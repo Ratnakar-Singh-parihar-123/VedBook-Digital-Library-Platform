@@ -5,14 +5,14 @@ import api from "./adminApi";
 /* ------------------------------------------------------------------ */
 export const featuredAPI = {
   /** Currently featured books (ordered) */
-  getFeatured: () => api.get("/discovery/featured"),
+  getFeatured: () => api.get("/api/discovery/featured"),
 
   /** All admin books (drafts + published) */
-  listAdminBooks: () => api.get("/books/admin"),
+  listAdminBooks: () => api.get("/api/books/admin"),
 
   /** Toggle featured status + set order */
   updateFeatured: (bookId, payload) =>
-    api.patch(`/discovery/admin/books/${bookId}/featured`, payload),
+    api.patch(`/api/discovery/admin/books/${bookId}/featured`, payload),
 };
 
 export default featuredAPI;
