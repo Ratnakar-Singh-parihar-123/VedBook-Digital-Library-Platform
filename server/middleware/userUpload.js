@@ -1,11 +1,8 @@
 import multer from "multer";
-import path from "node:path";
-import { mkdirSync } from "node:fs";
 import { randomUUID } from "node:crypto";
+import { getUserProfilesDir, initStorageDirs } from "../utils/storage.js";
 
-const uploadDir = path.resolve("uploads/user-profiles");
-
-mkdirSync(uploadDir, { recursive: true });
+initStorageDirs();
 
 const allowedTypes = {
   "image/jpeg": ".jpg",
@@ -15,16 +12,11 @@ const allowedTypes = {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    cb(null, getUserProfilesDir());
   },
 
   filename: (req, file, cb) => {
-    const extension = allowedTypes[file.mimetype];
-
-    if (!extension) {
-      return cb(new Error("Only JPG, PNG and WebP images are allowed"));
-    }
-
+    const extension = allowedTypes[file.mimetype] || ".jpg";
     cb(null, `${randomUUID()}${extension}`);
   },
 });
@@ -41,7 +33,7 @@ const userUpload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024,
+    fileSize: 5 * 1024 * 1024,
     files: 1,
   },
 });

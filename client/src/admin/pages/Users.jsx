@@ -13,6 +13,7 @@ import {
 import useFetch from "../dashboard/hooks/useFetch";
 import { formatDate } from "../dashboard/utils/format";
 import { usersAPI } from "../../api/adminApi";
+import { resolveAvatarUrl } from "../../utils/urlUtils";
 
 import UserDetailModal from "../components/UserDetailModal";
 import TableSkeleton from "../../components/ui/TableSkeleton";
@@ -24,7 +25,6 @@ import RefreshBanner from "../../components/ui/RefreshBanner";
 /*  Config                                                             */
 /* ------------------------------------------------------------------ */
 const PAGE_SIZE = 10;
-const API_BASE = import.meta.env?.VITE_API_URL || "";
 
 const ROLE_OPTIONS = [
   { value: "all", label: "All roles" },
@@ -40,7 +40,7 @@ const STATUS_OPTIONS = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  🐛 DEBUG FLAG — production me false kar dena                      */
+/*  🐛 DEBUG FLAG — set to false in production                        */
 /* ------------------------------------------------------------------ */
 const DEBUG = true;
 
@@ -54,17 +54,20 @@ function _dbgWarn(...args) {
 }
 function dbgErr(...args) {
   if (DEBUG)
-    console.error("%c[USERS-DEBUG]", "color:#ef4444;font-weight:bold", ...args);
+    console.error(
+      "%c[USERS-DEBUG]",
+      "color:#ef4444;font-weight:bold",
+      ...args
+    );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Helper: resolve avatar URL                                         */
+/*  Helper: extract raw avatar path from user object, then resolve    */
 /* ------------------------------------------------------------------ */
-function resolveAvatarUrl(user) {
+function resolveUserAvatarUrl(user) {
   if (!user) return null;
-
   const raw =
-    user?.profile_pic || // 👈 YE ADD KARO — tumhara backend isi naam se bhej raha hai
+    user?.profile_pic ||
     user?.avatar ||
     user?.avatarUrl ||
     user?.profilePic ||
@@ -77,24 +80,8 @@ function resolveAvatarUrl(user) {
     null;
 
   if (!raw) return null;
-
-  if (typeof raw === "string") {
-    if (
-      raw.startsWith("http") ||
-      raw.startsWith("data:") ||
-      raw.startsWith("blob:")
-    ) {
-      return raw;
-    }
-    return API_BASE
-      ? `${API_BASE.replace(/\/$/, "")}/${raw.replace(/^\//, "")}`
-      : raw;
-  }
-
-  if (typeof raw === "object" && raw.url) {
-    return resolveAvatarUrl({ profile_pic: raw.url });
-  }
-  return null;
+  if (typeof raw === "object" && raw.url) return resolveAvatarUrl(raw.url);
+  return resolveAvatarUrl(raw);
 }
 
 /* ------------------------------------------------------------------ */

@@ -25,9 +25,7 @@ import { SectionHeader } from '../../components/common/SectionHeader';
 import { BookCard } from '../../components/common/BookCard';
 import { useLibrary } from '../../context/LibraryContext';
 
-/* ✅ FIX: Do alag files se import */
 import { booksAPI } from '../../api/booksApi';
-import { libraryAPI } from '../../api/libraryApi';
 
 /* ------------------------------------------------------------------ */
 /*  Fallback cover                                                    */
@@ -158,7 +156,7 @@ export const BookDetailsScreen = ({ route, navigation }) => {
     if (!book) return;
 
     try {
-      toggleBookmark?.(book);
+      toggleBookmark?.(book.id);
     } catch {}
   };
 

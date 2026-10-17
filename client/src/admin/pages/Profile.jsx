@@ -18,6 +18,7 @@ import {
 
 import useFetch from "../dashboard/hooks/useFetch";
 import { profileAPI } from "../../api/adminApi";
+import { resolveAvatarUrl } from "../../utils/urlUtils";
 
 /* ------------------------------------------------------------------ */
 /*  Avatar URL resolver — handles relative paths & filename-only      */
@@ -32,20 +33,7 @@ function resolveAvatar(admin) {
     admin.image ||
     admin.photo ||
     "";
-  if (!raw || typeof raw !== "string") return "";
-
-  // Already absolute
-  if (/^(https?:\/\/|data:|blob:)/i.test(raw)) return raw;
-
-  // Filename only → build uploads URL
-  if (!raw.startsWith("/")) {
-    return `http://localhost:8000/uploads/admin-profiles/${raw}`;
-  }
-
-  // Relative path → prefix host
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-  const host = base.replace(/\/api\/?$/, "");
-  return `${host}${raw}`;
+  return resolveAvatarUrl(raw);
 }
 
 /* ------------------------------------------------------------------ */

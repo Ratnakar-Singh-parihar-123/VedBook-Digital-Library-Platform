@@ -1,10 +1,10 @@
 import express from "express";
 import http from "node:http";
-import path from "node:path";
 import cors from "cors";
 import dotenv from "dotenv";
 import db from "./config/db.js";
 import { initializeSocket } from "./config/socket.js";
+import { getStorageBaseDir, fileExistsOnDisk } from "./utils/storage.js";
 
 import adminRoutes from "./routes/adminRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -28,18 +28,27 @@ const httpServer = http.createServer(app);
 // Allowed frontend origins
 const allowedOrigins = [
   "https://thevedbook.vercel.app",
+  "https://vedbook.vercel.app",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  "http://localhost:8000",
+  "http://127.0.0.1:8000",
 ];
 
 // CORS configuration
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests without Origin, such as Postman/server-to-server
+      // Allow requests without Origin, such as Postman/server-to-server or mobile apps
       if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow Vercel preview deployments (*.vercel.app)
+      if (/^https:\/\/[\w-]+-ratnakarsinghparihars-projects\.vercel\.app$/.test(origin) ||
+          /^https:\/\/thevedbook.*\.vercel\.app$/.test(origin)) {
         return callback(null, true);
       }
 
@@ -56,15 +65,15 @@ app.use(express.json());
 // Initialize Socket.IO
 initializeSocket(httpServer);
 
-// Serve uploaded book cover images
-// Keep PDF files behind authenticated endpoints
-app.use("/uploads", express.static(path.resolve("uploads")));
+// Serve uploaded assets from persistent storage location
+app.use("/uploads", express.static(getStorageBaseDir()));
 
 // Health check
 app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "VedBook API is running!",
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -88,6 +97,15 @@ app.get("/api/db-test", async (req, res) => {
   }
 });
 
+// Storage health test
+app.get("/api/storage-test", (req, res) => {
+  res.json({
+    success: true,
+    storageDir: getStorageBaseDir(),
+    status: "healthy",
+  });
+});
+
 // API routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
@@ -102,9 +120,22 @@ app.use("/api/admin/reviews", adminReviewRoutes);
 app.use("/api/admin/analytics", adminAnalyticsRoutes);
 app.use("/api/notifications", userNotificationRoutes);
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err.message);
+  if (res.headersSent) {
+    return next(err);
+  }
+  return res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal server error",
+  });
+});
+
 // Start server
 const PORT = process.env.PORT || 5000;
 
 httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`VedBook server running on port ${PORT}`);
+  console.log(`Persistent storage directory: ${getStorageBaseDir()}`);
 });

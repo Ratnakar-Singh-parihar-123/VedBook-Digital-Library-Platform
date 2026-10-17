@@ -19,6 +19,7 @@ import HeroSection from "./components/HeroSection.jsx";
 import BookDetailModal from "../../components/ui/BookDetailModal";
 import BookCardSkeleton from "../../components/ui/BookCardSkeleton";
 import { booksAPI, categoriesAPI } from "../../api/adminApi";
+import { resolveCoverUrl } from "../../utils/urlUtils";
 import {
   getRecentlyViewed,
   addRecentlyViewed,
@@ -74,18 +75,6 @@ function hashString(str) {
   return Math.abs(h);
 }
 
-function resolveCoverUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-  const s = raw.trim();
-  if (!s) return "";
-  if (/^(https?:\/\/|data:|blob:)/i.test(s)) return s;
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000";
-  const host = base.replace(/\/api\/?$/, "");
-  if (s.startsWith("uploads/")) return `${host}/${s}`;
-  if (s.startsWith("/")) return `${host}${s}`;
-  if (s.endsWith(".png")) return `${host}/uploads/covers/${s}`;
-  return `${host}/uploads/books/${s}`;
-}
 
 const FEATURED_FALLBACKS = [
   {
@@ -492,6 +481,7 @@ export default function HomeScreen() {
 /*  Editorial Card Component                                          */
 /* ------------------------------------------------------------------ */
 function EditorialCard({ book, onOpen, onDirectRead }) {
+  const [imgError, setImgError] = useState(false);
   const seed = hashString(`${book.title}-${book.id}`);
   const p = COVER_PALETTES[seed % COVER_PALETTES.length];
 
@@ -511,10 +501,11 @@ function EditorialCard({ book, onOpen, onDirectRead }) {
       <div>
         {/* Cover Presentation */}
         <div className="relative w-full aspect-[5/7] rounded-2xl overflow-hidden shadow-soft">
-          {book.cover ? (
+          {book.cover && !imgError ? (
             <img
               src={book.cover}
               alt={book.title}
+              onError={() => setImgError(true)}
               className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
             />
           ) : (

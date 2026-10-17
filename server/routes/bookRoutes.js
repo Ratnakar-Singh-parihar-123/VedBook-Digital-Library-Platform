@@ -11,7 +11,7 @@ import {
   unpublishBook,
   readPublishedBookPdf,
   searchBooks,
-  getBookById, // ← NEW
+  getBookById,
   getBookContent,
 } from "../controllers/bookController.js";
 
@@ -21,11 +21,18 @@ import bookUpload from "../middleware/bookUpload.js";
 
 const router = Router();
 
+// Allow uploading PDF and optional cover image
+const bookUploadFields = bookUpload.fields([
+  { name: "pdf", maxCount: 1 },
+  { name: "cover", maxCount: 1 },
+  { name: "coverImage", maxCount: 1 },
+]);
+
 // Public routes
 router.get("/", listPublishedBooks);
 router.get("/search", searchBooks);
 
-// Admin routes — generic /:id route se pehle
+// Admin routes — specific /admin routes before generic /:id
 router.get("/admin", verifyAdminToken, listAdminBooks);
 router.get("/admin/:id", verifyAdminToken, getAdminBookDetails);
 
@@ -35,11 +42,11 @@ router.get("/:id", getBookById);
 router.get("/:id/read", optionalUserToken, readPublishedBookPdf);
 
 // Create, update, publish and delete
-router.post("/", verifyAdminToken, bookUpload.single("pdf"), addBook);
+router.post("/", verifyAdminToken, bookUploadFields, addBook);
 
 router.patch("/:id/publish", verifyAdminToken, publishBook);
 router.patch("/:id/unpublish", verifyAdminToken, unpublishBook);
-router.patch("/:id", verifyAdminToken, bookUpload.single("pdf"), editBook);
+router.patch("/:id", verifyAdminToken, bookUploadFields, editBook);
 
 router.delete("/:id", verifyAdminToken, deleteBook);
 

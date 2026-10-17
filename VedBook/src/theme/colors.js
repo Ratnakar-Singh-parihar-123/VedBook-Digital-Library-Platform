@@ -124,6 +124,20 @@ export const shadows = {
     shadowRadius: 16,
     elevation: 4,
   },
+  medium: {
+    shadowColor: '#173F35',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.10,
+    shadowRadius: 18,
+    elevation: 6,
+  },
+  elevated: {
+    shadowColor: '#173F35',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.12,
+    shadowRadius: 20,
+    elevation: 8,
+  },
   hover: {
     shadowColor: '#173F35',
     shadowOffset: { width: 0, height: 10 },

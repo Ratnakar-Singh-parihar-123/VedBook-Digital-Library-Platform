@@ -1,12 +1,19 @@
 import axios from "axios";
+import {
+  getApiBaseUrl,
+  getServerBaseUrl,
+  resolveCoverUrl,
+  resolveAvatarUrl,
+} from "../utils/urlUtils";
+
+export { getApiBaseUrl, getServerBaseUrl, resolveCoverUrl, resolveAvatarUrl };
 
 /* ------------------------------------------------------------------ */
 /*  Axios instance — used across the app                              */
 /* ------------------------------------------------------------------ */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api",
-  timeout: 15000,
-  // headers: { "Content-Type": "application/json" },
+  baseURL: getApiBaseUrl(),
+  timeout: 25000,
   headers: {
     Accept: "application/json",
   },
@@ -32,9 +39,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (res) => res,
   (error) => {
-    console.log("API URL:", error.config?.baseURL + error.config?.url);
-    console.log("Status:", error.response?.status);
-    console.log("Backend error:", error.response?.data);
+    if (import.meta.env.DEV) {
+      console.log("API URL:", (error.config?.baseURL || "") + (error.config?.url || ""));
+      console.log("Status:", error.response?.status);
+      console.log("Backend error:", error.response?.data);
+    }
 
     if (error.response?.status === 401) {
       localStorage.removeItem("ved_token");
@@ -50,6 +59,7 @@ api.interceptors.response.use(
     return Promise.reject({ ...error, message });
   },
 );
+
 /* ------------------------------------------------------------------ */
 /*  Auth helpers                                                      */
 /* ------------------------------------------------------------------ */
@@ -58,6 +68,7 @@ export const authAPI = {
   login: (payload) => api.post("/api/admin/login", payload),
   me: () => api.get("/api/admin/me"),
 };
+
 export const usersAPI = {
   /** Paginated user list with filters */
   list: (params) => api.get("/api/admin/users", { params }),
@@ -73,26 +84,29 @@ export const usersAPI = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Books API — matches your Express routes                           */
+/*  Books API — matches Express routes                                */
 /* ------------------------------------------------------------------ */
 export const booksAPI = {
   searchPublic: (q) => api.get("/api/books/search", { params: { q } }),
   /** Public: only published books */
   listPublic: () => api.get("/api/books"),
 
-  /** Admin: all books (drafts + published) — no pagination params */
+  /** Admin: all books (drafts + published) */
   listAdmin: () => api.get("/api/books/admin"),
 
   /** Admin: one book with full details */
-  getAdmin: (id) => api.get(`api/books/admin/${id}`),
+  getAdmin: (id) => api.get(`/api/books/admin/${id}`),
 
-  /** Admin: upload new book (multipart, field = "pdf") */
+  /** Public: one book details */
+  getPublic: (id) => api.get(`/api/books/${id}`),
+
+  /** Admin: upload new book (multipart, field = "pdf", optional "cover") */
   create: (formData) =>
     api.post("/api/books", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
 
-  /** Admin: edit book (multipart, pdf optional) */
+  /** Admin: edit book (multipart, pdf and cover optional) */
   update: (id, formData) =>
     api.patch(`/api/books/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -107,12 +121,11 @@ export const booksAPI = {
 
   /** Public PDF URL for reading */
   readPdfUrl: (id) => {
-    const base = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-    return `${base}/api/books/${id}/read`;
+    return `${getServerBaseUrl()}/api/books/${id}/read`;
   },
 };
 
-/* Helper — object ko FormData me convert karo (file uploads ke liye) */
+/* Helper — convert object to FormData for file uploads */
 function toFormData(obj) {
   const fd = new FormData();
   Object.entries(obj).forEach(([k, v]) => {
@@ -132,65 +145,40 @@ function toFormData(obj) {
 /*  Profile API — admin's own account                                  */
 /* ------------------------------------------------------------------ */
 export const profileAPI = {
-  // Get current admin profile
   get: () => api.get("/api/admin/profile"),
 
-  // Update name, email, avatar — all fields are optional
   update: (payload) => {
     const fd = payload instanceof FormData ? payload : toFormData(payload);
-
     return api.patch("/api/admin/profile", fd, {
-      headers: {
-        "Content-Type": null,
-      },
+      headers: { "Content-Type": null },
     });
   },
 
-  // Change password
   changePassword: (payload) => api.patch("/api/admin/change-password", payload),
 };
 
 export const categoriesAPI = {
-  // Public: active categories only
   list: () => api.get("/api/categories"),
   listPublic: () => api.get("/api/categories"),
-
-  // Admin: active + inactive categories
   listAdmin: () => api.get("/api/categories/admin"),
-
-  // Admin: create category
   create: (payload) => api.post("/api/categories", payload),
-
-  // Admin: update name, description, etc.
   update: (id, payload) => api.patch(`/api/categories/${id}`, payload),
-
-  // Admin: activate/deactivate category
   updateStatus: (id, is_active) =>
     api.patch(`/api/categories/${id}/status`, { is_active }),
-
-  // Soft-deactivate category
-  remove: (id) => api.delete(`/categories/${id}`),
+  remove: (id) => api.delete(`/api/categories/${id}`),
 };
 
 /* ------------------------------------------------------------------ */
 /*  Notifications API                                                  */
 /* ------------------------------------------------------------------ */
-
 export const notificationsAPI = {
-  // Admin inbox
   list: () => api.get("/api/admin/notifications"),
   get: (id) => api.get(`/api/admin/notifications/${id}`),
-
-  // Create, edit, delete
   create: (payload) => api.post("/api/admin/notifications", payload),
   update: (id, payload) => api.patch(`/api/admin/notifications/${id}`, payload),
   remove: (id) => api.delete(`/api/admin/notifications/${id}`),
-
-  // Read status
   markRead: (id) => api.patch(`/api/admin/notifications/${id}/read`),
   markAllRead: () => api.patch("/api/admin/notifications/read-all"),
-
-  // Sent notifications
   listSent: () => api.get("/api/admin/notifications/sent"),
   getSent: (id) => api.get(`/api/admin/notifications/sent/${id}`),
 };

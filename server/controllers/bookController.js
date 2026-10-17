@@ -1,9 +1,12 @@
 import db from "../config/db.js";
-import path from "node:path";
 import { createReadStream } from "node:fs";
-import { stat, unlink } from "node:fs/promises";
-
 import { generateBookCover } from "../utils/generateBookCover.js";
+import {
+  safeDeleteStoredFile,
+  resolveStoragePath,
+  getFileStat,
+  isRemoteUrl,
+} from "../utils/storage.js";
 
 import {
   createBook,
@@ -13,14 +16,17 @@ import {
   updateBookStatus,
   updateBookDetails,
   deleteBookById,
+  isFileReferencedByOtherBook,
   searchPublishedBooks,
 } from "../models/book.js";
 
 import { recordBookRead, logAdminActivity } from "../models/dashboard.js";
 
-// Helpers
-
-const validId = (id) => /^\d+$/.test(String(id)) && Number(id) > 0;
+// Helper: validate integer ID
+const validId = (id) => {
+  const n = Number(id);
+  return Number.isSafeInteger(n) && n > 0;
+};
 
 const handleError = (res, error, message) => {
   console.error(message, error.message);
@@ -42,7 +48,6 @@ const handleError = (res, error, message) => {
   });
 };
 
-// Analytics must not break the main operation.
 const safeLogAdminActivity = async (activity) => {
   try {
     await logAdminActivity(activity);
@@ -51,71 +56,24 @@ const safeLogAdminActivity = async (activity) => {
   }
 };
 
-// Safely remove a stored PDF.
-const removeStoredBookPdf = async (storedPath) => {
-  if (!storedPath) return;
+// Cleanup uploaded files on error
+const cleanupUploadedFiles = async (req) => {
+  const pdfFile = req.files?.pdf?.[0] || (req.file?.fieldname === "pdf" ? req.file : null);
+  const coverFile =
+    req.files?.cover?.[0] ||
+    req.files?.coverImage?.[0] ||
+    (req.file && ["cover", "coverImage"].includes(req.file.fieldname) ? req.file : null);
 
-  const uploadDirectory = path.resolve(process.cwd(), "uploads/books");
-
-  const absolutePath = path.resolve(process.cwd(), storedPath);
-
-  const relativePath = path.relative(uploadDirectory, absolutePath);
-
-  if (
-    !relativePath ||
-    relativePath.startsWith("..") ||
-    path.isAbsolute(relativePath)
-  ) {
-    throw new Error("Invalid stored PDF path");
+  if (pdfFile) {
+    await safeDeleteStoredFile(`uploads/books/${pdfFile.filename}`);
   }
-
-  try {
-    await unlink(absolutePath);
-  } catch (error) {
-    if (error.code !== "ENOENT") throw error;
+  if (coverFile) {
+    await safeDeleteStoredFile(`uploads/covers/${coverFile.filename}`);
   }
 };
 
-// Safely remove a stored cover.
-const removeStoredBookCover = async (storedPath) => {
-  if (!storedPath) return;
-
-  const coverDirectory = path.resolve(process.cwd(), "uploads/covers");
-
-  const absolutePath = path.resolve(process.cwd(), storedPath);
-
-  const relativePath = path.relative(coverDirectory, absolutePath);
-
-  if (
-    !relativePath ||
-    relativePath.startsWith("..") ||
-    path.isAbsolute(relativePath)
-  ) {
-    throw new Error("Invalid stored cover path");
-  }
-
-  try {
-    await unlink(absolutePath);
-  } catch (error) {
-    if (error.code !== "ENOENT") throw error;
-  }
-};
-
-// Clean up a newly uploaded PDF.
-const cleanupUploadedPdf = async (req) => {
-  if (!req.file) return;
-
-  try {
-    await removeStoredBookPdf(`uploads/books/${req.file.filename}`);
-  } catch (error) {
-    console.error("Uploaded PDF cleanup error:", error.message);
-  }
-};
-
-// Validation response that also cleans up Multer's uploaded PDF.
 const rejectRequest = async (res, req, message, status = 400) => {
-  await cleanupUploadedPdf(req);
-
+  await cleanupUploadedFiles(req);
   return res.status(status).json({
     success: false,
     message,
@@ -123,7 +81,6 @@ const rejectRequest = async (res, req, message, status = 400) => {
 };
 
 // Public: List published books
-
 export const listPublishedBooks = async (req, res) => {
   try {
     const books = await getPublishedBooks();
@@ -138,8 +95,7 @@ export const listPublishedBooks = async (req, res) => {
   }
 };
 
-// Admin: List all books
-
+// Admin: List all books (drafts + published)
 export const listAdminBooks = async (req, res) => {
   try {
     const books = await getAllBooksForAdmin();
@@ -155,11 +111,18 @@ export const listAdminBooks = async (req, res) => {
 };
 
 // Admin: Add a new book as draft
-
 export const addBook = async (req, res) => {
-  let uploadedPdfPath = req.file ? `uploads/books/${req.file.filename}` : null;
+  const pdfFile =
+    req.files?.pdf?.[0] || (req.file?.fieldname === "pdf" ? req.file : req.file);
+  const coverFile =
+    req.files?.cover?.[0] ||
+    req.files?.coverImage?.[0] ||
+    (req.file && ["cover", "coverImage"].includes(req.file.fieldname)
+      ? req.file
+      : null);
 
-  let coverImage = null;
+  let uploadedPdfPath = pdfFile ? `uploads/books/${pdfFile.filename}` : null;
+  let coverImage = coverFile ? `uploads/covers/${coverFile.filename}` : null;
 
   try {
     const {
@@ -184,7 +147,7 @@ export const addBook = async (req, res) => {
       );
     }
 
-    if (!req.file) {
+    if (!pdfFile) {
       return res.status(400).json({
         success: false,
         message: "Please upload a PDF file using the 'pdf' field",
@@ -230,14 +193,14 @@ export const addBook = async (req, res) => {
       parsedYear = year;
     }
 
-    // Generate a cover from the PDF's first page.
-    // If cover generation fails, the book can still be saved.
-    try {
-      coverImage = await generateBookCover(req.file.path, req.file.filename);
-    } catch (coverError) {
-      console.error("Cover generation failed:", coverError.message);
-
-      coverImage = null;
+    // If no cover was manually uploaded, auto-generate from PDF first page
+    if (!coverImage && pdfFile) {
+      try {
+        coverImage = await generateBookCover(pdfFile.path, pdfFile.filename);
+      } catch (coverError) {
+        console.error("Cover generation failed:", coverError.message);
+        coverImage = null;
+      }
     }
 
     const book = await createBook({
@@ -266,29 +229,17 @@ export const addBook = async (req, res) => {
       book,
     });
   } catch (error) {
-    // The database operation failed; remove newly created files.
     if (uploadedPdfPath) {
-      try {
-        await removeStoredBookPdf(uploadedPdfPath);
-      } catch (cleanupError) {
-        console.error("PDF cleanup error:", cleanupError.message);
-      }
+      await safeDeleteStoredFile(uploadedPdfPath);
     }
-
     if (coverImage) {
-      try {
-        await removeStoredBookCover(coverImage);
-      } catch (cleanupError) {
-        console.error("Cover cleanup error:", cleanupError.message);
-      }
+      await safeDeleteStoredFile(coverImage);
     }
-
     return handleError(res, error, "Create book error:");
   }
 };
 
 // Admin: Publish a book
-
 export const publishBook = async (req, res) => {
   try {
     const { id } = req.params;
@@ -338,7 +289,6 @@ export const publishBook = async (req, res) => {
 };
 
 // Admin: Unpublish a book
-
 export const unpublishBook = async (req, res) => {
   try {
     const { id } = req.params;
@@ -388,7 +338,6 @@ export const unpublishBook = async (req, res) => {
 };
 
 // Public: Read a published book's PDF
-
 export const readPublishedBookPdf = async (req, res) => {
   try {
     const { id } = req.params;
@@ -416,33 +365,42 @@ export const readPublishedBookPdf = async (req, res) => {
       });
     }
 
-    const uploadDirectory = path.resolve(process.cwd(), "uploads/books");
-
-    const pdfPath = path.resolve(process.cwd(), book.pdf_path);
-
-    const relativePath = path.relative(uploadDirectory, pdfPath);
-
-    if (
-      !relativePath ||
-      relativePath.startsWith("..") ||
-      path.isAbsolute(relativePath)
-    ) {
-      return res.status(403).json({
-        success: false,
-        message: "Invalid PDF file path",
-      });
-    }
-
-    const fileInfo = await stat(pdfPath);
-
-    if (!fileInfo.isFile()) {
+    if (!book.pdf_path) {
       return res.status(404).json({
         success: false,
-        message: "PDF file not found",
+        message: "No PDF file associated with this book",
       });
     }
 
-    // Reading analytics should not block PDF delivery.
+    // Handle remote external URL (e.g. S3, Cloudinary)
+    if (isRemoteUrl(book.pdf_path)) {
+      try {
+        await recordBookRead(book.id, req.user?.id ?? null);
+      } catch (err) {
+        console.error("Could not record reading event:", err.message);
+      }
+      return res.redirect(book.pdf_path);
+    }
+
+    const absolutePath = resolveStoragePath(book.pdf_path);
+    if (!absolutePath) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid PDF storage path",
+      });
+    }
+
+    const fileInfo = await getFileStat(book.pdf_path);
+
+    if (!fileInfo || !fileInfo.isFile()) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "PDF document is currently unavailable on server storage. It may need to be re-uploaded.",
+      });
+    }
+
+    // Non-blocking reading analytics
     try {
       await recordBookRead(book.id, req.user?.id ?? null);
     } catch (error) {
@@ -455,18 +413,18 @@ export const readPublishedBookPdf = async (req, res) => {
       `inline; filename="book-${book.id}.pdf"`,
     );
     res.setHeader("Content-Length", fileInfo.size);
+    res.setHeader("Accept-Ranges", "bytes");
     res.setHeader("X-Content-Type-Options", "nosniff");
-    res.setHeader("Cache-Control", "private, no-store");
+    res.setHeader("Cache-Control", "private, max-age=3600");
 
-    const pdfStream = createReadStream(pdfPath);
+    const pdfStream = createReadStream(absolutePath);
 
     pdfStream.on("error", (error) => {
       console.error("PDF stream error:", error.message);
-
       if (!res.headersSent) {
         res.status(500).json({
           success: false,
-          message: "Unable to read PDF",
+          message: "Unable to read PDF stream",
         });
       } else {
         res.destroy(error);
@@ -486,8 +444,7 @@ export const readPublishedBookPdf = async (req, res) => {
   }
 };
 
-// Admin: Get one book, including drafts
-
+// Admin: Get one book details including drafts
 export const getAdminBookDetails = async (req, res) => {
   try {
     const { id } = req.params;
@@ -517,12 +474,21 @@ export const getAdminBookDetails = async (req, res) => {
   }
 };
 
-// Admin: Edit book details; PDF is optional
-
+// Admin: Edit book details; PDF and cover are optional
 export const editBook = async (req, res) => {
-  let uploadedPdfPath = req.file ? `uploads/books/${req.file.filename}` : null;
+  const pdfFile =
+    req.files?.pdf?.[0] || (req.file?.fieldname === "pdf" ? req.file : null);
+  const coverFile =
+    req.files?.cover?.[0] ||
+    req.files?.coverImage?.[0] ||
+    (req.file && ["cover", "coverImage"].includes(req.file.fieldname)
+      ? req.file
+      : null);
 
-  let uploadedCoverPath = null;
+  let uploadedPdfPath = pdfFile ? `uploads/books/${pdfFile.filename}` : null;
+  let uploadedCoverPath = coverFile
+    ? `uploads/covers/${coverFile.filename}`
+    : null;
 
   try {
     const { id } = req.params;
@@ -599,25 +565,19 @@ export const editBook = async (req, res) => {
       parsedYear = year;
     }
 
-    // Generate a cover only when a replacement PDF is uploaded.
-    if (req.file) {
+    // Generate cover if replacement PDF was uploaded and no custom cover provided
+    if (pdfFile && !uploadedCoverPath) {
       try {
         uploadedCoverPath = await generateBookCover(
-          req.file.path,
-          req.file.filename,
+          pdfFile.path,
+          pdfFile.filename,
         );
       } catch (coverError) {
-        console.error(
-          "Replacement cover generation failed:",
+        console.warn(
+          "Replacement cover generation failed (keeping existing):",
           coverError.message,
         );
-
-        const error = new Error(
-          "Could not generate a cover for the replacement PDF.",
-        );
-
-        error.statusCode = 500;
-        throw error;
+        uploadedCoverPath = null;
       }
     }
 
@@ -637,18 +597,25 @@ export const editBook = async (req, res) => {
       throw error;
     }
 
-    // Remove old files only after the database update succeeds.
-    if (uploadedPdfPath) {
-      try {
-        await removeStoredBookPdf(existingBook.pdf_path);
-      } catch (error) {
-        console.error("Old PDF cleanup error:", error.message);
+    // Clean up old PDF if replaced AND not shared with another book
+    if (uploadedPdfPath && existingBook.pdf_path) {
+      const isShared = await isFileReferencedByOtherBook(
+        existingBook.pdf_path,
+        bookId,
+      );
+      if (!isShared) {
+        await safeDeleteStoredFile(existingBook.pdf_path);
       }
+    }
 
-      try {
-        await removeStoredBookCover(existingBook.cover_image);
-      } catch (error) {
-        console.error("Old cover cleanup error:", error.message);
+    // Clean up old cover if replaced AND not shared
+    if (uploadedCoverPath && existingBook.cover_image) {
+      const isShared = await isFileReferencedByOtherBook(
+        existingBook.cover_image,
+        bookId,
+      );
+      if (!isShared) {
+        await safeDeleteStoredFile(existingBook.cover_image);
       }
     }
 
@@ -670,29 +637,17 @@ export const editBook = async (req, res) => {
       book: updatedBook,
     });
   } catch (error) {
-    // The update failed; clean up replacement files.
     if (uploadedPdfPath) {
-      try {
-        await removeStoredBookPdf(uploadedPdfPath);
-      } catch (cleanupError) {
-        console.error("New PDF cleanup error:", cleanupError.message);
-      }
+      await safeDeleteStoredFile(uploadedPdfPath);
     }
-
     if (uploadedCoverPath) {
-      try {
-        await removeStoredBookCover(uploadedCoverPath);
-      } catch (cleanupError) {
-        console.error("New cover cleanup error:", cleanupError.message);
-      }
+      await safeDeleteStoredFile(uploadedCoverPath);
     }
-
     return handleError(res, error, "Edit book error:");
   }
 };
 
-// Admin: Delete a book, its PDF and its cover
-
+// Admin: Delete a book and its unshared files safely
 export const deleteBook = async (req, res) => {
   try {
     const { id } = req.params;
@@ -714,18 +669,24 @@ export const deleteBook = async (req, res) => {
       });
     }
 
+    // Check if other books share these files before deleting the book
+    const pdfShared = book.pdf_path
+      ? await isFileReferencedByOtherBook(book.pdf_path, bookId)
+      : true;
+    const coverShared = book.cover_image
+      ? await isFileReferencedByOtherBook(book.cover_image, bookId)
+      : true;
+
+    // Delete database record first
     await deleteBookById(bookId);
 
-    try {
-      await removeStoredBookPdf(book.pdf_path);
-    } catch (error) {
-      console.error("Deleted book PDF cleanup error:", error.message);
+    // Safely delete unshared files
+    if (book.pdf_path && !pdfShared) {
+      await safeDeleteStoredFile(book.pdf_path);
     }
 
-    try {
-      await removeStoredBookCover(book.cover_image);
-    } catch (error) {
-      console.error("Deleted book cover cleanup error:", error.message);
+    if (book.cover_image && !coverShared) {
+      await safeDeleteStoredFile(book.cover_image);
     }
 
     await safeLogAdminActivity({
@@ -775,9 +736,8 @@ export const searchBooks = async (req, res, next) => {
   }
 };
 
-// Get single book details                                           //
-// GET /api/books/:id                                                //
-
+// Public: Get single book details
+// GET /api/books/:id
 export const getBookById = async (req, res) => {
   try {
     const bookId = Number.parseInt(req.params.id, 10);
@@ -847,9 +807,8 @@ export const getBookById = async (req, res) => {
   }
 };
 
-// Get book content (PDF)                                            //
-// GET /api/books/:id/content                                        //
-
+// Get book content (PDF path/url)
+// GET /api/books/:id/content
 export const getBookContent = async (req, res) => {
   try {
     const bookId = Number.parseInt(req.params.id, 10);
@@ -862,7 +821,7 @@ export const getBookContent = async (req, res) => {
     }
 
     const [rows] = await db.query(
-      `SELECT id, title, pdf_path
+      `SELECT id, title, pdf_path, status
        FROM books
        WHERE id = ?
        LIMIT 1`,
@@ -885,13 +844,9 @@ export const getBookContent = async (req, res) => {
       });
     }
 
-    //Relative path ko normalize karo //
     let pdfPath = String(book.pdf_path).trim();
+    const isAbsolute = isRemoteUrl(pdfPath);
 
-    //Agar already full URL hai to as-is bhejo //
-    const isAbsolute = /^https?:\/\//i.test(pdfPath);
-
-    //Agar relative hai to leading slash ensure karo //
     if (!isAbsolute && !pdfPath.startsWith("/")) {
       pdfPath = `/${pdfPath}`;
     }
@@ -900,8 +855,8 @@ export const getBookContent = async (req, res) => {
       success: true,
       data: {
         type: "pdf",
-        pdfPath: isAbsolute ? pdfPath : pdfPath,
-        pdfUrl: isAbsolute ? pdfPath : pdfPath, // both keys for safety
+        pdfPath,
+        pdfUrl: isAbsolute ? pdfPath : `/api/books/${book.id}/read`,
       },
     });
   } catch (error) {

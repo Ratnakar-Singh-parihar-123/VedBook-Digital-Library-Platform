@@ -75,22 +75,8 @@ const NAV_GROUPS = [
   },
 ];
 
-/* ------------------------------------------------------------------ */
-/*  Avatar URL resolver                                                */
-/* ------------------------------------------------------------------ */
-function resolveAvatarUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
+import { resolveAvatarUrl } from "../../utils/urlUtils";
 
-  if (/^(https?:\/\/|data:|blob:)/i.test(raw)) return raw;
-
-  if (!raw.startsWith("/")) {
-    return `http://localhost:8000/uploads/admin-profiles/${raw}`;
-  }
-
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-  const host = base.replace(/\/api\/?$/, "");
-  return `${host}${raw}`;
-}
 
 function getAvatarFromAdmin(admin) {
   if (!admin) return "";

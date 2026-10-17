@@ -39,7 +39,10 @@ export const findBookById = async (id) => {
        b.category_id,
        b.published_year,
        b.status,
+       b.is_featured,
+       b.featured_order,
        b.created_at,
+       b.updated_at,
        c.name AS category_name
      FROM books b
      LEFT JOIN categories c ON c.id = b.category_id
@@ -59,14 +62,17 @@ export const getPublishedBooks = async () => {
        b.author,
        b.description,
        b.cover_image,
+       b.pdf_path,
        b.category_id,
        b.published_year,
+       b.is_featured,
+       b.featured_order,
        b.created_at,
        c.name AS category_name
      FROM books b
      LEFT JOIN categories c ON c.id = b.category_id
      WHERE b.status = 'published'
-     ORDER BY b.created_at DESC`,
+     ORDER BY b.is_featured DESC, b.featured_order ASC, b.created_at DESC`,
   );
 
   return rows;
@@ -93,7 +99,10 @@ export const getAllBooksForAdmin = async () => {
        b.category_id,
        b.published_year,
        b.status,
+       b.is_featured,
+       b.featured_order,
        b.created_at,
+       b.updated_at,
        c.name AS category_name
      FROM books b
      LEFT JOIN categories c ON c.id = b.category_id
@@ -115,6 +124,9 @@ export const updateBookDetails = async (
     coverImage,
   },
 ) => {
+  const hasPdf = Boolean(pdfPath);
+  const hasCover = coverImage !== undefined && coverImage !== null;
+
   const [result] = await db.execute(
     `UPDATE books
      SET title = ?,
@@ -122,11 +134,8 @@ export const updateBookDetails = async (
          description = ?,
          category_id = ?,
          published_year = ?,
-         pdf_path = COALESCE(?, pdf_path),
-         cover_image = CASE
-           WHEN ? = 1 THEN ?
-           ELSE cover_image
-         END
+         pdf_path = CASE WHEN ? = 1 THEN ? ELSE pdf_path END,
+         cover_image = CASE WHEN ? = 1 THEN ? ELSE cover_image END
      WHERE id = ?`,
     [
       title,
@@ -134,8 +143,9 @@ export const updateBookDetails = async (
       description || null,
       categoryId || null,
       publishedYear ?? null,
+      hasPdf ? 1 : 0,
       pdfPath || null,
-      pdfPath ? 1 : 0,
+      hasCover ? 1 : 0,
       coverImage || null,
       id,
     ],
@@ -146,8 +156,21 @@ export const updateBookDetails = async (
 
 export const deleteBookById = async (id) => {
   const [result] = await db.execute(`DELETE FROM books WHERE id = ?`, [id]);
-
   return result.affectedRows > 0;
+};
+
+// Check if a file is shared with another book
+export const isFileReferencedByOtherBook = async (filePath, excludeBookId) => {
+  if (!filePath || typeof filePath !== "string") return false;
+  const [rows] = await db.execute(
+    `SELECT id FROM books
+     WHERE (pdf_path = ? OR cover_image = ?)
+       AND id != ?
+     LIMIT 1`,
+    [filePath, filePath, excludeBookId],
+  );
+
+  return rows.length > 0;
 };
 
 export const searchPublishedBooks = async (query) => {
@@ -170,7 +193,6 @@ export const searchPublishedBooks = async (query) => {
 
   for (const word of words) {
     const term = `%${word}%`;
-
     params.push(term, term, term, term);
   }
 
@@ -181,8 +203,11 @@ export const searchPublishedBooks = async (query) => {
       b.author,
       b.description,
       b.cover_image,
+      b.pdf_path,
       b.published_year,
       b.category_id,
+      b.is_featured,
+      b.created_at,
       c.name AS category_name
     FROM books b
     LEFT JOIN categories c
@@ -203,6 +228,5 @@ export const searchPublishedBooks = async (query) => {
   params.push(query.trim(), `${query.trim()}%`, `%${query.trim()}%`);
 
   const [rows] = await db.execute(sql, params);
-
   return rows;
 };

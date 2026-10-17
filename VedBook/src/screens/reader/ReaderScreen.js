@@ -483,8 +483,8 @@ export const ReaderScreen = ({ route, navigation }) => {
 
   const handlePdfError = useCallback(pdfLoadError => {
     if (!mountedRef.current) return;
-    console.warn('PDF load error:', pdfLoadError);
-    setPdfError('PDF load nahi ho payi.');
+    if (__DEV__) console.warn('PDF load error:', pdfLoadError);
+    setPdfError('Unable to load the PDF document. Please try again.');
   }, []);
 
   const retryPdf = () => {
@@ -760,7 +760,7 @@ export const ReaderScreen = ({ route, navigation }) => {
               <View style={styles.stateIconCircle}>
                 <Icon name="alert-circle" size={26} color={colors.goldDark} />
               </View>
-              <Text style={styles.stateTitle}>PDF open nahi ho payi</Text>
+              <Text style={styles.stateTitle}>PDF Failed to Load</Text>
               <Text style={styles.stateMsg}>{pdfError}</Text>
               <TouchableOpacity onPress={retryPdf} style={styles.retryButton}>
                 <Text style={styles.retryText}>Retry PDF</Text>

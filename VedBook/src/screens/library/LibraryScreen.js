@@ -44,14 +44,6 @@ import { useLibrary } from '../../context/LibraryContext';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const isSmallScreen = SCREEN_WIDTH < 360;
-const isTablet = SCREEN_WIDTH >= 600;
-
-/* Horizontal padding scales with screen */
-const H_PADDING = isTablet
-  ? spacing.xxl
-  : isSmallScreen
-  ? spacing.md
-  : spacing.lg;
 
 /* Tab label shortening on small screens */
 const TAB_LABELS = {

@@ -1,13 +1,8 @@
 import path from "node:path";
-import { mkdirSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
-
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { createCanvas } from "@napi-rs/canvas";
-
-const coverDir = path.resolve("uploads/covers");
-
-mkdirSync(coverDir, { recursive: true });
+import { getCoversDir } from "./storage.js";
 
 export const generateBookCover = async (pdfPath, pdfFilename) => {
   const pdfBytes = new Uint8Array(await readFile(pdfPath));
@@ -27,7 +22,7 @@ export const generateBookCover = async (pdfPath, pdfFilename) => {
       throw new Error("PDF has no pages");
     }
 
-    // Get the first page of the PDF.
+    // Get the first page of the PDF
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 1.5 });
 
@@ -44,14 +39,14 @@ export const generateBookCover = async (pdfPath, pdfFilename) => {
       viewport,
     }).promise;
 
-    const filename = `${path.parse(pdfFilename).name}.png`;
-    const outputPath = path.join(coverDir, filename);
+    const baseName = path.parse(pdfFilename).name;
+    const filename = `${baseName}.png`;
+    const outputPath = path.join(getCoversDir(), filename);
 
     await writeFile(outputPath, await canvas.encode("png"));
 
     return `uploads/covers/${filename}`;
   } finally {
-    // Destroy the loading task if the installed PDF.js supports it.
     if (typeof loadingTask.destroy === "function") {
       await loadingTask.destroy().catch((error) => {
         console.error("PDF loading task cleanup failed:", error.message);

@@ -25,6 +25,7 @@ import {
 import useFetch from "../dashboard/hooks/useFetch";
 import { formatDateTime, formatNumber } from "../dashboard/utils/format";
 import { booksAPI } from "../../api/adminApi";
+import { resolveCoverUrl } from "../../utils/urlUtils";
 
 export default function BookDetailModal({
   bookId,
@@ -76,6 +77,12 @@ export default function BookDetailModal({
     if (open) closeBtnRef.current?.focus();
   }, [open]);
 
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [bookId]);
+
   const coverPath =
     book?.cover_image ||
     book?.coverImage ||
@@ -83,16 +90,7 @@ export default function BookDetailModal({
     book?.coverUrl ||
     null;
 
-  const apiBaseUrl =
-    import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
-  const serverBaseUrl = apiBaseUrl.replace(/\/api\/?$/, "");
-
-  const coverUrl = coverPath
-    ? /^https?:\/\//i.test(coverPath)
-      ? coverPath
-      : `${serverBaseUrl}/${coverPath.replace(/^\/+/, "")}`
-    : null;
+  const coverUrl = resolveCoverUrl(coverPath);
 
   const trap = (e) => {
     if (e.key !== "Tab" || !panelRef.current) return;
@@ -182,15 +180,12 @@ export default function BookDetailModal({
 
             <div className="relative flex gap-4 mt-4">
               <div className="grid w-20 overflow-hidden h-28 sm:w-24 sm:h-32 rounded-2xl bg-cream/10 ring-1 ring-cream/20 shrink-0 place-items-center">
-                {coverUrl ? (
+                {coverUrl && !imgError ? (
                   <img
                     src={coverUrl}
                     alt={`${book?.title || "Book"} cover`}
                     className="object-cover w-full h-full"
-                    onError={(e) => {
-                      console.error("Cover image failed to load:", coverUrl);
-                      e.currentTarget.style.display = "none";
-                    }}
+                    onError={() => setImgError(true)}
                   />
                 ) : (
                   <Library size={26} className="text-cream/40" />

@@ -195,13 +195,15 @@ export const homeAPI = {
       .map(normaliseBook)
       .filter(Boolean);
 
-    console.log(
-      'Recently catalogued covers:',
-      books.map(book => ({
-        title: book.title,
-        cover: book.cover,
-      })),
-    );
+    if (__DEV__) {
+      console.log(
+        'Recently catalogued covers:',
+        books.map(book => ({
+          title: book.title,
+          cover: book.cover,
+        })),
+      );
+    }
 
     return books;
   },

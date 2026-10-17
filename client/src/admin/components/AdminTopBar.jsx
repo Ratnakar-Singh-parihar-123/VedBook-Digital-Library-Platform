@@ -6,17 +6,7 @@ import {
   Bell,
   ShieldCheck,
 } from "lucide-react";
-
-function resolveAvatarUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-  if (/^(https?:\/\/|data:|blob:)/i.test(raw)) return raw;
-  if (!raw.startsWith("/")) {
-    return `http://localhost:8000/uploads/admin-profiles/${raw}`;
-  }
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-  const host = base.replace(/\/api\/?$/, "");
-  return `${host}${raw}`;
-}
+import { resolveAvatarUrl } from "../../utils/urlUtils";
 
 export default function AdminTopBar({ onMenuClick }) {
   const location = useLocation();

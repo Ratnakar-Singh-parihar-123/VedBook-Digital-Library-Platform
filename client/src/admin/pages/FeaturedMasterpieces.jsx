@@ -24,28 +24,7 @@ import {
 
 import Loader from "../../components/ui/Loader";
 import { featuredAPI } from "../../api/featuredApi";
-
-/* ------------------------------------------------------------------ */
-/*  Cover URL resolver — mirrors AllBooks BookThumb                   */
-/* ------------------------------------------------------------------ */
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  import.meta.env.VITE_API_URL ||
-  "http://localhost:8000/api";
-
-const SERVER_BASE_URL = API_BASE_URL.replace(/\/api\/?$/, "");
-
-function resolveCoverUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-  const s = raw.trim();
-  if (!s) return "";
-
-  // Already absolute or data/blob
-  if (/^(https?:\/\/|data:|blob:)/i.test(s)) return s;
-
-  // Relative path → prefix server host
-  return `${SERVER_BASE_URL}/${s.replace(/^\/+/, "")}`;
-}
+import { resolveCoverUrl } from "../../utils/urlUtils";
 
 function pickCover(b) {
   if (!b) return "";

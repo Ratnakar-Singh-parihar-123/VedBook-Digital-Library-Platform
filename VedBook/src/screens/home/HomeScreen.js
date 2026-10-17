@@ -21,7 +21,6 @@ import {
   TextInput,
   ActivityIndicator,
   Keyboard,
-  Dimensions,
   Platform,
   useWindowDimensions,
 } from 'react-native';
@@ -959,7 +958,6 @@ const styles = StyleSheet.create({
   },
 
   scrollContent: { paddingTop: 0 },
-  searchScrollContent: { paddingTop: spacing.xs },
   statusText: {
     paddingHorizontal: spacing.lg,
     color: colors.textSecondary,

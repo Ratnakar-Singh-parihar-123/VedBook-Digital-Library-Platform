@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 
 import { booksAPI } from "../../api/adminApi";
+import { resolveCoverUrl, resolveAvatarUrl } from "../../utils/urlUtils";
 
 /* ------------------------------------------------------------------ */
 /*  Brand logo                                                         */
@@ -60,43 +61,6 @@ function hashString(str) {
   return Math.abs(h);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Cover URL resolver                                                 */
-/* ------------------------------------------------------------------ */
-
-function resolveCoverUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-
-  const s = raw.trim();
-  if (!s) return "";
-
-  // Already a complete URL
-  if (/^(https?:\/\/|data:|blob:)/i.test(s)) {
-    return s;
-  }
-
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
-  const host = base.replace(/\/api\/?$/, "");
-
-  // Database path: uploads/covers/book.png
-  if (s.startsWith("uploads/")) {
-    return `${host}/${s}`;
-  }
-
-  // Absolute server path
-  if (s.startsWith("/")) {
-    return `${host}${s}`;
-  }
-
-  // Cover filename only
-  if (s.toLowerCase().endsWith(".png")) {
-    return `${host}/uploads/covers/${s}`;
-  }
-
-  // Legacy cover filename fallback
-  return `${host}/uploads/books/${s}`;
-}
 
 function pickCover(b) {
   if (!b) return "";
@@ -197,19 +161,6 @@ function MiniCover({ book, className = "" }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Avatar URL resolver                                                */
-/* ------------------------------------------------------------------ */
-function resolveAvatarUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-  if (/^(https?:\/\/|data:|blob:)/i.test(raw)) return raw;
-  if (!raw.startsWith("/")) {
-    return `http://localhost:8000/uploads/admin-profiles/${raw}`;
-  }
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-  const host = base.replace(/\/api\/?$/, "");
-  return `${host}${raw}`;
-}
 
 function getAvatarFromAdmin(admin) {
   if (!admin) return "";

@@ -22,6 +22,7 @@ import {
 import useFetch from "../dashboard/hooks/useFetch";
 import { formatDate, formatNumber } from "../dashboard/utils/format";
 import { booksAPI } from "../../api/adminApi";
+import { resolveCoverUrl } from "../../utils/urlUtils";
 
 import BookDetailModal from "../components/BookDetailModal";
 import DeleteBookDialog from "../components/DeleteBookDialog";
@@ -634,15 +635,7 @@ function BookThumb({ book, className = "" }) {
     book.coverUrl ||
     book.thumbnail;
 
-  const apiBaseUrl =
-    import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-  const serverBaseUrl = apiBaseUrl.replace(/\/api\/?$/, "");
-
-  const coverUrl = cover
-    ? /^https?:\/\//i.test(cover)
-      ? cover
-      : `${serverBaseUrl}/${cover.replace(/^\/+/, "")}`
-    : null;
+  const coverUrl = resolveCoverUrl(cover);
 
   useEffect(() => {
     setErrored(false);

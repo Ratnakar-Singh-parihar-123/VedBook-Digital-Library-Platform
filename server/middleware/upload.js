@@ -1,38 +1,28 @@
 import multer from "multer";
-import path from "node:path";
-import { mkdirSync } from "node:fs";
 import { randomUUID } from "node:crypto";
+import { getAdminProfilesDir, initStorageDirs } from "../utils/storage.js";
 
-const uploadDir = path.resolve("uploads/admin-profiles");
+initStorageDirs();
 
-mkdirSync(uploadDir, { recursive: true });
+const extensionMap = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+};
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    cb(null, getAdminProfilesDir());
   },
 
   filename: (req, file, cb) => {
-    const extensionMap = {
-      "image/jpeg": ".jpg",
-      "image/png": ".png",
-      "image/webp": ".webp",
-    };
-
-    const extension = extensionMap[file.mimetype];
-
-    if (!extension) {
-      return cb(new Error("Unsupported image type"));
-    }
-
+    const extension = extensionMap[file.mimetype] || ".png";
     cb(null, `${randomUUID()}${extension}`);
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-
-  if (!allowedTypes.includes(file.mimetype)) {
+  if (!extensionMap[file.mimetype]) {
     return cb(new Error("Only JPG, PNG and WebP images are allowed"));
   }
 

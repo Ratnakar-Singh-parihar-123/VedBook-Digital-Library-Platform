@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 
 import { booksAPI, categoriesAPI } from "../../../api/adminApi";
+import { resolveCoverUrl } from "../../../utils/urlUtils";
 import BookCardSkeleton from "../../../components/ui/BookCardSkeleton";
 import EmptyState from "../../../components/ui/EmptyState";
 import ErrorState from "../../../components/ui/ErrorState";
@@ -48,23 +49,6 @@ const SORTS = [
 
 const BOOKS_PER_PAGE = 12;
 
-/* ------------------------------------------------------------------ */
-/*  Cover URL resolver — handles absolute, relative, filename-only    */
-/* ------------------------------------------------------------------ */
-function resolveCoverUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-  const s = raw.trim();
-  if (!s) return "";
-  if (/^(https?:\/\/|data:|blob:)/i.test(s)) return s;
-
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000";
-  const host = base.replace(/\/api\/?$/, "");
-
-  if (s.startsWith("uploads/")) return `${host}/${s}`;
-  if (s.startsWith("/")) return `${host}${s}`;
-  if (s.endsWith(".png")) return `${host}/uploads/covers/${s}`;
-  return `${host}/uploads/books/${s}`;
-}
 
 function pickCover(b) {
   if (!b) return "";

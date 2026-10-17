@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { isFavorite, toggleFavorite, addRecentlyViewed, getReadingProgress } from "../../utils/libraryStorage";
 import { useToast } from "../../context/ToastContext";
+import { resolveCoverUrl } from "../../utils/urlUtils";
 
 /* ------------------------------------------------------------------ */
 /*  Cover Palettes & URL Resolver                                      */
@@ -35,19 +36,6 @@ function hashString(str) {
     h |= 0;
   }
   return Math.abs(h);
-}
-
-function resolveCoverUrl(raw) {
-  if (!raw || typeof raw !== "string") return "";
-  const s = raw.trim();
-  if (!s) return "";
-  if (/^(https?:\/\/|data:|blob:)/i.test(s)) return s;
-  const base = import.meta.env.VITE_API_URL || "http://localhost:8000";
-  const host = base.replace(/\/api\/?$/, "");
-  if (s.startsWith("uploads/")) return `${host}/${s}`;
-  if (s.startsWith("/")) return `${host}${s}`;
-  if (s.endsWith(".png")) return `${host}/uploads/covers/${s}`;
-  return `${host}/uploads/books/${s}`;
 }
 
 export default function BookDetailModal({ book, isOpen, onClose }) {
