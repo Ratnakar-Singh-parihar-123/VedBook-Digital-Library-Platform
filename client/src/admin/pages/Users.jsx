@@ -24,7 +24,7 @@ import RefreshBanner from "../../components/ui/RefreshBanner";
 /*  Config                                                             */
 /* ------------------------------------------------------------------ */
 const PAGE_SIZE = 10;
-const API_BASE = import.meta.env?.VITE_API_BASE_URL || "";
+const API_BASE = import.meta.env?.VITE_API_URL || "";
 
 const ROLE_OPTIONS = [
   { value: "all", label: "All roles" },

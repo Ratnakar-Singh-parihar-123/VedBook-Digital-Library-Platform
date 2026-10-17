@@ -631,7 +631,7 @@ function BookThumb({ book, className = "" }) {
     book.thumbnail;
 
   const apiBaseUrl =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+    import.meta.env.VITE_API_URL || "http://localhost:8000/api";
   const serverBaseUrl = apiBaseUrl.replace(/\/api\/?$/, "");
 
   const coverUrl = cover

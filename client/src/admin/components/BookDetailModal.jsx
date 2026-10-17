@@ -84,7 +84,7 @@ export default function BookDetailModal({
     null;
 
   const apiBaseUrl =
-    import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+    import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
   const serverBaseUrl = apiBaseUrl.replace(/\/api\/?$/, "");
 

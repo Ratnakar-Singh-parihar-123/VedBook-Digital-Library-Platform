@@ -21,16 +21,13 @@ import {
 } from "lucide-react";
 
 import useFetch from "../dashboard/hooks/useFetch";
-import {
-  formatDateTime,
-  formatNumber,
-} from "../dashboard/utils/format";
+import { formatDateTime, formatNumber } from "../dashboard/utils/format";
 import { usersAPI } from "../../api/adminApi";
 
 /* ------------------------------------------------------------------ */
 /*  Avatar URL resolver — same as Users.jsx                           */
 /* ------------------------------------------------------------------ */
-const API_BASE = import.meta.env?.VITE_API_BASE_URL || "";
+const API_BASE = import.meta.env?.VITE_API_URL || "";
 
 function resolveAvatarUrl(user) {
   if (!user) return null;
@@ -136,7 +133,7 @@ export default function UserDetailModal({
   const handleDelete = async () => {
     if (!user || actionLoading) return;
     const confirmed = window.confirm(
-      `Are you sure you want to delete user "${user.name || user.email}"? This action cannot be undone.`
+      `Are you sure you want to delete user "${user.name || user.email}"? This action cannot be undone.`,
     );
     if (!confirmed) return;
     try {

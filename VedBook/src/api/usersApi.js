@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 /*  React Native me env vars ka direct support nahi — hardcode karo    */
 /*  ya react-native-config / expo-constants use karo.                  */
 /* ------------------------------------------------------------------ */
-export const API_BASE_URL = 'http://192.168.1.107:8000/api'; // Android emulator
+export const API_BASE_URL =
+  'https://vedbook-digital-library-platform.onrender.com/api'; // Android emulator
 // For iOS simulator:  "http://localhost:8000/api"
 // For physical device: "http://<your-laptop-ip>:8000/api"
 
