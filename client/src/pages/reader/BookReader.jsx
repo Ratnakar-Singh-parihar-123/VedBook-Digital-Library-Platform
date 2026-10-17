@@ -21,9 +21,22 @@ import {
   RefreshCw,
   Book,
   BookOpenCheck,
+  Bookmark,
+  Palette,
+  Check,
 } from "lucide-react";
 
 import { booksAPI } from "../../api/adminApi";
+import {
+  getReadingProgress,
+  saveReadingProgress,
+  addRecentlyViewed,
+  isFavorite,
+  toggleFavorite,
+  getReaderPrefs,
+  saveReaderPrefs,
+} from "../../utils/libraryStorage";
+import { useToast } from "../../context/ToastContext";
 
 /* ------------------------------------------------------------------ */
 /*  PDF.js worker — CDN, matched to react-pdf's bundled version       */
@@ -41,6 +54,41 @@ const MAX_ZOOM = ZOOM_STEPS.length - 1;
 const PDF_RATIO = 8.5 / 11;
 const SPREAD_GAP = 2; // px between two pages (spine)
 
+const THEMES = {
+  forest: {
+    id: "forest",
+    name: "Forest Midnight",
+    bg: "#0B1613",
+    headerBg: "rgba(11, 22, 19, 0.75)",
+    glow1: "rgba(214,181,109,0.10)",
+    glow2: "rgba(228,237,229,0.05)",
+  },
+  sepia: {
+    id: "sepia",
+    name: "Warm Sepia",
+    bg: "#1D160E",
+    headerBg: "rgba(29, 22, 14, 0.75)",
+    glow1: "rgba(214,160,109,0.12)",
+    glow2: "rgba(140,90,50,0.06)",
+  },
+  charcoal: {
+    id: "charcoal",
+    name: "Pure Dark",
+    bg: "#111111",
+    headerBg: "rgba(17, 17, 17, 0.75)",
+    glow1: "rgba(255,255,255,0.04)",
+    glow2: "rgba(255,255,255,0.02)",
+  },
+  cream: {
+    id: "cream",
+    name: "Emerald Night",
+    bg: "#1A2621",
+    headerBg: "rgba(26, 38, 33, 0.75)",
+    glow1: "rgba(214,181,109,0.14)",
+    glow2: "rgba(228,237,229,0.08)",
+  },
+};
+
 /* ------------------------------------------------------------------ */
 /*  Book Reader                                                        */
 /* ------------------------------------------------------------------ */
@@ -48,11 +96,15 @@ export default function BookReader() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const passedBook = location.state?.book || null;
 
   const [numPages, setNumPages] = useState(0);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(() => {
+    const saved = id ? getReadingProgress(id) : null;
+    return saved?.page ? Math.max(1, saved.page) : 1;
+  });
   const [pdfError, setPdfError] = useState("");
   const [zoomIndex, setZoomIndex] = useState(DEFAULT_ZOOM_INDEX);
   const [tocOpen, setTocOpen] = useState(false);
@@ -60,6 +112,15 @@ export default function BookReader() {
   const [fullscreen, setFullscreen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
+
+  const [fav, setFav] = useState(() => (id ? isFavorite(id) : false));
+  const [themeKey, setThemeKey] = useState(() => {
+    const prefs = getReaderPrefs();
+    return prefs?.theme && THEMES[prefs.theme] ? prefs.theme : "forest";
+  });
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const [pageInput, setPageInput] = useState(String(pageNumber));
+  const themeMenuRef = useRef(null);
 
   /* Spread mode: 1 = single, 2 = two-page spread */
   const [spread, setSpread] = useState(() => {
@@ -74,6 +135,31 @@ export default function BookReader() {
   const zoom = ZOOM_STEPS[zoomIndex];
   const title = passedBook?.title || "Book";
   const author = passedBook?.author || "";
+
+  // Save reading progress & recently viewed
+  useEffect(() => {
+    if (id && numPages > 0) {
+      saveReadingProgress(id, pageNumber, numPages);
+    }
+  }, [id, pageNumber, numPages]);
+
+  useEffect(() => {
+    if (id) {
+      addRecentlyViewed(passedBook || { id, title, author });
+    }
+  }, [id, passedBook, title, author]);
+
+  // Click outside listener for theme popup
+  useEffect(() => {
+    if (!themeMenuOpen) return;
+    const onClick = (e) => {
+      if (themeMenuRef.current && !themeMenuRef.current.contains(e.target)) {
+        setThemeMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [themeMenuOpen]);
 
   /* ---------- Force single on small screens ---------- */
   useEffect(() => {
@@ -304,7 +390,7 @@ export default function BookReader() {
     <div
       ref={readerRef}
       className="fixed inset-0 z-40 flex flex-col"
-      style={{ background: "#0B1613" }}
+      style={{ background: (THEMES[themeKey] || THEMES.forest).bg }}
     >
       <style>{`
         @keyframes page-enter {
@@ -315,7 +401,10 @@ export default function BookReader() {
       `}</style>
 
       {/* ================= TOP BAR ================= */}
-      <header className="relative z-20 border-b shrink-0 bg-black/50 backdrop-blur-md border-white/5">
+      <header
+        className="relative z-20 border-b shrink-0 backdrop-blur-md border-white/5"
+        style={{ background: (THEMES[themeKey] || THEMES.forest).headerBg }}
+      >
         <div className="flex items-center justify-between gap-3 px-3 h-14 sm:px-5">
           {/* Left */}
           <div className="flex items-center min-w-0 gap-2">
@@ -438,6 +527,75 @@ export default function BookReader() {
               </button>
             </div>
 
+            {/* Bookmark button */}
+            <button
+              type="button"
+              onClick={() => {
+                const isNow = toggleFavorite(passedBook || { id, title, author });
+                setFav(isNow);
+                if (isNow) {
+                  toast.success(`"${title}" saved to your bookmarks.`);
+                } else {
+                  toast.info(`"${title}" removed from bookmarks.`);
+                }
+              }}
+              aria-label={fav ? "Remove from bookmarks" : "Save bookmark"}
+              title={fav ? "Bookmarked" : "Bookmark this book"}
+              className={`w-9 h-9 rounded-xl border transition grid place-items-center ${
+                fav
+                  ? "bg-primary text-gold border-gold/40 shadow-soft"
+                  : "bg-white/[0.06] border-white/10 text-cream/80 hover:bg-white/10 hover:text-cream"
+              }`}
+            >
+              <Bookmark size={15} className={fav ? "fill-gold text-gold" : ""} />
+            </button>
+
+            {/* Reading ambience theme selector */}
+            <div ref={themeMenuRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setThemeMenuOpen((v) => !v)}
+                aria-label="Reading ambience theme"
+                title="Reading ambience theme"
+                className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/10 grid place-items-center text-cream/80 hover:bg-white/10 hover:text-cream transition"
+              >
+                <Palette size={15} />
+              </button>
+
+              {themeMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-stone-900/95 border border-white/10 rounded-2xl p-2 shadow-2xl backdrop-blur-md z-50">
+                  <p className="text-[10px] uppercase font-bold text-cream/40 px-2 py-1 tracking-wider">
+                    Reading Ambience
+                  </p>
+                  {Object.values(THEMES).map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => {
+                        setThemeKey(t.id);
+                        saveReaderPrefs({ theme: t.id });
+                        setThemeMenuOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-xs font-medium transition ${
+                        themeKey === t.id
+                          ? "bg-white/15 text-cream font-bold"
+                          : "text-cream/70 hover:bg-white/10 hover:text-cream"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-3.5 h-3.5 rounded-full border border-white/20 shrink-0"
+                          style={{ background: t.bg }}
+                        />
+                        <span>{t.name}</span>
+                      </div>
+                      {themeKey === t.id && <Check size={13} className="text-gold" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
               type="button"
               onClick={toggleFullscreen}
@@ -464,9 +622,9 @@ export default function BookReader() {
         className="relative flex-1 overflow-auto"
         style={{
           background:
-            "radial-gradient(ellipse 60% 55% at 50% 0%, rgba(214,181,109,0.10), transparent 70%), " +
-            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(228,237,229,0.05), transparent 60%), " +
-            "#0B1613",
+            `radial-gradient(ellipse 60% 55% at 50% 0%, ${(THEMES[themeKey] || THEMES.forest).glow1}, transparent 70%), ` +
+            `radial-gradient(ellipse 80% 60% at 50% 100%, ${(THEMES[themeKey] || THEMES.forest).glow2}, transparent 60%), ` +
+            (THEMES[themeKey] || THEMES.forest).bg,
         }}
       >
         <div className="relative flex items-start justify-center min-h-full px-4 py-8 sm:py-14 sm:px-8">
@@ -710,7 +868,10 @@ export default function BookReader() {
       </main>
 
       {/* ================= BOTTOM BAR ================= */}
-      <footer className="relative z-20 border-t shrink-0 bg-black/50 backdrop-blur-md border-white/5">
+      <footer
+        className="relative z-20 border-t shrink-0 backdrop-blur-md border-white/5"
+        style={{ background: (THEMES[themeKey] || THEMES.forest).headerBg }}
+      >
         <div className="flex items-center justify-between h-16 gap-3 px-3 sm:px-6">
           {/* Prev */}
           <button
@@ -725,11 +886,34 @@ export default function BookReader() {
             </span>
           </button>
 
-          {/* Slider (desktop) */}
+          {/* Slider & Page Jump (desktop) */}
           <div className="items-center flex-1 hidden max-w-xl gap-3 mx-auto sm:flex">
-            <span className="text-[11px] text-cream/40 tabular-nums w-8 text-right">
-              {leftPage}
-            </span>
+            <div className="flex items-center gap-1.5 bg-white/[0.06] border border-white/10 rounded-xl px-2.5 py-1 shrink-0">
+              <span className="text-[10px] uppercase text-cream/40 font-semibold tracking-wider">Page</span>
+              <input
+                type="number"
+                min={1}
+                max={numPages || 1}
+                value={pageInput}
+                onChange={(e) => setPageInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const p = parseInt(pageInput, 10);
+                    if (!isNaN(p)) goToPage(p);
+                  }
+                }}
+                onBlur={() => {
+                  const p = parseInt(pageInput, 10);
+                  if (!isNaN(p)) goToPage(p);
+                  else setPageInput(String(leftPage));
+                }}
+                aria-label="Direct page jump"
+                className="w-11 bg-transparent text-center font-bold text-xs text-cream outline-none tabular-nums"
+              />
+              <span className="text-[11px] text-cream/30">/</span>
+              <span className="text-[11px] text-cream/50 tabular-nums">{numPages || "—"}</span>
+            </div>
+
             <input
               type="range"
               min={1}
@@ -740,9 +924,6 @@ export default function BookReader() {
               aria-label="Jump to page"
               className="flex-1 cursor-pointer accent-gold"
             />
-            <span className="text-[11px] text-cream/40 tabular-nums w-8">
-              {numPages || "—"}
-            </span>
           </div>
 
           {/* Mobile counter */}

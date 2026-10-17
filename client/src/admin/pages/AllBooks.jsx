@@ -29,6 +29,7 @@ import TableSkeleton from "../../components/ui/TableSkeleton";
 import EmptyState from "../../components/ui/EmptyState";
 import ErrorState from "../../components/ui/ErrorState";
 import RefreshBanner from "../../components/ui/RefreshBanner";
+import { useToast } from "../../context/ToastContext";
 
 /* ------------------------------------------------------------------ */
 /*  Config                                                             */
@@ -52,6 +53,7 @@ const SORT_OPTIONS = [
 /*  Page                                                              */
 /* ================================================================== */
 export default function AllBooks() {
+  const toast = useToast();
   const [refreshKey, setRefreshKey] = useState(0);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -161,12 +163,14 @@ export default function AllBooks() {
     try {
       if (isPublished) {
         await booksAPI.unpublish(id);
+        toast.info(`"${book.title}" moved to drafts.`);
       } else {
         await booksAPI.publish(id);
+        toast.success(`"${book.title}" is now published.`);
       }
       reload();
     } catch (err) {
-      alert(err?.message || "Could not update status");
+      toast.error(err?.message || "Could not update book status.");
     } finally {
       setWorkingId(null);
     }

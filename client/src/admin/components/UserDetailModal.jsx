@@ -82,6 +82,7 @@ export default function UserDetailModal({
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   /* Reset tab and action error when opening a different user */
   useEffect(() => {
@@ -89,6 +90,7 @@ export default function UserDetailModal({
       setTab("overview");
       setActionError("");
       setCurrentUser(null);
+      setConfirmDelete(false);
     }
   }, [open, userId]);
 
@@ -130,12 +132,8 @@ export default function UserDetailModal({
     }
   };
 
-  const handleDelete = async () => {
+  const executeDelete = async () => {
     if (!user || actionLoading) return;
-    const confirmed = window.confirm(
-      `Are you sure you want to delete user "${user.name || user.email}"? This action cannot be undone.`,
-    );
-    if (!confirmed) return;
     try {
       setActionLoading(true);
       setActionError("");
@@ -377,16 +375,38 @@ export default function UserDetailModal({
                     )}
                     {isActive(user) ? "Suspend" : "Activate"}
                   </button>
-                  <button
-                    type="button"
-                    onClick={handleDelete}
-                    disabled={actionLoading}
-                    className="inline-flex items-center gap-2 text-red-600 border border-red-200 bg-cream px-3.5 py-2.5 rounded-xl text-sm font-medium hover:bg-red-50 transition disabled:opacity-50"
-                    aria-label="Delete user"
-                    title="Delete user"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                  {confirmDelete ? (
+                    <div className="flex items-center gap-2 bg-red-50 border border-red-200 px-3 py-1.5 rounded-xl animate-fade-in">
+                      <span className="text-xs font-semibold text-red-700">Delete user?</span>
+                      <button
+                        type="button"
+                        onClick={executeDelete}
+                        disabled={actionLoading}
+                        className="px-2.5 py-1 text-xs font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
+                      >
+                        {actionLoading ? <Loader2 size={12} className="animate-spin" /> : "Confirm"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmDelete(false)}
+                        className="px-2 py-1 text-xs font-medium text-gray-600 hover:text-gray-900"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDelete(true)}
+                      disabled={actionLoading}
+                      className="inline-flex items-center gap-1.5 text-red-600 border border-red-200 bg-cream px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium hover:bg-red-50 transition disabled:opacity-50"
+                      aria-label="Delete user"
+                      title="Delete user"
+                    >
+                      <Trash2 size={14} />
+                      <span className="hidden sm:inline">Delete</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

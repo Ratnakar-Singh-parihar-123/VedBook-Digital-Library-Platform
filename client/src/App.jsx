@@ -11,6 +11,7 @@ import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer.jsx";
 import ScrollToTop from "./components/ui/ScrollToTop.jsx";
 import Loader from "./components/ui/Loader";
+import { ToastProvider } from "./context/ToastContext";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
@@ -106,85 +107,87 @@ function AdminAppShell() {
 /* ------------------------------------------------------------------ */
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
+    <ToastProvider>
+      <BrowserRouter>
+        <ScrollToTop />
 
-      <Routes>
-        {/* ================= PUBLIC (full-screen reader) ================= */}
-        <Route
-          path="/read/:id"
-          element={
-            <Suspense fallback={<PageLoader tone="light" />}>
-              <BookReader />
-            </Suspense>
-          }
-        />
-
-        {/* ================= PUBLIC (with Navbar + Footer) ================= */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<HomeIcon />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/explore" element={<ExploreBooks />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/download" element={<DownloadApp />} />
-          <Route path="/privacy" element={<PolicyAndHelp section="privacy" />} />
-          <Route path="/terms" element={<PolicyAndHelp section="terms" />} />
-          <Route path="/help" element={<PolicyAndHelp section="help" />} />
-          <Route path="/report" element={<PolicyAndHelp section="report" />} />
-        </Route>
-
-        {/* ================= ADMIN AUTH (full-screen) ================= */}
-        <Route
-          path="/admin/login"
-          element={
-            <Suspense fallback={<PageLoader tone="dark" />}>
-              <AdminLogin />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/admin/register"
-          element={
-            <Suspense fallback={<PageLoader tone="dark" />}>
-              <AdminRegister />
-            </Suspense>
-          }
-        />
-
-        {/* ================= ADMIN APP (protected + sidebar) ================= */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <AdminAppShell />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/books" element={<AllBooks />} />
-          <Route path="/admin/books/upload" element={<UploadBook />} />
-          <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/books/edit/:id" element={<EditBook />} />
-          <Route path="/admin/users" element={<Users />} />
-          <Route path="/admin/analytics" element={<Analytics />} />
-          <Route path="/admin/reading-activity" element={<ReadingActivity />} />
-          <Route path="/admin/activity-log" element={<ActivityLog />} />
-          <Route path="/admin/profile" element={<Profile />} />
-          <Route path="/admin/settings" element={<Setting />} />
-          <Route path="/admin/notifications" element={<Notifications />} />
-          <Route path="/admin/featured" element={<FeaturedMasterpieces />} />
-          {/* <Route path="/admin/reviews" element={<Reviews />} /> */}
-          <Route path="/admin/popular" element={<PopularThisWeek />} />
-          <Route path="/admin/reviews" element={<ReviewManagement />} />
+        <Routes>
+          {/* ================= PUBLIC (full-screen reader) ================= */}
           <Route
-            path="/admin/notifications/sent"
-            element={<SentNotifications />}
+            path="/read/:id"
+            element={
+              <Suspense fallback={<PageLoader tone="light" />}>
+                <BookReader />
+              </Suspense>
+            }
           />
-        </Route>
 
-        {/* ================= FALLBACK ================= */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* ================= PUBLIC (with Navbar + Footer) ================= */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomeIcon />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/explore" element={<ExploreBooks />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/download" element={<DownloadApp />} />
+            <Route path="/privacy" element={<PolicyAndHelp section="privacy" />} />
+            <Route path="/terms" element={<PolicyAndHelp section="terms" />} />
+            <Route path="/help" element={<PolicyAndHelp section="help" />} />
+            <Route path="/report" element={<PolicyAndHelp section="report" />} />
+          </Route>
+
+          {/* ================= ADMIN AUTH (full-screen) ================= */}
+          <Route
+            path="/admin/login"
+            element={
+              <Suspense fallback={<PageLoader tone="dark" />}>
+                <AdminLogin />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/admin/register"
+            element={
+              <Suspense fallback={<PageLoader tone="dark" />}>
+                <AdminRegister />
+              </Suspense>
+            }
+          />
+
+          {/* ================= ADMIN APP (protected + sidebar) ================= */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <AdminAppShell />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/books" element={<AllBooks />} />
+            <Route path="/admin/books/upload" element={<UploadBook />} />
+            <Route path="/admin/categories" element={<AdminCategories />} />
+            <Route path="/admin/books/edit/:id" element={<EditBook />} />
+            <Route path="/admin/users" element={<Users />} />
+            <Route path="/admin/analytics" element={<Analytics />} />
+            <Route path="/admin/reading-activity" element={<ReadingActivity />} />
+            <Route path="/admin/activity-log" element={<ActivityLog />} />
+            <Route path="/admin/profile" element={<Profile />} />
+            <Route path="/admin/settings" element={<Setting />} />
+            <Route path="/admin/notifications" element={<Notifications />} />
+            <Route path="/admin/featured" element={<FeaturedMasterpieces />} />
+            {/* <Route path="/admin/reviews" element={<Reviews />} /> */}
+            <Route path="/admin/popular" element={<PopularThisWeek />} />
+            <Route path="/admin/reviews" element={<ReviewManagement />} />
+            <Route
+              path="/admin/notifications/sent"
+              element={<SentNotifications />}
+            />
+          </Route>
+
+          {/* ================= FALLBACK ================= */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
