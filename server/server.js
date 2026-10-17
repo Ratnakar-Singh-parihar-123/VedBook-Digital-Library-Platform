@@ -18,25 +18,57 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import adminReviewRoutes from "./routes/adminReviewRoutes.js";
 import adminAnalyticsRoutes from "./routes/adminAnalyticsRoutes.js";
 import userNotificationRoutes from "./routes/userNotificationRoutes.js";
+
+// Load environment variables
 dotenv.config();
 
 const app = express();
 const httpServer = http.createServer(app);
 
+// Allowed frontend origins
+const allowedOrigins = [
+  "https://thevedbook.vercel.app",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+];
+
+// CORS configuration
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests without Origin, such as Postman/server-to-server
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.warn("CORS blocked origin:", origin);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  }),
+);
+
+// Parse JSON request bodies
+app.use(express.json());
+
 // Initialize Socket.IO
 initializeSocket(httpServer);
 
-app.use(cors());
-app.use(express.json());
-
-// Serve book cover images publicly.
-// Keep PDF files behind an authenticated endpoint.
+// Serve uploaded book cover images
+// Keep PDF files behind authenticated endpoints
 app.use("/uploads", express.static(path.resolve("uploads")));
 
+// Health check
 app.get("/", (req, res) => {
-  res.json({ message: "VedBook API is running!" });
+  res.json({
+    success: true,
+    message: "VedBook API is running!",
+  });
 });
 
+// Database connection test
 app.get("/api/db-test", async (req, res) => {
   try {
     const [rows] = await db.query("SELECT DATABASE() AS databaseName");
@@ -47,7 +79,7 @@ app.get("/api/db-test", async (req, res) => {
       database: rows[0].databaseName,
     });
   } catch (error) {
-    console.error("Database error:", error.message);
+    console.error("Database error:", error);
 
     res.status(500).json({
       success: false,
@@ -56,6 +88,7 @@ app.get("/api/db-test", async (req, res) => {
   }
 });
 
+// API routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -69,8 +102,9 @@ app.use("/api/admin/reviews", adminReviewRoutes);
 app.use("/api/admin/analytics", adminAnalyticsRoutes);
 app.use("/api/notifications", userNotificationRoutes);
 
+// Start server
 const PORT = process.env.PORT || 5000;
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`VedBook server running on port ${PORT}`);
 });

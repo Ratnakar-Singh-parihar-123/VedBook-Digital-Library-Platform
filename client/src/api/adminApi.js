@@ -73,9 +73,6 @@ export const usersAPI = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Books API — admin side                                             */
-/* ------------------------------------------------------------------ */
-/* ------------------------------------------------------------------ */
 /*  Books API — matches your Express routes                           */
 /* ------------------------------------------------------------------ */
 export const booksAPI = {
@@ -155,21 +152,21 @@ export const profileAPI = {
 
 export const categoriesAPI = {
   // Public: active categories only
-  list: () => api.get("/categories"),
-  listPublic: () => api.get("/categories"),
+  list: () => api.get("/api/categories"),
+  listPublic: () => api.get("/api/categories"),
 
   // Admin: active + inactive categories
-  listAdmin: () => api.get("/categories/admin"),
+  listAdmin: () => api.get("/api/categories/admin"),
 
   // Admin: create category
-  create: (payload) => api.post("/categories", payload),
+  create: (payload) => api.post("/api/categories", payload),
 
   // Admin: update name, description, etc.
-  update: (id, payload) => api.patch(`/categories/${id}`, payload),
+  update: (id, payload) => api.patch(`/api/categories/${id}`, payload),
 
   // Admin: activate/deactivate category
   updateStatus: (id, is_active) =>
-    api.patch(`/categories/${id}/status`, { is_active }),
+    api.patch(`/api/categories/${id}/status`, { is_active }),
 
   // Soft-deactivate category
   remove: (id) => api.delete(`/categories/${id}`),
