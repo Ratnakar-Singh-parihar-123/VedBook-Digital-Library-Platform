@@ -1071,7 +1071,7 @@ function MobileSidebar({ open, onClose, admin, isAuthed }) {
                     <img
                       src={LOGO_SRC}
                       alt="VedBook"
-                      className="object-contain w-full h-full p-1"
+                      className="object-contain w-full h-full"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                         e.currentTarget.nextSibling.style.display = "grid";

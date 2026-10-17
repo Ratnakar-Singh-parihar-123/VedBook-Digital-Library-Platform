@@ -88,12 +88,48 @@ function pickCover(b) {
 /*  Auto-cover palettes (theme-based)                                  */
 /* ------------------------------------------------------------------ */
 const COVER_PALETTES = [
-  { from: "#1A4A3E", to: "#0B241C", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#B08F4A", to: "#6E5A2A", text: "#FAF7F0", muted: "rgba(250,247,240,0.6)", accent: "#FAF7F0" },
-  { from: "#2A5E4E", to: "#0F2B22", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#D6B56D", to: "#8E7538", text: "#173F35", muted: "rgba(23,63,53,0.7)", accent: "#173F35" },
-  { from: "#3A6A55", to: "#152E24", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#8B6E32", to: "#4E3D1B", text: "#FAF7F0", muted: "rgba(250,247,240,0.6)", accent: "#D6B56D" },
+  {
+    from: "#1A4A3E",
+    to: "#0B241C",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#B08F4A",
+    to: "#6E5A2A",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.6)",
+    accent: "#FAF7F0",
+  },
+  {
+    from: "#2A5E4E",
+    to: "#0F2B22",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#D6B56D",
+    to: "#8E7538",
+    text: "#173F35",
+    muted: "rgba(23,63,53,0.7)",
+    accent: "#173F35",
+  },
+  {
+    from: "#3A6A55",
+    to: "#152E24",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#8B6E32",
+    to: "#4E3D1B",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.6)",
+    accent: "#D6B56D",
+  },
 ];
 
 function hashString(str) {
@@ -114,10 +150,10 @@ export default function ExploreBooks() {
 
   const [query, setQuery] = useState(() => searchParams.get("q") || "");
   const [category, setCategory] = useState(
-    () => searchParams.get("category") || searchParams.get("cat") || "All"
+    () => searchParams.get("category") || searchParams.get("cat") || "All",
   );
   const [language, setLanguage] = useState(
-    () => searchParams.get("lang") || searchParams.get("language") || "All"
+    () => searchParams.get("lang") || searchParams.get("language") || "All",
   );
   const [sort, setSort] = useState(() => searchParams.get("sort") || "popular");
   const [view, setView] = useState("grid");
@@ -131,7 +167,8 @@ export default function ExploreBooks() {
   // Sync state when URL query params change
   useEffect(() => {
     const q = searchParams.get("q") || "";
-    const cat = searchParams.get("category") || searchParams.get("cat") || "All";
+    const cat =
+      searchParams.get("category") || searchParams.get("cat") || "All";
     const s = searchParams.get("sort") || "popular";
     const l = searchParams.get("lang") || searchParams.get("language") || "All";
 
@@ -158,7 +195,8 @@ export default function ExploreBooks() {
       if (e.detail?.type === "recent") setRecentBooks(e.detail.data || []);
     };
     window.addEventListener("ved-library-change", onLibraryChange);
-    return () => window.removeEventListener("ved-library-change", onLibraryChange);
+    return () =>
+      window.removeEventListener("ved-library-change", onLibraryChange);
   }, []);
 
   useEffect(() => {
@@ -266,7 +304,7 @@ export default function ExploreBooks() {
         (b) =>
           b.title.toLowerCase().includes(q) ||
           b.author.toLowerCase().includes(q) ||
-          b.category.toLowerCase().includes(q)
+          b.category.toLowerCase().includes(q),
       );
     }
     if (category !== "All") list = list.filter((b) => b.category === category);
@@ -281,7 +319,7 @@ export default function ExploreBooks() {
         break;
       case "newest":
         list.sort(
-          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0),
         );
         break;
       default:
@@ -328,29 +366,36 @@ export default function ExploreBooks() {
     <div className="min-h-screen bg-cream">
       {/* ================= PAGE HEADER ================= */}
       <section className="relative overflow-hidden border-b border-primary/10">
-        <div className="absolute rounded-full -top-32 -right-32 w-96 h-96 bg-gold/15 blur-3xl pointer-events-none" />
-        <div className="absolute rounded-full top-20 -left-24 w-72 h-72 bg-mint blur-3xl pointer-events-none" />
+        <div className="absolute rounded-full pointer-events-none -top-32 -right-32 w-96 h-96 bg-gold/15 blur-3xl" />
+        <div className="absolute rounded-full pointer-events-none top-20 -left-24 w-72 h-72 bg-mint blur-3xl" />
 
         <div className="relative px-5 py-10 mx-auto max-w-7xl md:py-14">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <span className="inline-flex items-center gap-2 bg-mint text-primary text-xs font-semibold px-3 py-1.5 rounded-full border border-primary/10">
                 <Sparkles size={12} className="text-gold" />
-                {allBooks.length > 0 ? `${allBooks.length}+ titles curated` : "Digital Library Catalog"}
+                {allBooks.length > 0
+                  ? `${allBooks.length}+ titles curated`
+                  : "Digital Library Catalog"}
               </span>
 
-              <h1 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-display text-primary font-bold tracking-tight">
+              <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl font-display text-primary">
                 Explore the <span className="text-gold">sanctuary.</span>
               </h1>
 
-              <p className="max-w-xl mt-2 text-sm text-primary/70 md:text-base leading-relaxed">
-                Search classical sacred texts, philosophy, literature, and study notes. Read online or save titles to your personal shelf.
+              <p className="max-w-xl mt-2 text-sm leading-relaxed text-primary/70 md:text-base">
+                Search classical sacred texts, philosophy, literature, and study
+                notes. Read online or save titles to your personal shelf.
               </p>
             </div>
 
             <div className="items-center hidden gap-6 md:flex">
               {[
-                { k: allBooks.length > 0 ? `${allBooks.length}+` : "—", l: "Titles", icon: BookOpen },
+                {
+                  k: allBooks.length > 0 ? `${allBooks.length}+` : "—",
+                  l: "Titles",
+                  icon: BookOpen,
+                },
                 { k: "4.8", l: "Avg Rating", icon: Star },
                 { k: "25K+", l: "Readers", icon: Users },
               ].map(({ k, l, icon: Icon }) => (
@@ -437,9 +482,11 @@ export default function ExploreBooks() {
             >
               <RefreshCw
                 size={15}
-                className={isRefreshing || loading ? "animate-spin text-gold" : ""}
+                className={
+                  isRefreshing || loading ? "animate-spin text-gold" : ""
+                }
               />
-              <span className="hidden sm:inline text-xs">
+              <span className="hidden text-xs sm:inline">
                 {isRefreshing ? "Refreshing..." : "Refresh"}
               </span>
             </button>
@@ -465,7 +512,7 @@ export default function ExploreBooks() {
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 aria-label="Sort books"
-                className="w-full px-4 py-3 text-sm bg-white border outline-none appearance-none cursor-pointer sm:w-44 border-primary/15 text-primary rounded-2xl pr-9 focus:ring-2 focus:ring-gold/40 shadow-soft font-medium"
+                className="w-full px-4 py-3 text-sm font-medium bg-white border outline-none appearance-none cursor-pointer sm:w-44 border-primary/15 text-primary rounded-2xl pr-9 focus:ring-2 focus:ring-gold/40 shadow-soft"
               >
                 {SORTS.map((s) => (
                   <option key={s.key} value={s.key}>
@@ -504,7 +551,7 @@ export default function ExploreBooks() {
           </div>
 
           {/* Recently Viewed Shelf */}
-          {recentBooks.length > 0 && !query.trim() && category === "All" && !favoritesOnly && (
+          {/* {recentBooks.length > 0 && !query.trim() && category === "All" && !favoritesOnly && (
             <section
               aria-label="Recently viewed books"
               className="p-4 mb-6 transition-all border sm:p-5 bg-white/70 rounded-3xl border-primary/10 shadow-soft backdrop-blur-sm"
@@ -512,7 +559,7 @@ export default function ExploreBooks() {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <Clock size={15} className="text-gold" />
-                  <h2 className="text-xs font-bold uppercase tracking-wider font-display text-primary">
+                  <h2 className="text-xs font-bold tracking-wider uppercase font-display text-primary">
                     Jump Back In — Recently Viewed
                   </h2>
                 </div>
@@ -538,12 +585,12 @@ export default function ExploreBooks() {
                     }}
                     className="shrink-0 flex items-center gap-2.5 p-2 rounded-2xl bg-cream hover:bg-mint border border-primary/10 text-left transition max-w-[210px] group"
                   >
-                    <div className="w-10 h-14 rounded-lg overflow-hidden bg-primary shrink-0 shadow-soft">
+                    <div className="w-10 overflow-hidden rounded-lg h-14 bg-primary shrink-0 shadow-soft">
                       {b.cover ? (
                         <img
                           src={resolveCoverUrl(b.cover)}
                           alt=""
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform"
+                          className="object-cover w-full h-full transition-transform group-hover:scale-105"
                         />
                       ) : (
                         <div className="grid w-full h-full text-xs font-bold place-items-center text-gold font-display">
@@ -563,7 +610,7 @@ export default function ExploreBooks() {
                 ))}
               </div>
             </section>
-          )}
+          )} */}
 
           {/* Active Filter Chips */}
           {activeFilters > 0 && (
@@ -578,12 +625,15 @@ export default function ExploreBooks() {
                 <Chip label={language} onClear={() => setLanguage("All")} />
               )}
               {favoritesOnly && (
-                <Chip label="Saved Bookmarks" onClear={() => setFavoritesOnly(false)} />
+                <Chip
+                  label="Saved Bookmarks"
+                  onClear={() => setFavoritesOnly(false)}
+                />
               )}
               <button
                 type="button"
                 onClick={clearAll}
-                className="text-xs underline text-primary/60 hover:text-primary underline-offset-4 font-medium"
+                className="text-xs font-medium underline text-primary/60 hover:text-primary underline-offset-4"
               >
                 Clear all filters
               </button>
@@ -601,12 +651,17 @@ export default function ExploreBooks() {
           {!loading && !error && (
             <div className="flex items-center justify-between mb-5 text-sm text-primary/60">
               <p>
-                Showing <span className="font-bold text-primary">{filtered.length}</span>{" "}
+                Showing{" "}
+                <span className="font-bold text-primary">
+                  {filtered.length}
+                </span>{" "}
                 {filtered.length === 1 ? "book" : "books"}
               </p>
               {totalPages > 1 && (
                 <p className="text-xs">
-                  Page <span className="font-semibold text-primary">{safePage}</span> of {totalPages}
+                  Page{" "}
+                  <span className="font-semibold text-primary">{safePage}</span>{" "}
+                  of {totalPages}
                 </p>
               )}
             </div>
@@ -645,14 +700,24 @@ export default function ExploreBooks() {
               {filtered.length === 0 ? (
                 <EmptyState
                   icon={Search}
-                  title={activeFilters > 0 ? "No books match your filters" : "No books in library"}
+                  title={
+                    activeFilters > 0
+                      ? "No books match your filters"
+                      : "No books in library"
+                  }
                   description={
                     activeFilters > 0
                       ? "Try adjusting your search query, or clear selected categories and filters."
                       : "No titles found matching your search. Check back soon!"
                   }
-                  actionLabel={activeFilters > 0 ? "Clear all filters" : "Refresh library"}
-                  onAction={activeFilters > 0 ? clearAll : () => setRefreshKey((k) => k + 1)}
+                  actionLabel={
+                    activeFilters > 0 ? "Clear all filters" : "Refresh library"
+                  }
+                  onAction={
+                    activeFilters > 0
+                      ? clearAll
+                      : () => setRefreshKey((k) => k + 1)
+                  }
                   className="my-6"
                 />
               ) : view === "grid" ? (
@@ -681,7 +746,7 @@ export default function ExploreBooks() {
 
               {/* Pagination Controls */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-10 pt-6 border-t border-primary/10">
+                <div className="flex items-center justify-center gap-2 pt-6 mt-10 border-t border-primary/10">
                   <button
                     type="button"
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -698,7 +763,12 @@ export default function ExploreBooks() {
                       const pNum = i + 1;
                       const isCurrent = pNum === safePage;
                       // Display sensible subset on large pagination
-                      if (totalPages > 6 && Math.abs(pNum - safePage) > 2 && pNum !== 1 && pNum !== totalPages) {
+                      if (
+                        totalPages > 6 &&
+                        Math.abs(pNum - safePage) > 2 &&
+                        pNum !== 1 &&
+                        pNum !== totalPages
+                      ) {
                         return null;
                       }
                       return (
@@ -808,7 +878,12 @@ function FilterSidebar({
           }`}
         >
           <span className="flex items-center gap-2">
-            <Bookmark size={15} className={favoritesOnly ? "fill-gold text-gold" : "text-primary/60"} />
+            <Bookmark
+              size={15}
+              className={
+                favoritesOnly ? "fill-gold text-gold" : "text-primary/60"
+              }
+            />
             Saved Bookmarks
           </span>
           <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-white/20">
@@ -819,11 +894,11 @@ function FilterSidebar({
 
       {/* Categories Box */}
       <div className="p-5 bg-white border border-primary/15 rounded-3xl shadow-soft">
-        <div className="flex items-center gap-2 text-primary font-display font-bold">
+        <div className="flex items-center gap-2 font-bold text-primary font-display">
           <Filter size={15} className="text-gold" />
           <h3 className="text-base">Categories</h3>
         </div>
-        <ul className="mt-4 space-y-1 overflow-y-auto max-h-72 pr-1">
+        <ul className="pr-1 mt-4 space-y-1 overflow-y-auto max-h-72">
           {categories.map((c) => {
             const on = category === c;
             return (
@@ -847,7 +922,9 @@ function FilterSidebar({
 
       {/* Language Box */}
       <div className="p-5 bg-white border border-primary/15 rounded-3xl shadow-soft">
-        <h3 className="text-base font-display font-bold text-primary">Language</h3>
+        <h3 className="text-base font-bold font-display text-primary">
+          Language
+        </h3>
         <ul className="mt-4 space-y-1">
           {languages.map((l) => {
             const on = language === l;
@@ -877,11 +954,12 @@ function FilterSidebar({
           <div className="grid w-9 h-9 rounded-xl bg-gold text-primary place-items-center">
             <TrendingUp size={16} />
           </div>
-          <p className="mt-3 text-base leading-tight font-display text-cream font-bold">
+          <p className="mt-3 text-base font-bold leading-tight font-display text-cream">
             Classical Collections
           </p>
-          <p className="mt-1 text-xs text-cream/70 leading-relaxed">
-            Discover Vedic scriptures and philosophical commentaries in bilingual formats.
+          <p className="mt-1 text-xs leading-relaxed text-cream/70">
+            Discover Vedic scriptures and philosophical commentaries in
+            bilingual formats.
           </p>
           <Link
             to="/categories"
@@ -1014,7 +1092,10 @@ function BookCard({ book, onOpen, onDirectRead }) {
     >
       <div>
         <div className="relative">
-          <BookCover book={book} className="w-full aspect-[5/7] rounded-2xl shadow-soft" />
+          <BookCover
+            book={book}
+            className="w-full aspect-[5/7] rounded-2xl shadow-soft"
+          />
 
           {book.rating != null && (
             <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-0.5 shadow-soft">
@@ -1037,7 +1118,10 @@ function BookCard({ book, onOpen, onDirectRead }) {
                   : "bg-white/90 text-primary/70 hover:bg-white hover:text-primary"
               }`}
             >
-              <Bookmark size={13} className={fav ? "fill-gold text-gold" : ""} />
+              <Bookmark
+                size={13}
+                className={fav ? "fill-gold text-gold" : ""}
+              />
             </button>
           </div>
 
@@ -1047,7 +1131,7 @@ function BookCard({ book, onOpen, onDirectRead }) {
         </div>
 
         <div className="px-1 pt-3 pb-1">
-          <h3 className="text-sm font-bold leading-tight font-display text-primary line-clamp-1 group-hover:text-primary-light transition-colors">
+          <h3 className="text-sm font-bold leading-tight transition-colors font-display text-primary line-clamp-1 group-hover:text-primary-light">
             {book.title}
           </h3>
           <p className="text-[11px] text-primary/60 mt-1 line-clamp-1">
@@ -1056,17 +1140,20 @@ function BookCard({ book, onOpen, onDirectRead }) {
         </div>
       </div>
 
-      <div className="px-1 pt-2 border-t border-primary/5 mt-2 flex items-center justify-between">
+      <div className="flex items-center justify-between px-1 pt-2 mt-2 border-t border-primary/5">
         <span className="text-[9.5px] uppercase tracking-wider text-primary/45 font-semibold truncate max-w-[80px]">
           {book.category}
         </span>
         <button
           type="button"
           onClick={onDirectRead}
-          className="text-xs font-bold text-gold hover:text-primary transition-colors flex items-center gap-1 shrink-0"
+          className="flex items-center gap-1 text-xs font-bold transition-colors text-gold hover:text-primary shrink-0"
         >
           <span>Read</span>
-          <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+          <ArrowRight
+            size={12}
+            className="group-hover:translate-x-0.5 transition-transform"
+          />
         </button>
       </div>
     </article>
@@ -1111,7 +1198,7 @@ function BookRow({ book, onOpen, onDirectRead }) {
       <div className="flex flex-col flex-1 min-w-0">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="text-sm sm:text-base font-bold leading-tight font-display text-primary line-clamp-1 group-hover:text-primary-light transition-colors">
+            <h3 className="text-sm font-bold leading-tight transition-colors sm:text-base font-display text-primary line-clamp-1 group-hover:text-primary-light">
               {book.title}
             </h3>
             <p className="mt-1 text-xs text-primary/60">{book.author}</p>
@@ -1129,16 +1216,21 @@ function BookRow({ book, onOpen, onDirectRead }) {
               onClick={handleToggleFav}
               aria-label={fav ? "Remove from bookmarks" : "Save bookmark"}
               className={`w-7 h-7 rounded-lg grid place-items-center transition ${
-                fav ? "bg-primary text-gold" : "text-primary/40 hover:text-primary hover:bg-mint"
+                fav
+                  ? "bg-primary text-gold"
+                  : "text-primary/40 hover:text-primary hover:bg-mint"
               }`}
             >
-              <Bookmark size={13} className={fav ? "fill-gold text-gold" : ""} />
+              <Bookmark
+                size={13}
+                className={fav ? "fill-gold text-gold" : ""}
+              />
             </button>
           </div>
         </div>
 
         {book.description && (
-          <p className="hidden mt-2 text-xs sm:block text-primary/70 line-clamp-2 leading-relaxed">
+          <p className="hidden mt-2 text-xs leading-relaxed sm:block text-primary/70 line-clamp-2">
             {book.description}
           </p>
         )}
@@ -1159,7 +1251,7 @@ function BookRow({ book, onOpen, onDirectRead }) {
           <button
             type="button"
             onClick={onDirectRead}
-            className="text-xs font-bold text-gold hover:text-primary transition flex items-center gap-1 shrink-0"
+            className="flex items-center gap-1 text-xs font-bold transition text-gold hover:text-primary shrink-0"
           >
             <span>Read Book</span>
             <ArrowRight size={13} />
@@ -1205,12 +1297,14 @@ function MobileFilterDrawer({
         }`}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-primary/10 shrink-0">
-          <h2 className="text-lg font-display text-primary font-bold">Filter Catalog</h2>
+          <h2 className="text-lg font-bold font-display text-primary">
+            Filter Catalog
+          </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close filters"
-            className="grid w-9 h-9 transition bg-white border rounded-xl border-primary/10 place-items-center text-primary hover:bg-mint"
+            className="grid transition bg-white border w-9 h-9 rounded-xl border-primary/10 place-items-center text-primary hover:bg-mint"
           >
             <X size={17} />
           </button>
@@ -1219,7 +1313,7 @@ function MobileFilterDrawer({
         <div className="flex-1 px-5 py-4 space-y-6 overflow-y-auto">
           {/* Favorites toggle */}
           <div>
-            <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-primary/50">
+            <h3 className="mb-2 text-xs font-bold tracking-wider uppercase text-primary/50">
               Personal Shelf
             </h3>
             <button
@@ -1231,13 +1325,16 @@ function MobileFilterDrawer({
                   : "bg-white border border-primary/15 text-primary"
               }`}
             >
-              <Bookmark size={13} className={favoritesOnly ? "fill-gold text-gold" : ""} />
+              <Bookmark
+                size={13}
+                className={favoritesOnly ? "fill-gold text-gold" : ""}
+              />
               <span>Show Bookmarked Books Only</span>
             </button>
           </div>
 
           <div>
-            <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-primary/50">
+            <h3 className="mb-3 text-xs font-bold tracking-wider uppercase text-primary/50">
               Categories
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -1259,7 +1356,7 @@ function MobileFilterDrawer({
           </div>
 
           <div>
-            <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-primary/50">
+            <h3 className="mb-3 text-xs font-bold tracking-wider uppercase text-primary/50">
               Language
             </h3>
             <div className="flex flex-wrap gap-2">

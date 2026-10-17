@@ -19,17 +19,50 @@ import HeroSection from "./components/HeroSection.jsx";
 import BookDetailModal from "../../components/ui/BookDetailModal";
 import BookCardSkeleton from "../../components/ui/BookCardSkeleton";
 import { booksAPI, categoriesAPI } from "../../api/adminApi";
-import { getRecentlyViewed, addRecentlyViewed } from "../../utils/libraryStorage";
+import {
+  getRecentlyViewed,
+  addRecentlyViewed,
+} from "../../utils/libraryStorage";
 
 /* ------------------------------------------------------------------ */
 /*  Cover Palettes & URL Resolver                                      */
 /* ------------------------------------------------------------------ */
 const COVER_PALETTES = [
-  { from: "#1A4A3E", to: "#0B241C", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#B08F4A", to: "#6E5A2A", text: "#FAF7F0", muted: "rgba(250,247,240,0.6)", accent: "#FAF7F0" },
-  { from: "#2A5E4E", to: "#0F2B22", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#D6B56D", to: "#8E7538", text: "#173F35", muted: "rgba(23,63,53,0.7)", accent: "#173F35" },
-  { from: "#3A6A55", to: "#152E24", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
+  {
+    from: "#1A4A3E",
+    to: "#0B241C",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#B08F4A",
+    to: "#6E5A2A",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.6)",
+    accent: "#FAF7F0",
+  },
+  {
+    from: "#2A5E4E",
+    to: "#0F2B22",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#D6B56D",
+    to: "#8E7538",
+    text: "#173F35",
+    muted: "rgba(23,63,53,0.7)",
+    accent: "#173F35",
+  },
+  {
+    from: "#3A6A55",
+    to: "#152E24",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
 ];
 
 function hashString(str) {
@@ -202,26 +235,26 @@ export default function HomeScreen() {
       <HeroSection />
 
       {/* 2. Recently Viewed / Continue Reading Shelf (Conditional) */}
-      {recentBooks.length > 0 && (
-        <section className="py-8 bg-white/70 border-b border-primary/10">
-          <div className="max-w-7xl mx-auto px-5">
+      {/* {recentBooks.length > 0 && (
+        <section className="py-8 border-b bg-white/70 border-primary/10">
+          <div className="px-5 mx-auto max-w-7xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Clock size={16} className="text-gold" />
-                <h2 className="text-sm font-bold uppercase tracking-wider text-primary font-display">
+                <h2 className="text-sm font-bold tracking-wider uppercase text-primary font-display">
                   Continue Reading
                 </h2>
               </div>
               <Link
                 to="/explore"
-                className="text-xs font-semibold text-gold hover:underline flex items-center gap-1"
+                className="flex items-center gap-1 text-xs font-semibold text-gold hover:underline"
               >
                 <span>View Full Library</span>
                 <ChevronRight size={13} />
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {recentBooks.slice(0, 6).map((b) => (
                 <div
                   key={b.id}
@@ -230,21 +263,21 @@ export default function HomeScreen() {
                   tabIndex={0}
                   className="p-2.5 rounded-2xl bg-white border border-primary/10 hover:shadow-card hover:-translate-y-0.5 transition cursor-pointer flex items-center gap-3"
                 >
-                  <div className="w-10 h-14 rounded-lg bg-primary/10 overflow-hidden shrink-0 shadow-soft">
+                  <div className="w-10 overflow-hidden rounded-lg h-14 bg-primary/10 shrink-0 shadow-soft">
                     {b.cover ? (
                       <img
                         src={resolveCoverUrl(b.cover)}
                         alt=""
-                        className="w-full h-full object-cover"
+                        className="object-cover w-full h-full"
                       />
                     ) : (
-                      <div className="w-full h-full bg-primary flex items-center justify-center text-gold font-bold text-xs">
+                      <div className="flex items-center justify-center w-full h-full text-xs font-bold bg-primary text-gold">
                         V
                       </div>
                     )}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-primary truncate font-display">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold truncate text-primary font-display">
                       {b.title}
                     </p>
                     <p className="text-[10px] text-primary/50 truncate mt-0.5">
@@ -259,22 +292,23 @@ export default function HomeScreen() {
             </div>
           </div>
         </section>
-      )}
+      )} */}
 
       {/* 3. Featured Masterpieces Collection */}
-      <section className="py-16 md:py-20 border-b border-primary/10">
-        <div className="max-w-7xl mx-auto px-5">
+      <section className="py-16 border-b md:py-20 border-primary/10">
+        <div className="px-5 mx-auto max-w-7xl">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
             <div>
               <span className="inline-flex items-center gap-1.5 text-xs uppercase font-bold tracking-wider text-gold">
                 <Sparkles size={13} />
                 Editor's Choice
               </span>
-              <h2 className="mt-2 text-3xl sm:text-4xl font-display text-primary font-bold">
+              <h2 className="mt-2 text-3xl font-bold sm:text-4xl font-display text-primary">
                 Featured Masterpieces
               </h2>
-              <p className="text-sm text-primary/70 mt-1 max-w-lg">
-                Handpicked editions revered for their depth, philosophical significance, and clarity.
+              <p className="max-w-lg mt-1 text-sm text-primary/70">
+                Handpicked editions revered for their depth, philosophical
+                significance, and clarity.
               </p>
             </div>
 
@@ -283,14 +317,17 @@ export default function HomeScreen() {
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-gold transition group"
             >
               <span>Explore all masterpieces</span>
-              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight
+                size={15}
+                className="transition-transform group-hover:translate-x-1"
+              />
             </Link>
           </div>
 
           {loading ? (
             <BookCardSkeleton count={4} view="grid" />
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
               {featuredPicks.map((b) => (
                 <EditorialCard
                   key={b.id}
@@ -305,40 +342,45 @@ export default function HomeScreen() {
       </section>
 
       {/* 4. Curated Categories Navigation */}
-      <section className="py-16 md:py-20 bg-white/60 border-b border-primary/10">
-        <div className="max-w-7xl mx-auto px-5">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+      <section className="py-16 border-b md:py-20 bg-white/60 border-primary/10">
+        <div className="px-5 mx-auto max-w-7xl">
+          <div className="max-w-2xl mx-auto mb-12 text-center">
             <span className="inline-flex items-center gap-1.5 text-xs uppercase font-bold tracking-wider text-gold">
               <FolderTree size={14} />
               Organized Knowledge
             </span>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-display text-primary font-bold">
+            <h2 className="mt-2 text-3xl font-bold sm:text-4xl font-display text-primary">
               Explore by Subject & Genre
             </h2>
-            <p className="text-sm sm:text-base text-primary/70 mt-2">
-              From Vedic commentaries to modern computer science, find exactly what you are called to study.
+            <p className="mt-2 text-sm sm:text-base text-primary/70">
+              From Vedic commentaries to modern computer science, find exactly
+              what you are called to study.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 sm:gap-4">
             {[
               { label: "Philosophy", count: "120+ texts", icon: Sparkles },
               { label: "Sacred Texts", count: "80+ editions", icon: BookOpen },
               { label: "Literature", count: "250+ works", icon: Star },
               { label: "Technology", count: "140+ notes", icon: TrendingUp },
               { label: "History", count: "90+ books", icon: Quote },
-              { label: "Competitive", count: "310+ guides", icon: CheckCircle2 },
+              {
+                label: "Competitive",
+                count: "310+ guides",
+                icon: CheckCircle2,
+              },
             ].map(({ label, count, icon: Icon }) => (
               <Link
                 key={label}
                 to={`/explore?category=${encodeURIComponent(label)}`}
                 className="p-5 rounded-2xl bg-white border border-primary/10 hover:border-gold/40 hover:shadow-card hover:-translate-y-1 transition text-center group flex flex-col items-center justify-between min-h-[140px]"
               >
-                <div className="w-10 h-10 rounded-xl bg-mint text-primary grid place-items-center group-hover:bg-primary group-hover:text-gold transition">
+                <div className="grid w-10 h-10 transition rounded-xl bg-mint text-primary place-items-center group-hover:bg-primary group-hover:text-gold">
                   <Icon size={18} />
                 </div>
                 <div>
-                  <h3 className="font-display text-sm font-bold text-primary group-hover:text-primary-light transition mt-2">
+                  <h3 className="mt-2 text-sm font-bold transition font-display text-primary group-hover:text-primary-light">
                     {label}
                   </h3>
                   <p className="text-[11px] text-primary/50 mt-0.5">{count}</p>
@@ -347,7 +389,7 @@ export default function HomeScreen() {
             ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="mt-8 text-center">
             <Link
               to="/categories"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cream border border-primary/15 text-xs font-semibold text-primary hover:bg-primary hover:text-cream transition shadow-soft"
@@ -360,19 +402,20 @@ export default function HomeScreen() {
       </section>
 
       {/* 5. Popular Picks / Community Favorites */}
-      <section className="py-16 md:py-20 border-b border-primary/10">
-        <div className="max-w-7xl mx-auto px-5">
+      <section className="py-16 border-b md:py-20 border-primary/10">
+        <div className="px-5 mx-auto max-w-7xl">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
             <div>
               <span className="inline-flex items-center gap-1.5 text-xs uppercase font-bold tracking-wider text-gold">
                 <TrendingUp size={13} />
                 Popular Across Readers
               </span>
-              <h2 className="mt-2 text-3xl sm:text-4xl font-display text-primary font-bold">
+              <h2 className="mt-2 text-3xl font-bold sm:text-4xl font-display text-primary">
                 Trending Literature & Study Guides
               </h2>
-              <p className="text-sm text-primary/70 mt-1 max-w-lg">
-                The most read, referenced, and bookmarked editions by our community.
+              <p className="max-w-lg mt-1 text-sm text-primary/70">
+                The most read, referenced, and bookmarked editions by our
+                community.
               </p>
             </div>
 
@@ -381,11 +424,14 @@ export default function HomeScreen() {
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-gold transition group"
             >
               <span>View all popular books</span>
-              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight
+                size={15}
+                className="transition-transform group-hover:translate-x-1"
+              />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
             {popularPicks.map((b) => (
               <EditorialCard
                 key={b.id}
@@ -399,20 +445,21 @@ export default function HomeScreen() {
       </section>
 
       {/* 6. Editorial Philosophy / Quote Banner */}
-      <section className="py-16 md:py-24 bg-primary text-cream relative overflow-hidden">
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-gold/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-mint/15 blur-3xl pointer-events-none" />
+      <section className="relative py-16 overflow-hidden md:py-24 bg-primary text-cream">
+        <div className="absolute rounded-full pointer-events-none -top-32 -left-32 w-96 h-96 bg-gold/15 blur-3xl" />
+        <div className="absolute rounded-full pointer-events-none -bottom-32 -right-32 w-96 h-96 bg-mint/15 blur-3xl" />
 
-        <div className="relative max-w-5xl mx-auto px-5 text-center">
-          <Quote size={36} className="text-gold mx-auto opacity-75" />
-          <blockquote className="mt-6 font-display text-2xl sm:text-3xl lg:text-4xl leading-snug font-medium text-cream max-w-3xl mx-auto">
-            “A room without books is like a body without a soul. Knowledge, when shared freely, elevates all humankind.”
+        <div className="relative max-w-5xl px-5 mx-auto text-center">
+          <Quote size={36} className="mx-auto opacity-75 text-gold" />
+          <blockquote className="max-w-3xl mx-auto mt-6 text-2xl font-medium leading-snug font-display sm:text-3xl lg:text-4xl text-cream">
+            “A room without books is like a body without a soul. Knowledge, when
+            shared freely, elevates all humankind.”
           </blockquote>
-          <p className="mt-4 text-gold text-sm tracking-widest uppercase font-semibold">
+          <p className="mt-4 text-sm font-semibold tracking-widest uppercase text-gold">
             — Marcus Tullius Cicero & The Vedic Tradition
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-10">
             <Link
               to="/explore"
               className="inline-flex items-center gap-2 bg-gold text-primary font-semibold px-6 py-3.5 rounded-2xl text-sm shadow-soft hover:bg-gold/90 transition hover:scale-[1.02] active:scale-[0.98]"
@@ -472,8 +519,10 @@ function EditorialCard({ book, onOpen, onDirectRead }) {
             />
           ) : (
             <div
-              className="w-full h-full flex flex-col justify-between p-4 relative"
-              style={{ background: `linear-gradient(135deg, ${p.from}, ${p.to})` }}
+              className="relative flex flex-col justify-between w-full h-full p-4"
+              style={{
+                background: `linear-gradient(135deg, ${p.from}, ${p.to})`,
+              }}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-black/25" />
               <span
@@ -482,14 +531,17 @@ function EditorialCard({ book, onOpen, onDirectRead }) {
               >
                 {book.category}
               </span>
-              <div className="my-auto pl-1">
+              <div className="pl-1 my-auto">
                 <h4
-                  className="font-display text-sm sm:text-base leading-tight font-bold"
+                  className="text-sm font-bold leading-tight font-display sm:text-base"
                   style={{ color: p.text }}
                 >
                   {book.title}
                 </h4>
-                <div className="mt-1.5 h-0.5 w-6 rounded-full" style={{ background: p.accent }} />
+                <div
+                  className="mt-1.5 h-0.5 w-6 rounded-full"
+                  style={{ background: p.accent }}
+                />
               </div>
               <p className="text-[10px] pl-1" style={{ color: p.muted }}>
                 {book.author}
@@ -500,7 +552,9 @@ function EditorialCard({ book, onOpen, onDirectRead }) {
           {book.rating && (
             <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 bg-white/95 backdrop-blur-sm rounded-lg px-2 py-0.5 shadow-soft">
               <Star size={10} className="text-gold fill-gold" />
-              <span className="text-[10px] font-bold text-primary">{book.rating}</span>
+              <span className="text-[10px] font-bold text-primary">
+                {book.rating}
+              </span>
             </span>
           )}
 
@@ -511,24 +565,29 @@ function EditorialCard({ book, onOpen, onDirectRead }) {
 
         {/* Title and metadata */}
         <div className="pt-3 pb-1">
-          <h3 className="font-display text-base font-bold text-primary leading-tight line-clamp-1 group-hover:text-primary-light transition-colors">
+          <h3 className="text-base font-bold leading-tight transition-colors font-display text-primary line-clamp-1 group-hover:text-primary-light">
             {book.title}
           </h3>
-          <p className="text-xs text-primary/60 mt-1 line-clamp-1">{book.author}</p>
+          <p className="mt-1 text-xs text-primary/60 line-clamp-1">
+            {book.author}
+          </p>
         </div>
       </div>
 
-      <div className="pt-3 mt-2 border-t border-primary/5 flex items-center justify-between">
+      <div className="flex items-center justify-between pt-3 mt-2 border-t border-primary/5">
         <span className="text-[10px] uppercase font-semibold tracking-wider text-primary/45 truncate max-w-[90px]">
           {book.category}
         </span>
         <button
           type="button"
           onClick={onDirectRead}
-          className="text-xs font-bold text-gold hover:text-primary transition flex items-center gap-1"
+          className="flex items-center gap-1 text-xs font-bold transition text-gold hover:text-primary"
         >
           <span>Read Text</span>
-          <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+          <ArrowRight
+            size={12}
+            className="group-hover:translate-x-0.5 transition-transform"
+          />
         </button>
       </div>
     </article>
