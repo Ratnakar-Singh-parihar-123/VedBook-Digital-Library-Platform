@@ -1,7 +1,11 @@
 import multer from "multer";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { getBooksDir, getCoversDir, initStorageDirs } from "../utils/storage.js";
+import {
+  getBooksDir,
+  getCoversDir,
+  initStorageDirs,
+} from "../utils/storage.js";
 
 // Ensure dirs are initialized
 initStorageDirs();
@@ -51,7 +55,7 @@ const bookUpload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 50 * 1024 * 1024,*/ 50MB limit
+    fileSize: 50 * 1024 * 1024, // 50MB limit
     files: 2,
   },
 });
