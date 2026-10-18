@@ -23,9 +23,8 @@ import Loader from "../../components/ui/Loader";
 import { reviewsAPI } from "../../api/reviewsApi";
 import { formatDate, formatNumber } from "../dashboard/utils/format";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const PAGE_SIZE = 10;
 
 const STATUS_FILTERS = [
@@ -407,9 +406,8 @@ export default function ReviewManagement() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Stat card                                                          */
-/* ------------------------------------------------------------------ */
+
 function StatCard({ icon: Icon, label, value, tone }) {
   const toneMap = {
     primary: "bg-mint text-primary",
@@ -440,9 +438,8 @@ function StatCard({ icon: Icon, label, value, tone }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Review card                                                        */
-/* ------------------------------------------------------------------ */
+
 function ReviewCard({ review, working, onApprove, onHide }) {
   const reviewStatus = String(review.status || "pending").toLowerCase();
   const bookTitle =
@@ -601,9 +598,8 @@ function ReviewCard({ review, working, onApprove, onHide }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Empty                                                              */
-/* ------------------------------------------------------------------ */
+
 function EmptyReviews({ hasFilters, onClear }) {
   return (
     <div className="px-6 py-16 text-center border bg-cream border-primary/10 rounded-2xl">
@@ -631,9 +627,8 @@ function EmptyReviews({ hasFilters, onClear }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Pagination                                                         */
-/* ------------------------------------------------------------------ */
+
 function Pagination({ page, totalPages, onChange }) {
   const pages = [];
   const maxVisible = 5;

@@ -1,34 +1,30 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-/* ------------------------------------------------------------------ */
-/*  Base URL                                                           */
-/*  React Native me env vars ka direct support nahi — hardcode karo    */
-/*  ya react-native-config / expo-constants use karo.                  */
-/* ------------------------------------------------------------------ */
+// Base URL                                                           */
+// React Native me env vars ka direct support nahi — hardcode karo    */
+// ya react-native-config / expo-constants use karo.                  */
+
 export const API_BASE_URL =
   'https://vedbook-digital-library-platform.onrender.com/api'; // Android emulator
 // For iOS simulator:  "http://localhost:8000/api"
 // For physical device: "http://<your-laptop-ip>:8000/api"
 
-/* ------------------------------------------------------------------ */
-/*  Axios instance for user endpoints                                  */
-/* ------------------------------------------------------------------ */
+// Axios instance for user endpoints                                  */
+
 const usersClient = axios.create({
   baseURL: `${API_BASE_URL}/users`,
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 });
 
-/* ------------------------------------------------------------------ */
-/*  Token storage keys                                                 */
-/* ------------------------------------------------------------------ */
+// Token storage keys                                                 */
+
 const TOKEN_KEY = 'ved_user_token';
 const USER_KEY = 'ved_user';
 
-/* ------------------------------------------------------------------ */
-/*  Attach token to every request                                      */
-/* ------------------------------------------------------------------ */
+// Attach token to every request                                      */
+
 usersClient.interceptors.request.use(
   async config => {
     try {
@@ -37,16 +33,15 @@ usersClient.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     } catch {
-      /* ignore */
+      //ignore */
     }
     return config;
   },
   error => Promise.reject(error),
 );
 
-/* ------------------------------------------------------------------ */
-/*  Handle 401 — clear token                                           */
-/* ------------------------------------------------------------------ */
+// Handle 401 — clear token                                           */
+
 usersClient.interceptors.response.use(
   res => res,
   async error => {
@@ -55,7 +50,7 @@ usersClient.interceptors.response.use(
         await AsyncStorage.removeItem(TOKEN_KEY);
         await AsyncStorage.removeItem(USER_KEY);
       } catch {
-        /* ignore */
+        //ignore */
       }
     }
 
@@ -69,9 +64,8 @@ usersClient.interceptors.response.use(
   },
 );
 
-/* ------------------------------------------------------------------ */
-/*  Storage helpers                                                    */
-/* ------------------------------------------------------------------ */
+// Storage helpers                                                    */
+
 export const storage = {
   async getToken() {
     try {
@@ -93,7 +87,7 @@ export const storage = {
       if (token) await AsyncStorage.setItem(TOKEN_KEY, token);
       if (user) await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
     } catch {
-      /* ignore */
+      //ignore */
     }
   },
   async clearSession() {
@@ -101,14 +95,13 @@ export const storage = {
       await AsyncStorage.removeItem(TOKEN_KEY);
       await AsyncStorage.removeItem(USER_KEY);
     } catch {
-      /* ignore */
+      //ignore */
     }
   },
 };
 
-/* ------------------------------------------------------------------ */
-/*  User API methods                                                   */
-/* ------------------------------------------------------------------ */
+// User API methods                                                   */
+
 export const usersAPI = {
   /** Register a new user */
   register: async ({ fullName, name, email, password }) => {
@@ -137,7 +130,7 @@ export const usersAPI = {
       const { data } = await usersClient.post('/logout');
       return data;
     } catch {
-      /* even if server fails, client will clear session */
+      //even if server fails, client will clear session */
       return { success: true };
     }
   },

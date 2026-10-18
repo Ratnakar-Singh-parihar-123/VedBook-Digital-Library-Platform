@@ -1,6 +1,12 @@
 import { formatNumber } from "./utils/format";
 
-export default function StatCard({ label, value, icon: Icon, loading, isRefreshing = false }) {
+export default function StatCard({
+  label,
+  value,
+  icon: Icon,
+  loading,
+  isRefreshing = false,
+}) {
   return (
     <div className="group relative overflow-hidden bg-cream border border-primary/10 rounded-2xl p-4 transition-all hover:shadow-soft hover:-translate-y-0.5">
       {/* decorative gold glow */}
@@ -17,19 +23,24 @@ export default function StatCard({ label, value, icon: Icon, loading, isRefreshi
         )}
       </div>
 
-      <div className="relative mt-3 flex items-center justify-between">
+      <div className="relative flex items-center justify-between mt-3">
         <p className="text-2xl tracking-tight font-display sm:text-3xl text-primary tabular-nums">
           {loading ? (
             <span className="inline-block w-20 rounded-lg h-7 animate-shimmer bg-primary/10" />
           ) : (
-            <span className={isRefreshing ? "opacity-70 transition-opacity" : ""}>
+            <span
+              className={isRefreshing ? "opacity-70 transition-opacity" : ""}
+            >
               {formatNumber(value)}
             </span>
           )}
         </p>
 
         {isRefreshing && (
-          <span className="w-2 h-2 rounded-full bg-gold animate-pulse" title="Updating..." />
+          <span
+            className="w-2 h-2 rounded-full bg-gold animate-pulse"
+            title="Updating..."
+          />
         )}
       </div>
     </div>

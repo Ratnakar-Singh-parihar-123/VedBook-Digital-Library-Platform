@@ -32,9 +32,8 @@ export const CategoriesScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
 
-  /* ------------------------------------------------------------------ */
-  /*  Fill missing bookCounts via one bulk books fetch                  */
-  /* ------------------------------------------------------------------ */
+  // Fill missing bookCounts via one bulk books fetch               //
+
   const fillMissingCounts = useCallback(async list => {
     const needsCount = list.some(c => !c.bookCount || c.bookCount === 0);
     if (!needsCount) return list;
@@ -58,9 +57,8 @@ export const CategoriesScreen = ({ navigation }) => {
     }
   }, []);
 
-  /* ------------------------------------------------------------------ */
-  /*  Fetch categories                                                  */
-  /* ------------------------------------------------------------------ */
+  // Fetch categories                                               //
+
   const fetchCategories = useCallback(
     async (isRefresh = false) => {
       if (isRefresh) setRefreshing(true);
@@ -104,7 +102,7 @@ export const CategoriesScreen = ({ navigation }) => {
     });
   };
 
-  /* ---------------- HEADER ---------------- */
+  //---------------- HEADER ----------------//
   const renderHeader = () => {
     const canGoBack = navigation.canGoBack?.();
 
@@ -144,7 +142,7 @@ export const CategoriesScreen = ({ navigation }) => {
     );
   };
 
-  /* ---------------- BODY ---------------- */
+  //---------------- BODY ----------------//
   const renderBody = () => {
     if (loading) {
       return (
@@ -250,13 +248,13 @@ export const CategoriesScreen = ({ navigation }) => {
   );
 };
 
-/* ================================================================== */
-/*  STYLES                                                            */
-/* ================================================================== */
+//==================================================================//
+// STYLES                                                         //
+//==================================================================//
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.ivory },
 
-  /* HEADER */
+  //HEADER//
   header: {
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.md,
@@ -314,7 +312,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 
-  /* LIST */
+  //LIST//
   listContent: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
@@ -377,7 +375,7 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.sm,
   },
 
-  /* STATES */
+  //STATES//
   centerBox: {
     flex: 1,
     alignItems: 'center',

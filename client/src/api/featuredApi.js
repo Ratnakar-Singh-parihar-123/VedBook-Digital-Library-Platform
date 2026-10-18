@@ -1,8 +1,7 @@
 import api from "./adminApi";
 
-/* ------------------------------------------------------------------ */
-/*  Discovery / Featured API                                          */
-/* ------------------------------------------------------------------ */
+// Discovery / Featured API                                          */
+
 export const featuredAPI = {
   /** Currently featured books (ordered) */
   getFeatured: () => api.get("/api/discovery/featured"),

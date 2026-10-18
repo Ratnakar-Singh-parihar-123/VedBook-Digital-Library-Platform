@@ -1,11 +1,3 @@
-/**
- * VedBook Mock Authentication Service
- *
- * NOTE: This is an isolated local-only mock service for prototype/demo purposes.
- * It simulates network latency, session tokens, and account persistence.
- * For production, swap this module with real backend authentication endpoints (e.g. REST/GraphQL/Firebase/Supabase).
- */
-
 import {
   getSavedSession,
   saveAuthSession,
@@ -24,7 +16,8 @@ export const DEMO_CREDENTIALS = [
     fullName: 'Vedant Sharma',
     email: 'demo@vedbook.com',
     password: 'Password123!',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
     bio: 'Avid reader of ancient philosophy, Indian history, and modern cosmology.',
     streak: 7,
     booksRead: 14,
@@ -36,7 +29,8 @@ export const DEMO_CREDENTIALS = [
     fullName: 'Arya Sen',
     email: 'reader@vedbook.com',
     password: 'Password123!',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
+    avatar:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
     bio: 'Software engineer and literature lover.',
     streak: 12,
     booksRead: 26,
@@ -45,7 +39,7 @@ export const DEMO_CREDENTIALS = [
   },
 ];
 
-const delay = (ms = 400) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms = 400) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const mockAuthService = {
   /**
@@ -63,19 +57,21 @@ export const mockAuthService = {
 
     // Check predefined demo accounts
     let user = DEMO_CREDENTIALS.find(
-      (u) => u.email.toLowerCase() === cleanEmail && u.password === cleanPass,
+      u => u.email.toLowerCase() === cleanEmail && u.password === cleanPass,
     );
 
     // Check dynamically registered local demo accounts
     if (!user) {
       const registered = await getRegisteredUsers();
       user = registered.find(
-        (u) => u.email.toLowerCase() === cleanEmail && u.password === cleanPass,
+        u => u.email.toLowerCase() === cleanEmail && u.password === cleanPass,
       );
     }
 
     if (!user) {
-      throw new Error('Invalid email or password. Please verify your credentials or use the demo login.');
+      throw new Error(
+        'Invalid email or password. Please verify your credentials or use the demo login.',
+      );
     }
 
     // Create session token
@@ -130,11 +126,17 @@ export const mockAuthService = {
 
     // Check for collision
     const registered = await getRegisteredUsers();
-    const existsInDemo = DEMO_CREDENTIALS.some((u) => u.email.toLowerCase() === cleanEmail);
-    const existsInRegistered = registered.some((u) => u.email.toLowerCase() === cleanEmail);
+    const existsInDemo = DEMO_CREDENTIALS.some(
+      u => u.email.toLowerCase() === cleanEmail,
+    );
+    const existsInRegistered = registered.some(
+      u => u.email.toLowerCase() === cleanEmail,
+    );
 
     if (existsInDemo || existsInRegistered) {
-      throw new Error('An account with this email already exists. Please log in.');
+      throw new Error(
+        'An account with this email already exists. Please log in.',
+      );
     }
 
     const newUser = {
@@ -142,7 +144,8 @@ export const mockAuthService = {
       fullName: cleanName,
       email: cleanEmail,
       password: cleanPass,
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=400&auto=format&fit=crop',
+      avatar:
+        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=400&auto=format&fit=crop',
       bio: 'New explorer of the VedBook digital library.',
       streak: 1,
       booksRead: 0,
@@ -212,7 +215,8 @@ export const mockAuthService = {
         id: session.userId,
         fullName: 'VedBook Reader',
         email: session.email,
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
+        avatar:
+          'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
         bio: 'Avid reader and knowledge seeker.',
         streak: 5,
         booksRead: 8,

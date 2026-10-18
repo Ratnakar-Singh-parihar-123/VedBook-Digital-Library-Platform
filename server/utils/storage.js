@@ -37,7 +37,10 @@ export const initStorageDirs = () => {
         fs.mkdirSync(dir, { recursive: true });
       }
     } catch (err) {
-      console.error(`Failed to initialize storage directory ${dir}:`, err.message);
+      console.error(
+        `Failed to initialize storage directory ${dir}:`,
+        err.message,
+      );
     }
   }
 };
@@ -101,7 +104,10 @@ export const safeDeleteStoredFile = async (storedPath) => {
 
   const abs = resolveStoragePath(storedPath);
   if (!abs) {
-    console.warn("Attempted to delete file outside storage boundary:", storedPath);
+    console.warn(
+      "Attempted to delete file outside storage boundary:",
+      storedPath,
+    );
     return false;
   }
 

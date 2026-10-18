@@ -31,9 +31,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
-  /* ----------------------------------------------------------------- */
-  /*  Initialize session on app boot                                    */
-  /* ----------------------------------------------------------------- */
+  // Initialize session on app boot                                 //
+
   useEffect(() => {
     let cancelled = false;
 
@@ -97,9 +96,8 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  /* ----------------------------------------------------------------- */
-  /*  Extract token + user from any backend response shape              */
-  /* ----------------------------------------------------------------- */
+  // Extract token + user from any backend response shape           //
+
   const extractAuth = res => {
     if (!res) return { token: null, user: null };
 
@@ -122,9 +120,8 @@ export const AuthProvider = ({ children }) => {
     return { token, user: userData };
   };
 
-  /* ----------------------------------------------------------------- */
-  /*  Login                                                             */
-  /* ----------------------------------------------------------------- */
+  // Login                                                          //
+
   const login = useCallback(async (email, password) => {
     const res = await usersAPI.login({ email, password });
     const { token, user: userData } = extractAuth(res);
@@ -145,9 +142,8 @@ export const AuthProvider = ({ children }) => {
     return { token, user: userData };
   }, []);
 
-  /* ----------------------------------------------------------------- */
-  /*  Register                                                          */
-  /* ----------------------------------------------------------------- */
+  // Register                                                       //
+
   const register = useCallback(async formData => {
     const res = await usersAPI.register(formData);
     const { token, user: userData } = extractAuth(res);
@@ -163,14 +159,13 @@ export const AuthProvider = ({ children }) => {
     return res;
   }, []);
 
-  /* ----------------------------------------------------------------- */
-  /*  Logout                                                            */
-  /* ----------------------------------------------------------------- */
+  // Logout                                                         //
+
   const logout = useCallback(async () => {
     try {
       await usersAPI.logout();
     } catch {
-      /* even if server fails, we clear locally */
+      //even if server fails, we clear locally//
     } finally {
       await storage.clearSession();
       setIsAuthenticated(false);
@@ -178,17 +173,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /* ----------------------------------------------------------------- */
-  /*  Onboarding                                                        */
-  /* ----------------------------------------------------------------- */
+  // Onboarding                                                     //
+
   const completeOnboarding = useCallback(async () => {
     await setOnboardingCompleted(true);
     setHasCompletedOnboardingState(true);
   }, []);
 
-  /* ----------------------------------------------------------------- */
-  /*  Profile updates                                                   */
-  /* ----------------------------------------------------------------- */
+  // Profile updates                                                //
+
   const updateProfile = useCallback(
     async updatedFields => {
       // Optimistic local update
@@ -212,7 +205,7 @@ export const AuthProvider = ({ children }) => {
     [user],
   );
 
-  /* Manually refresh from server */
+  //Manually refresh from server//
   const refreshProfile = useCallback(async () => {
     try {
       const res = await usersAPI.getProfile();

@@ -236,12 +236,7 @@ export const LibraryScreen = ({ navigation }) => {
       completed: completedBooks?.length || 0,
       recent: recentlyOpened?.length || 0,
     }),
-    [
-      getContinueReadingBooks,
-      bookmarks,
-      completedBooks,
-      recentlyOpened,
-    ],
+    [getContinueReadingBooks, bookmarks, completedBooks, recentlyOpened],
   );
 
   /* ================================================================== */

@@ -36,7 +36,9 @@ export default function ReadingTrendChart({ refreshKey = 0, defaultDays = 7 }) {
       />
 
       {loading && points.length === 0 && <ChartSkeleton />}
-      {!loading && error && points.length === 0 && <ChartError message={error} />}
+      {!loading && error && points.length === 0 && (
+        <ChartError message={error} />
+      )}
       {!loading && !error && points.length === 0 && (
         <ChartEmpty label="No reading activity yet." />
       )}
@@ -88,8 +90,15 @@ export default function ReadingTrendChart({ refreshKey = 0, defaultDays = 7 }) {
   );
 }
 
-/* ---------- Shared sub-components ---------- */
-export function Header({ icon: Icon, title, subtitle, days, setDays, isRefreshing = false }) {
+//---------- Shared sub-components ----------//
+export function Header({
+  icon: Icon,
+  title,
+  subtitle,
+  days,
+  setDays,
+  isRefreshing = false,
+}) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 mb-4">
       <div className="flex items-center gap-2">

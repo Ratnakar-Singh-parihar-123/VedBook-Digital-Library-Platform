@@ -38,14 +38,12 @@ import {
 } from "../../utils/libraryStorage";
 import { useToast } from "../../context/ToastContext";
 
-/* ------------------------------------------------------------------ */
 /*  PDF.js worker — CDN, matched to react-pdf's bundled version       */
-/* ------------------------------------------------------------------ */
+
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const ZOOM_STEPS = [75, 100, 125, 150, 200];
 const DEFAULT_ZOOM_INDEX = 1;
 const MIN_ZOOM = 0;
@@ -89,9 +87,8 @@ const THEMES = {
   },
 };
 
-/* ------------------------------------------------------------------ */
 /*  Book Reader                                                        */
-/* ------------------------------------------------------------------ */
+
 export default function BookReader() {
   const { id } = useParams();
   const location = useLocation();
@@ -277,7 +274,9 @@ export default function BookReader() {
   const changeSpread = (nextOrUpdater) => {
     setSpread((prev) => {
       const next =
-        typeof nextOrUpdater === "function" ? nextOrUpdater(prev) : nextOrUpdater;
+        typeof nextOrUpdater === "function"
+          ? nextOrUpdater(prev)
+          : nextOrUpdater;
       if (next === 2) {
         setPageNumber((p) => (p % 2 === 0 ? Math.max(1, p - 1) : p));
       }
@@ -531,7 +530,9 @@ export default function BookReader() {
             <button
               type="button"
               onClick={() => {
-                const isNow = toggleFavorite(passedBook || { id, title, author });
+                const isNow = toggleFavorite(
+                  passedBook || { id, title, author },
+                );
                 setFav(isNow);
                 if (isNow) {
                   toast.success(`"${title}" saved to your bookmarks.`);
@@ -547,7 +548,10 @@ export default function BookReader() {
                   : "bg-white/[0.06] border-white/10 text-cream/80 hover:bg-white/10 hover:text-cream"
               }`}
             >
-              <Bookmark size={15} className={fav ? "fill-gold text-gold" : ""} />
+              <Bookmark
+                size={15}
+                className={fav ? "fill-gold text-gold" : ""}
+              />
             </button>
 
             {/* Reading ambience theme selector */}
@@ -563,7 +567,7 @@ export default function BookReader() {
               </button>
 
               {themeMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-stone-900/95 border border-white/10 rounded-2xl p-2 shadow-2xl backdrop-blur-md z-50">
+                <div className="absolute right-0 z-50 w-48 p-2 mt-2 border shadow-2xl top-full bg-stone-900/95 border-white/10 rounded-2xl backdrop-blur-md">
                   <p className="text-[10px] uppercase font-bold text-cream/40 px-2 py-1 tracking-wider">
                     Reading Ambience
                   </p>
@@ -589,7 +593,9 @@ export default function BookReader() {
                         />
                         <span>{t.name}</span>
                       </div>
-                      {themeKey === t.id && <Check size={13} className="text-gold" />}
+                      {themeKey === t.id && (
+                        <Check size={13} className="text-gold" />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -889,7 +895,9 @@ export default function BookReader() {
           {/* Slider & Page Jump (desktop) */}
           <div className="items-center flex-1 hidden max-w-xl gap-3 mx-auto sm:flex">
             <div className="flex items-center gap-1.5 bg-white/[0.06] border border-white/10 rounded-xl px-2.5 py-1 shrink-0">
-              <span className="text-[10px] uppercase text-cream/40 font-semibold tracking-wider">Page</span>
+              <span className="text-[10px] uppercase text-cream/40 font-semibold tracking-wider">
+                Page
+              </span>
               <input
                 type="number"
                 min={1}
@@ -908,10 +916,12 @@ export default function BookReader() {
                   else setPageInput(String(leftPage));
                 }}
                 aria-label="Direct page jump"
-                className="w-11 bg-transparent text-center font-bold text-xs text-cream outline-none tabular-nums"
+                className="text-xs font-bold text-center bg-transparent outline-none w-11 text-cream tabular-nums"
               />
               <span className="text-[11px] text-cream/30">/</span>
-              <span className="text-[11px] text-cream/50 tabular-nums">{numPages || "—"}</span>
+              <span className="text-[11px] text-cream/50 tabular-nums">
+                {numPages || "—"}
+              </span>
             </div>
 
             <input
@@ -964,9 +974,8 @@ export default function BookReader() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  PaperPage — single page with book aesthetic                       */
-/* ------------------------------------------------------------------ */
+
 function PaperPage({ pageNumber, width, height, side }) {
   /* side: "left" | "right" | "single" */
   const isLeft = side === "left";
@@ -1050,9 +1059,8 @@ function PaperPage({ pageNumber, width, height, side }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Loading / Error / Skeleton                                         */
-/* ------------------------------------------------------------------ */
+
 function LoadingState() {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-24 text-cream/60">
@@ -1108,9 +1116,8 @@ function PageSkeleton({ width }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  TOC Panel                                                          */
-/* ------------------------------------------------------------------ */
+
 function TocPanel({ open, onClose, items, currentPage, onJump }) {
   useEffect(() => {
     if (!open) return;

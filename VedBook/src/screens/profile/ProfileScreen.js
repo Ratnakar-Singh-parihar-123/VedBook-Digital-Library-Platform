@@ -37,9 +37,8 @@ import { usersAPI, API_BASE_URL } from '../../api/usersApi';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const MODAL_HEIGHT = SCREEN_HEIGHT; // Full-height bottom sheet
 
-/* ------------------------------------------------------------------ */
 /*  Resolve avatar URL — handles relative paths + cache-busting       */
-/* ------------------------------------------------------------------ */
+
 function resolveAvatarUrl(raw, cacheBust = null) {
   if (!raw || typeof raw !== 'string') return null;
   const s = raw.trim();
@@ -73,9 +72,8 @@ function getAvatarFromUser(u, cacheBust = null) {
   return resolveAvatarUrl(raw, cacheBust);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Screen                                                             */
-/* ------------------------------------------------------------------ */
+
 export const ProfileScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const { user, logout, refreshProfile } = useAuth();

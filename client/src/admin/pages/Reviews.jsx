@@ -25,14 +25,10 @@ import {
 
 import Loader from "../../components/ui/Loader";
 import { reviewsAPI } from "../../api/reviewsApi";
-import {
-  formatDate,
-  formatNumber,
-} from "../dashboard/utils/format";
+import { formatDate, formatNumber } from "../dashboard/utils/format";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const PAGE_SIZE = 15;
 
 const STATUS_TABS = [
@@ -454,9 +450,8 @@ function ReviewsTab({ refreshKey, onToast }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Stat card                                                          */
-/* ------------------------------------------------------------------ */
+
 function StatCard({ icon: Icon, label, value, tone }) {
   const toneCls = {
     primary: { bg: "bg-mint text-primary", badge: "bg-white/60" },
@@ -486,9 +481,8 @@ function StatCard({ icon: Icon, label, value, tone }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Review card                                                        */
-/* ------------------------------------------------------------------ */
+
 function ReviewCard({ review, working, onApprove, onHide }) {
   const status = String(review.status || "pending").toLowerCase();
   const bookTitle =
@@ -644,9 +638,8 @@ function ReviewCard({ review, working, onApprove, onHide }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Empty reviews                                                      */
-/* ------------------------------------------------------------------ */
+
 function EmptyReviews({ hasFilters, onClear }) {
   return (
     <div className="px-6 py-16 text-center border bg-cream border-primary/10 rounded-2xl">
@@ -795,9 +788,8 @@ function PopularTab({ refreshKey }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Popular book row                                                  */
-/* ------------------------------------------------------------------ */
+
 function PopularRow({ book }) {
   /* Top 3 get special styling */
   const isTop3 = book.rank <= 3;
@@ -873,9 +865,8 @@ function PopularRow({ book }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Pagination                                                         */
-/* ------------------------------------------------------------------ */
+
 function Pagination({ page, totalPages, onChange }) {
   const pages = [];
   const maxVisible = 5;
@@ -928,9 +919,8 @@ function Pagination({ page, totalPages, onChange }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+
 function relativeTime(dateStr) {
   if (!dateStr) return "—";
   const dt = new Date(dateStr);

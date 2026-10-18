@@ -1,11 +1,3 @@
-/**
- * Local storage utility for VedBook client-side personal library features:
- * - Recently viewed books
- * - Local bookmarks / favorites
- * - Reading progress (page position per book)
- * - Reader appearance preferences (theme, spread, font scaling)
- */
-
 const RECENTLY_VIEWED_KEY = "ved_recently_viewed";
 const FAVORITES_KEY = "ved_favorites";
 const READING_PROGRESS_KEY = "ved_reading_progress";
@@ -13,18 +5,18 @@ const READER_PREFS_KEY = "ved_reader_prefs";
 
 const MAX_RECENT_BOOKS = 12;
 
-/* ------------------------------------------------------------------ */
-/*  Helper to dispatch storage updates to current tab                 */
-/* ------------------------------------------------------------------ */
+// Helper to dispatch storage updates to current tab                 */
+
 function dispatchLibraryChange(type, data) {
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("ved-library-change", { detail: { type, data } }));
+    window.dispatchEvent(
+      new CustomEvent("ved-library-change", { detail: { type, data } }),
+    );
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Recently Viewed Books                                             */
-/* ------------------------------------------------------------------ */
+// Recently Viewed Books                                             */
+
 export function getRecentlyViewed() {
   try {
     const raw = localStorage.getItem(RECENTLY_VIEWED_KEY);
@@ -67,9 +59,8 @@ export function clearRecentlyViewed() {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Bookmarks / Favorites                                             */
-/* ------------------------------------------------------------------ */
+// Bookmarks / Favorites                                             */
+
 export function getFavorites() {
   try {
     const raw = localStorage.getItem(FAVORITES_KEY);
@@ -121,9 +112,8 @@ export function toggleFavorite(book) {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Reading Progress (Page position)                                  */
-/* ------------------------------------------------------------------ */
+// Reading Progress (Page position)                                  */
+
 export function getReadingProgress(bookId) {
   if (!bookId) return null;
   try {
@@ -140,7 +130,9 @@ export function saveReadingProgress(bookId, page, totalPages = null) {
     const map = JSON.parse(localStorage.getItem(READING_PROGRESS_KEY) || "{}");
     map[bookId] = {
       page: Number(page),
-      totalPages: totalPages ? Number(totalPages) : (map[bookId]?.totalPages || null),
+      totalPages: totalPages
+        ? Number(totalPages)
+        : map[bookId]?.totalPages || null,
       updatedAt: Date.now(),
     };
     localStorage.setItem(READING_PROGRESS_KEY, JSON.stringify(map));
@@ -149,9 +141,8 @@ export function saveReadingProgress(bookId, page, totalPages = null) {
   }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Reader Preferences (theme, spread)                                */
-/* ------------------------------------------------------------------ */
+// Reader Preferences (theme, spread)                                */
+
 export function getReaderPrefs() {
   try {
     const raw = localStorage.getItem(READER_PREFS_KEY);

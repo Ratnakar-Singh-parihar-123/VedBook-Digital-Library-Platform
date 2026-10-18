@@ -21,13 +21,13 @@ export function BookCardGridSkeleton({ className = "" }) {
       <div className="px-1.5 pt-3 pb-1 flex-1 flex flex-col justify-between">
         <div>
           <Skeleton className="h-4 w-4/5 rounded mb-1.5" />
-          <Skeleton className="h-3 w-1/2 rounded" />
+          <Skeleton className="w-1/2 h-3 rounded" />
         </div>
 
         {/* Footer meta */}
         <div className="flex items-center justify-between pt-3 mt-2 border-t border-primary/5">
           <Skeleton className="h-2.5 w-16 rounded" />
-          <Skeleton className="h-3 w-10 rounded" tone="gold" />
+          <Skeleton className="w-10 h-3 rounded" tone="gold" />
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@ export function BookCardRowSkeleton({ className = "" }) {
       className={`flex gap-4 p-3 bg-white border rounded-2xl border-primary/5 ${className}`}
     >
       {/* Thumbnail */}
-      <div className="relative w-16 h-22 sm:w-20 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-surface">
+      <div className="relative w-16 overflow-hidden h-22 sm:w-20 sm:h-28 rounded-xl shrink-0 bg-surface">
         <Skeleton className="w-full h-full" rounded="rounded-xl" />
         <div className="absolute top-0 bottom-0 left-0 w-1 bg-primary/10" />
       </div>
@@ -58,12 +58,12 @@ export function BookCardRowSkeleton({ className = "" }) {
         <div className="flex items-start justify-between gap-3">
           <div className="w-full">
             <Skeleton className="h-4 w-2/3 sm:w-1/2 rounded mb-1.5" />
-            <Skeleton className="h-3 w-1/3 rounded" />
+            <Skeleton className="w-1/3 h-3 rounded" />
           </div>
           <Skeleton className="w-10 h-5 rounded-lg shrink-0" />
         </div>
 
-        <div className="hidden sm:block mt-3">
+        <div className="hidden mt-3 sm:block">
           <SkeletonText lines={2} lastLineWidth="80%" lineHeight="h-2.5" />
         </div>
 
@@ -72,7 +72,7 @@ export function BookCardRowSkeleton({ className = "" }) {
             <Skeleton className="h-2.5 w-14 rounded" />
             <Skeleton className="h-2.5 w-12 rounded" />
           </div>
-          <Skeleton className="h-3 w-12 rounded" tone="gold" />
+          <Skeleton className="w-12 h-3 rounded" tone="gold" />
         </div>
       </div>
     </div>

@@ -2,9 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from './usersApi';
 
-/* ------------------------------------------------------------------ */
-/*  Axios instance                                                    */
-/* ------------------------------------------------------------------ */
+// Axios instance                                                 //
+
 const client = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
@@ -19,9 +18,8 @@ client.interceptors.request.use(async config => {
   return config;
 });
 
-/* ------------------------------------------------------------------ */
-/*  Endpoints (user only)                                             */
-/* ------------------------------------------------------------------ */
+// Endpoints (user only)                                          //
+
 const ENDPOINTS = {
   list: '/notifications',
   unreadCount: '/notifications/unread-count',
@@ -30,15 +28,14 @@ const ENDPOINTS = {
   delete: id => `/notifications/${id}`,
 };
 
-/* ------------------------------------------------------------------ */
-/*  Normaliser                                                        */
-/* ------------------------------------------------------------------ */
+// Normaliser                                                     //
+
 function normaliseNotification(n) {
   if (!n) return null;
 
   const id = n.id || n._id || n.notification_id;
 
-  /* entity_type + entity_id → bookId (agar book ho) */
+  //entity_type + entity_id → bookId (agar book ho)//
   const entityType = n.entity_type || n.entityType || null;
   const entityId = n.entity_id || n.entityId || null;
 
@@ -60,7 +57,7 @@ function normaliseNotification(n) {
       n.date ||
       new Date().toISOString(),
 
-    /* Book navigation — priority: explicit bookId, phir entity */
+    //Book navigation — priority: explicit bookId, phir entity//
     bookId:
       n.bookId ||
       n.book_id ||
@@ -78,9 +75,8 @@ function normaliseNotification(n) {
   };
 }
 
-/* ------------------------------------------------------------------ */
-/*  Response parser                                                   */
-/* ------------------------------------------------------------------ */
+// Response parser                                                //
+
 const parseList = data => {
   const raw =
     data?.data?.notifications ||
@@ -106,11 +102,11 @@ const parseList = data => {
   return { notifications: list, unreadCount };
 };
 
-/* ================================================================== */
-/*  NOTIFICATIONS API                                                 */
-/* ================================================================== */
+//==================================================================//
+// NOTIFICATIONS API                                              //
+//==================================================================//
 export const notificationsAPI = {
-  /* ---------------- Fetch all ---------------- */
+  //---------------- Fetch all ----------------//
   getAll: async ({ page = 1, limit = 50 } = {}) => {
     try {
       const { data } = await client.get(ENDPOINTS.list, {
@@ -133,7 +129,7 @@ export const notificationsAPI = {
     }
   },
 
-  /* ---------------- Unread count only ---------------- */
+  //---------------- Unread count only ----------------//
   getUnreadCount: async () => {
     try {
       const { data } = await client.get(ENDPOINTS.unreadCount);
@@ -149,19 +145,19 @@ export const notificationsAPI = {
     }
   },
 
-  /* ---------------- Mark one as read ---------------- */
+  //---------------- Mark one as read ----------------//
   markAsRead: async notificationId => {
     const { data } = await client.patch(ENDPOINTS.markRead(notificationId));
     return data;
   },
 
-  /* ---------------- Mark all as read ---------------- */
+  //---------------- Mark all as read ----------------//
   markAllAsRead: async () => {
     const { data } = await client.patch(ENDPOINTS.markAllRead);
     return data;
   },
 
-  /* ---------------- Delete one ---------------- */
+  //---------------- Delete one ----------------//
   delete: async notificationId => {
     const { data } = await client.delete(ENDPOINTS.delete(notificationId));
     return data;

@@ -1,6 +1,5 @@
-/* ------------------------------------------------------------------ */
-/*  Formatters                                                         */
-/* ------------------------------------------------------------------ */
+// Formatters                                                         */
+
 const numberFmt = new Intl.NumberFormat("en-IN");
 const dateFmt = new Intl.DateTimeFormat(undefined, {
   year: "numeric",
@@ -36,9 +35,8 @@ function toDate(d) {
   return Number.isNaN(dt.getTime()) ? null : dt;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Safe extractors                                                    */
-/* ------------------------------------------------------------------ */
+// Safe extractors                                                    */
+
 export function pickNumber(obj, keys = []) {
   if (!obj) return 0;
   for (const k of keys) {

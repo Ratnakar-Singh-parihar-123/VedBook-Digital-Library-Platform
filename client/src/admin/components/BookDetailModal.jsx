@@ -400,9 +400,8 @@ export default function BookDetailModal({
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Sub-components                                                     */
-/* ------------------------------------------------------------------ */
+
 function StatTile({ icon: Icon, label, value, raw }) {
   const display = raw ? String(value || "—") : formatNumber(value || 0);
   return (

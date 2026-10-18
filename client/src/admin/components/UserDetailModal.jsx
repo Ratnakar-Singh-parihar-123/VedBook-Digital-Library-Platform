@@ -24,9 +24,8 @@ import useFetch from "../dashboard/hooks/useFetch";
 import { formatDateTime, formatNumber } from "../dashboard/utils/format";
 import { usersAPI } from "../../api/adminApi";
 
-/* ------------------------------------------------------------------ */
 /*  Avatar URL resolver — same as Users.jsx                           */
-/* ------------------------------------------------------------------ */
+
 const API_BASE = import.meta.env?.VITE_API_URL || "";
 
 function resolveAvatarUrl(user) {
@@ -66,9 +65,8 @@ function resolveAvatarUrl(user) {
   return null;
 }
 
-/* ------------------------------------------------------------------ */
 /*  Main Component                                                     */
-/* ------------------------------------------------------------------ */
+
 export default function UserDetailModal({
   userId,
   onClose,
@@ -377,14 +375,20 @@ export default function UserDetailModal({
                   </button>
                   {confirmDelete ? (
                     <div className="flex items-center gap-2 bg-red-50 border border-red-200 px-3 py-1.5 rounded-xl animate-fade-in">
-                      <span className="text-xs font-semibold text-red-700">Delete user?</span>
+                      <span className="text-xs font-semibold text-red-700">
+                        Delete user?
+                      </span>
                       <button
                         type="button"
                         onClick={executeDelete}
                         disabled={actionLoading}
                         className="px-2.5 py-1 text-xs font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
                       >
-                        {actionLoading ? <Loader2 size={12} className="animate-spin" /> : "Confirm"}
+                        {actionLoading ? (
+                          <Loader2 size={12} className="animate-spin" />
+                        ) : (
+                          "Confirm"
+                        )}
                       </button>
                       <button
                         type="button"
@@ -417,9 +421,8 @@ export default function UserDetailModal({
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Modal Avatar (image with initials fallback)                        */
-/* ------------------------------------------------------------------ */
+
 function ModalAvatar({ user }) {
   const name = user?.name || user?.fullName || "Unnamed";
   const initial = (name.charAt(0) || "U").toUpperCase();
@@ -454,9 +457,8 @@ function ModalAvatar({ user }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Tabs                                                               */
-/* ------------------------------------------------------------------ */
+
 function OverviewTab({ user }) {
   const stats = [
     {
@@ -618,9 +620,8 @@ function AccountTab({ user }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Small helpers                                                      */
-/* ------------------------------------------------------------------ */
+
 function StatTile({ icon: Icon, label, value, tone = "primary", suffix = "" }) {
   const toneCls =
     {

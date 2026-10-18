@@ -11,11 +11,11 @@ import { verifyUserToken } from "../middleware/userMiddleware.js";
 
 const router = Router();
 
-/* Specific routes PEHLE */
+//Specific routes PEHLE//
 router.get("/unread-count", verifyUserToken, getUnreadCount);
 router.patch("/read-all", verifyUserToken, readAllUserNotifications);
 
-/* Param routes baad me */
+//Param routes baad me//
 router.get("/", verifyUserToken, listUserNotifications);
 router.patch("/:id/read", verifyUserToken, readUserNotification);
 

@@ -22,7 +22,9 @@ export default function ErrorState({
         <AlertCircle size={17} className="shrink-0 mt-0.5 text-red-600" />
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-red-900">{title}</p>
-          {message && <p className="text-xs text-red-700/90 mt-0.5">{message}</p>}
+          {message && (
+            <p className="text-xs text-red-700/90 mt-0.5">{message}</p>
+          )}
         </div>
         {onRetry && (
           <button
@@ -44,20 +46,20 @@ export default function ErrorState({
       role="alert"
       className={`text-center py-12 px-6 bg-white/70 border border-red-200/70 rounded-3xl backdrop-blur-sm max-w-lg mx-auto ${className}`}
     >
-      <div className="grid mx-auto mb-4 w-14 h-14 rounded-2xl bg-red-100/70 text-red-600 place-items-center ring-1 ring-red-200">
+      <div className="grid mx-auto mb-4 text-red-600 w-14 h-14 rounded-2xl bg-red-100/70 place-items-center ring-1 ring-red-200">
         <AlertCircle size={26} />
       </div>
 
-      <h3 className="font-display text-lg sm:text-xl text-primary font-semibold">
+      <h3 className="text-lg font-semibold font-display sm:text-xl text-primary">
         {title}
       </h3>
 
-      <p className="mt-2 text-sm text-primary/70 leading-relaxed max-w-sm mx-auto">
+      <p className="max-w-sm mx-auto mt-2 text-sm leading-relaxed text-primary/70">
         {message}
       </p>
 
       {onRetry && (
-        <div className="mt-6 flex justify-center">
+        <div className="flex justify-center mt-6">
           <button
             type="button"
             onClick={onRetry}

@@ -45,7 +45,12 @@ export const resolveCoverUrl = (raw) => {
   if (clean.startsWith("uploads/")) {
     return `${serverBase}/${clean}`;
   }
-  if (clean.endsWith(".png") || clean.endsWith(".jpg") || clean.endsWith(".jpeg") || clean.endsWith(".webp")) {
+  if (
+    clean.endsWith(".png") ||
+    clean.endsWith(".jpg") ||
+    clean.endsWith(".jpeg") ||
+    clean.endsWith(".webp")
+  ) {
     return `${serverBase}/uploads/covers/${clean}`;
   }
   if (clean.endsWith(".pdf")) {

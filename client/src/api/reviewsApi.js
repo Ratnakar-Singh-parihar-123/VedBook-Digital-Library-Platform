@@ -1,8 +1,7 @@
 import api from "./adminApi";
 
-/* ------------------------------------------------------------------ */
-/*  Reviews + Popular Books API                                       */
-/* ------------------------------------------------------------------ */
+// Reviews + Popular Books API                                       */
+
 export const reviewsAPI = {
   /** Weekly popular books (auto-ranked) */
   getPopularBooks: (params) =>

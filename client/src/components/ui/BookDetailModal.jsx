@@ -14,19 +14,53 @@ import {
   Clock,
   Sparkles,
 } from "lucide-react";
-import { isFavorite, toggleFavorite, addRecentlyViewed, getReadingProgress } from "../../utils/libraryStorage";
+import {
+  isFavorite,
+  toggleFavorite,
+  addRecentlyViewed,
+  getReadingProgress,
+} from "../../utils/libraryStorage";
 import { useToast } from "../../context/ToastContext";
 import { resolveCoverUrl } from "../../utils/urlUtils";
 
-/* ------------------------------------------------------------------ */
 /*  Cover Palettes & URL Resolver                                      */
-/* ------------------------------------------------------------------ */
+
 const COVER_PALETTES = [
-  { from: "#1A4A3E", to: "#0B241C", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#B08F4A", to: "#6E5A2A", text: "#FAF7F0", muted: "rgba(250,247,240,0.6)", accent: "#FAF7F0" },
-  { from: "#2A5E4E", to: "#0F2B22", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
-  { from: "#D6B56D", to: "#8E7538", text: "#173F35", muted: "rgba(23,63,53,0.7)", accent: "#173F35" },
-  { from: "#3A6A55", to: "#152E24", text: "#FAF7F0", muted: "rgba(250,247,240,0.55)", accent: "#D6B56D" },
+  {
+    from: "#1A4A3E",
+    to: "#0B241C",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#B08F4A",
+    to: "#6E5A2A",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.6)",
+    accent: "#FAF7F0",
+  },
+  {
+    from: "#2A5E4E",
+    to: "#0F2B22",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
+  {
+    from: "#D6B56D",
+    to: "#8E7538",
+    text: "#173F35",
+    muted: "rgba(23,63,53,0.7)",
+    accent: "#173F35",
+  },
+  {
+    from: "#3A6A55",
+    to: "#152E24",
+    text: "#FAF7F0",
+    muted: "rgba(250,247,240,0.55)",
+    accent: "#D6B56D",
+  },
 ];
 
 function hashString(str) {
@@ -89,7 +123,9 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
   const language = book.language || "English";
   const publishedYear = book.published_year || book.publishedYear || null;
   const pages = book.pages || book.totalPages || null;
-  const coverSrc = resolveCoverUrl(book.cover || book.cover_image || book.coverUrl);
+  const coverSrc = resolveCoverUrl(
+    book.cover || book.cover_image || book.coverUrl,
+  );
 
   const handleStartReading = () => {
     addRecentlyViewed(book);
@@ -139,7 +175,7 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
       <div
         aria-hidden="true"
         onClick={onClose}
-        className="fixed inset-0 bg-primary/60 backdrop-blur-sm transition-opacity animate-fade-in"
+        className="fixed inset-0 transition-opacity bg-primary/60 backdrop-blur-sm animate-fade-in"
       />
 
       {/* Modal Dialog */}
@@ -157,14 +193,14 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Close book details"
-            className="w-8 h-8 rounded-full bg-cream border border-primary/10 text-primary/60 hover:text-primary hover:bg-mint transition grid place-items-center"
+            className="grid w-8 h-8 transition border rounded-full bg-cream border-primary/10 text-primary/60 hover:text-primary hover:bg-mint place-items-center"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
+        <div className="p-6 space-y-6 overflow-y-auto sm:p-8">
           <div className="grid sm:grid-cols-[190px_1fr] gap-6 sm:gap-8 items-start">
             {/* Book Cover */}
             <div className="relative mx-auto sm:mx-0 w-44 sm:w-full aspect-[5/7] rounded-2xl overflow-hidden shadow-card border border-primary/10 shrink-0">
@@ -173,12 +209,14 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
                   src={coverSrc}
                   alt={`${title} cover`}
                   onError={() => setImgError(true)}
-                  className="w-full h-full object-cover"
+                  className="object-cover w-full h-full"
                 />
               ) : (
                 <div
-                  className="w-full h-full flex flex-col justify-between p-4 relative"
-                  style={{ background: `linear-gradient(135deg, ${p.from}, ${p.to})` }}
+                  className="relative flex flex-col justify-between w-full h-full p-4"
+                  style={{
+                    background: `linear-gradient(135deg, ${p.from}, ${p.to})`,
+                  }}
                 >
                   <div className="absolute left-0 top-0 bottom-0 w-[5px] bg-black/20" />
                   <span
@@ -189,12 +227,15 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
                   </span>
                   <div className="my-auto">
                     <h4
-                      className="font-display text-base leading-tight font-bold"
+                      className="text-base font-bold leading-tight font-display"
                       style={{ color: p.text }}
                     >
                       {title}
                     </h4>
-                    <div className="mt-2 h-0.5 w-8 rounded-full" style={{ background: p.accent }} />
+                    <div
+                      className="mt-2 h-0.5 w-8 rounded-full"
+                      style={{ background: p.accent }}
+                    />
                   </div>
                   <p className="text-xs" style={{ color: p.muted }}>
                     {author}
@@ -223,12 +264,13 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
               <div>
                 <h3
                   id="modal-book-title"
-                  className="text-2xl sm:text-3xl font-display text-primary leading-tight font-bold"
+                  className="text-2xl font-bold leading-tight sm:text-3xl font-display text-primary"
                 >
                   {title}
                 </h3>
-                <p className="text-sm font-medium text-primary/70 mt-1">
-                  By <span className="text-primary font-semibold">{author}</span>
+                <p className="mt-1 text-sm font-medium text-primary/70">
+                  By{" "}
+                  <span className="font-semibold text-primary">{author}</span>
                 </p>
               </div>
 
@@ -258,7 +300,9 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
                 ) : (
                   <div className="flex items-center gap-1.5 text-primary/70">
                     <Clock size={13} className="text-gold shrink-0" />
-                    <span>~{Math.max(15, Math.round((pages || 120) * 1.5))} mins</span>
+                    <span>
+                      ~{Math.max(15, Math.round((pages || 120) * 1.5))} mins
+                    </span>
                   </div>
                 )}
               </div>
@@ -290,7 +334,7 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 sm:p-6 border-t border-primary/10 bg-white/70 backdrop-blur-sm flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-t sm:p-6 border-primary/10 bg-white/70 backdrop-blur-sm shrink-0">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -302,7 +346,10 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
                   : "bg-white border-primary/15 text-primary hover:bg-mint"
               }`}
             >
-              <Bookmark size={14} className={fav ? "fill-gold text-gold" : ""} />
+              <Bookmark
+                size={14}
+                className={fav ? "fill-gold text-gold" : ""}
+              />
               <span>{fav ? "Bookmarked" : "Bookmark"}</span>
             </button>
 
@@ -312,7 +359,11 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
               aria-label="Share book link"
               className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-white border border-primary/15 text-primary hover:bg-mint transition"
             >
-              {copied ? <Check size={14} className="text-emerald-600" /> : <Share2 size={14} />}
+              {copied ? (
+                <Check size={14} className="text-emerald-600" />
+              ) : (
+                <Share2 size={14} />
+              )}
               <span>{copied ? "Link Copied" : "Share"}</span>
             </button>
           </div>
@@ -323,7 +374,11 @@ export default function BookDetailModal({ book, isOpen, onClose }) {
             className="inline-flex items-center justify-center gap-2 bg-primary text-cream px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-primary-light transition shadow-soft hover:scale-[1.01] active:scale-[0.99]"
           >
             <BookOpen size={15} />
-            <span>{progress?.page ? `Continue Page ${progress.page}` : "Read Book Now"}</span>
+            <span>
+              {progress?.page
+                ? `Continue Page ${progress.page}`
+                : "Read Book Now"}
+            </span>
             <ArrowRight size={14} />
           </button>
         </div>

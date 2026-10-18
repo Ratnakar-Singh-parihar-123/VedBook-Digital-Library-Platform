@@ -1,5 +1,11 @@
 import { createContext, useContext, useState, useCallback } from "react";
-import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from "lucide-react";
+import {
+  CheckCircle2,
+  AlertCircle,
+  Info,
+  AlertTriangle,
+  X,
+} from "lucide-react";
 
 const ToastContext = createContext(null);
 
@@ -24,15 +30,20 @@ export function ToastProvider({ children }) {
       }
       return id;
     },
-    [removeToast]
+    [removeToast],
   );
 
   const toast = {
-    show: (msg, type = "info", title = "") => addToast({ message: msg, type, title }),
-    success: (msg, title = "Success") => addToast({ message: msg, type: "success", title }),
-    error: (msg, title = "Error") => addToast({ message: msg, type: "error", title }),
-    info: (msg, title = "Notice") => addToast({ message: msg, type: "info", title }),
-    warning: (msg, title = "Warning") => addToast({ message: msg, type: "warning", title }),
+    show: (msg, type = "info", title = "") =>
+      addToast({ message: msg, type, title }),
+    success: (msg, title = "Success") =>
+      addToast({ message: msg, type: "success", title }),
+    error: (msg, title = "Error") =>
+      addToast({ message: msg, type: "error", title }),
+    info: (msg, title = "Notice") =>
+      addToast({ message: msg, type: "info", title }),
+    warning: (msg, title = "Warning") =>
+      addToast({ message: msg, type: "warning", title }),
     remove: removeToast,
   };
 
@@ -117,8 +128,14 @@ function ToastItem({ toast, onDismiss }) {
     >
       <Icon size={18} className={`shrink-0 mt-0.5 ${styles.iconColor}`} />
       <div className="flex-1 min-w-0 pr-1">
-        {title && <p className="text-xs font-bold leading-tight font-display">{title}</p>}
-        <p className={`text-xs leading-relaxed ${title ? "mt-0.5 opacity-90" : "font-medium"}`}>
+        {title && (
+          <p className="text-xs font-bold leading-tight font-display">
+            {title}
+          </p>
+        )}
+        <p
+          className={`text-xs leading-relaxed ${title ? "mt-0.5 opacity-90" : "font-medium"}`}
+        >
           {message}
         </p>
       </div>
@@ -126,7 +143,7 @@ function ToastItem({ toast, onDismiss }) {
         type="button"
         onClick={onDismiss}
         aria-label="Dismiss notification"
-        className="shrink-0 p-1 rounded-lg text-cream/60 hover:text-cream hover:bg-white/10 transition"
+        className="p-1 transition rounded-lg shrink-0 text-cream/60 hover:text-cream hover:bg-white/10"
       >
         <X size={14} />
       </button>

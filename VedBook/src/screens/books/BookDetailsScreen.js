@@ -27,9 +27,8 @@ import { useLibrary } from '../../context/LibraryContext';
 
 import { booksAPI } from '../../api/booksApi';
 
-/* ------------------------------------------------------------------ */
 /*  Fallback cover                                                    */
-/* ------------------------------------------------------------------ */
+
 const FALLBACK_COVER =
   'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop';
 
@@ -52,9 +51,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
 
   const requestIdRef = useRef(0);
 
-  /* ------------------------------------------------------------------ */
   /*  Fetch book details                                                */
-  /* ------------------------------------------------------------------ */
+
   const fetchBook = useCallback(async () => {
     if (!bookId) {
       setError('Book id missing.');
@@ -90,9 +88,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
     fetchBook();
   }, [fetchBook]);
 
-  /* ------------------------------------------------------------------ */
   /*  Fetch related books                                               */
-  /* ------------------------------------------------------------------ */
+
   useEffect(() => {
     if (!book?.category || !book?.id) return;
 
@@ -119,9 +116,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
     };
   }, [book?.category, book?.id]);
 
-  /* ------------------------------------------------------------------ */
   /*  Derived values                                                    */
-  /* ------------------------------------------------------------------ */
+
   const bookmarked = book ? isBookmarked?.(book.id) : false;
   const currentProgress = book ? readingProgress?.[book.id] : null;
 
@@ -132,9 +128,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
     ? `${readingHours}h ${remainingMins}m`
     : '—';
 
-  /* ------------------------------------------------------------------ */
   /*  Handlers — sab safe with optional chaining + try/catch            */
-  /* ------------------------------------------------------------------ */
+
   const handleReadPress = async () => {
     if (!book) return;
 
@@ -160,9 +155,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
     } catch {}
   };
 
-  /* ------------------------------------------------------------------ */
   /*  Loading state                                                     */
-  /* ------------------------------------------------------------------ */
+
   if (loading && !book) {
     return (
       <View style={styles.container}>
@@ -189,9 +183,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
     );
   }
 
-  /* ------------------------------------------------------------------ */
   /*  Error state                                                       */
-  /* ------------------------------------------------------------------ */
+
   if (error && !book) {
     return (
       <View style={styles.container}>
@@ -226,9 +219,8 @@ export const BookDetailsScreen = ({ route, navigation }) => {
 
   if (!book) return null;
 
-  /* ------------------------------------------------------------------ */
   /*  Main render                                                       */
-  /* ------------------------------------------------------------------ */
+
   const coverUri = book.cover || book.coverImage || FALLBACK_COVER;
 
   return (

@@ -21,9 +21,8 @@ import EmptyState from "../../components/ui/EmptyState";
 import ErrorState from "../../components/ui/ErrorState";
 import RefreshBanner from "../../components/ui/RefreshBanner";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const PAGE_SIZE = 10;
 
 const ROLE_OPTIONS = [
@@ -39,9 +38,8 @@ const STATUS_OPTIONS = [
   { value: "suspended", label: "Suspended" },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  🐛 DEBUG FLAG — set to false in production                        */
-/* ------------------------------------------------------------------ */
+
 const DEBUG = true;
 
 function dbg(...args) {
@@ -54,16 +52,11 @@ function _dbgWarn(...args) {
 }
 function dbgErr(...args) {
   if (DEBUG)
-    console.error(
-      "%c[USERS-DEBUG]",
-      "color:#ef4444;font-weight:bold",
-      ...args
-    );
+    console.error("%c[USERS-DEBUG]", "color:#ef4444;font-weight:bold", ...args);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Helper: extract raw avatar path from user object, then resolve    */
-/* ------------------------------------------------------------------ */
+
 function resolveUserAvatarUrl(user) {
   if (!user) return null;
   const raw =
@@ -84,9 +77,8 @@ function resolveUserAvatarUrl(user) {
   return resolveAvatarUrl(raw);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function Users() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [search, setSearch] = useState("");
@@ -382,9 +374,8 @@ export default function Users() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Avatar — full debug + on-screen status badge                       */
-/* ------------------------------------------------------------------ */
+
 function Avatar({ user, size = 36, className = "" }) {
   const name = user?.name || user?.fullName || "Unnamed";
   const initial = (name.charAt(0) || "U").toUpperCase();
@@ -463,9 +454,8 @@ function Avatar({ user, size = 36, className = "" }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  UserRow                                                            */
-/* ------------------------------------------------------------------ */
+
 function UserRow({ user, onOpen }) {
   /* 🐛 DEBUG — sirf pehle user ke liye, har render pe spam na ho */
   if (DEBUG) {
@@ -513,9 +503,8 @@ function UserRow({ user, onOpen }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  UserCard                                                           */
-/* ------------------------------------------------------------------ */
+
 function UserCard({ user, onOpen }) {
   const name = user.name || user.fullName || "Unnamed";
   const email = user.email || "—";
@@ -543,9 +532,8 @@ function UserCard({ user, onOpen }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Small pieces                                                       */
-/* ------------------------------------------------------------------ */
+
 function RoleBadge({ role }) {
   const isAdmin = String(role).toLowerCase() === "admin";
   return (

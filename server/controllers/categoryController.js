@@ -185,7 +185,7 @@ export const removeCategory = async (req, res) => {
       });
     }
 
-    /* Optional: check for books */
+    //Optional: check for books//
     const [books] = await db.execute(
       "SELECT COUNT(*) AS count FROM books WHERE category_id = ?",
       [Number(id)],
@@ -199,7 +199,7 @@ export const removeCategory = async (req, res) => {
       });
     }
 
-    /* HARD DELETE */
+    //HARD DELETE//
     const [result] = await db.execute("DELETE FROM categories WHERE id = ?", [
       Number(id),
     ]);
@@ -236,7 +236,11 @@ export const toggleCategoryStatus = async (req, res) => {
     if (typeof is_active !== "boolean") {
       if (is_active === 1 || is_active === "1" || is_active === "true") {
         is_active = true;
-      } else if (is_active === 0 || is_active === "0" || is_active === "false") {
+      } else if (
+        is_active === 0 ||
+        is_active === "0" ||
+        is_active === "false"
+      ) {
         is_active = false;
       } else {
         return res.status(400).json({

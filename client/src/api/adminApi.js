@@ -8,9 +8,8 @@ import {
 
 export { getApiBaseUrl, getServerBaseUrl, resolveCoverUrl, resolveAvatarUrl };
 
-/* ------------------------------------------------------------------ */
-/*  Axios instance — used across the app                              */
-/* ------------------------------------------------------------------ */
+// Axios instance — used across the app                              */
+
 const api = axios.create({
   baseURL: getApiBaseUrl(),
   timeout: 25000,
@@ -19,9 +18,8 @@ const api = axios.create({
   },
 });
 
-/* ------------------------------------------------------------------ */
-/*  Request interceptor — attach token if present                     */
-/* ------------------------------------------------------------------ */
+// Request interceptor — attach token if present                     */
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("ved_token");
@@ -33,14 +31,16 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-/* ------------------------------------------------------------------ */
-/*  Response interceptor — normalise errors + handle 401              */
-/* ------------------------------------------------------------------ */
+// Response interceptor — normalise errors + handle 401              */
+
 api.interceptors.response.use(
   (res) => res,
   (error) => {
     if (import.meta.env.DEV) {
-      console.log("API URL:", (error.config?.baseURL || "") + (error.config?.url || ""));
+      console.log(
+        "API URL:",
+        (error.config?.baseURL || "") + (error.config?.url || ""),
+      );
       console.log("Status:", error.response?.status);
       console.log("Backend error:", error.response?.data);
     }
@@ -60,9 +60,8 @@ api.interceptors.response.use(
   },
 );
 
-/* ------------------------------------------------------------------ */
-/*  Auth helpers                                                      */
-/* ------------------------------------------------------------------ */
+// Auth helpers                                                      */
+
 export const authAPI = {
   register: (payload) => api.post("/api/admin/register", payload),
   login: (payload) => api.post("/api/admin/login", payload),
@@ -83,9 +82,8 @@ export const usersAPI = {
   remove: (id) => api.delete(`/api/admin/users/${id}`),
 };
 
-/* ------------------------------------------------------------------ */
-/*  Books API — matches Express routes                                */
-/* ------------------------------------------------------------------ */
+// Books API — matches Express routes                                */
+
 export const booksAPI = {
   searchPublic: (q) => api.get("/api/books/search", { params: { q } }),
   /** Public: only published books */
@@ -125,7 +123,7 @@ export const booksAPI = {
   },
 };
 
-/* Helper — convert object to FormData for file uploads */
+//Helper — convert object to FormData for file uploads */
 function toFormData(obj) {
   const fd = new FormData();
   Object.entries(obj).forEach(([k, v]) => {
@@ -141,9 +139,8 @@ function toFormData(obj) {
   return fd;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Profile API — admin's own account                                  */
-/* ------------------------------------------------------------------ */
+// Profile API — admin's own account                                  */
+
 export const profileAPI = {
   get: () => api.get("/api/admin/profile"),
 
@@ -168,9 +165,8 @@ export const categoriesAPI = {
   remove: (id) => api.delete(`/api/categories/${id}`),
 };
 
-/* ------------------------------------------------------------------ */
-/*  Notifications API                                                  */
-/* ------------------------------------------------------------------ */
+// Notifications API                                                  */
+
 export const notificationsAPI = {
   list: () => api.get("/api/admin/notifications"),
   get: (id) => api.get(`/api/admin/notifications/${id}`),

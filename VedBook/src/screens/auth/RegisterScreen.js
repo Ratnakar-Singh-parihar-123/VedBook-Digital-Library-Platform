@@ -227,7 +227,7 @@ export const RegisterScreen = ({ navigation }) => {
   );
 };
 
-/* styles unchanged */
+//styles unchanged//
 const styles = StyleSheet.create({
   keyboardView: { flex: 1, backgroundColor: colors.ivory },
   scrollContainer: {

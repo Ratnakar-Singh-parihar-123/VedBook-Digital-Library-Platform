@@ -103,7 +103,11 @@ export const Button = ({
         <View style={styles.content}>
           {icon && iconPosition === 'left' && (
             <View style={styles.iconLeft}>
-              <Icon name={icon} size={size === 'sm' ? 16 : 18} color={textColor} />
+              <Icon
+                name={icon}
+                size={size === 'sm' ? 16 : 18}
+                color={textColor}
+              />
             </View>
           )}
           <Text
@@ -118,7 +122,11 @@ export const Button = ({
           </Text>
           {icon && iconPosition === 'right' && (
             <View style={styles.iconRight}>
-              <Icon name={icon} size={size === 'sm' ? 16 : 18} color={textColor} />
+              <Icon
+                name={icon}
+                size={size === 'sm' ? 16 : 18}
+                color={textColor}
+              />
             </View>
           )}
         </View>

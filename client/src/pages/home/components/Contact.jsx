@@ -14,9 +14,8 @@ import {
 } from "lucide-react";
 import { useToast } from "../../../context/ToastContext";
 
-/* ------------------------------------------------------------------ */
 /*  Data                                                               */
-/* ------------------------------------------------------------------ */
+
 const CONTACT_CARDS = [
   {
     icon: Mail,
@@ -97,21 +96,21 @@ export default function Contact() {
     <div className="min-h-screen bg-cream">
       {/* ================= HERO ================= */}
       <section className="relative overflow-hidden border-b border-primary/10">
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-gold/15 blur-3xl" />
-        <div className="absolute top-20 -left-24 w-72 h-72 rounded-full bg-mint blur-3xl" />
+        <div className="absolute rounded-full -top-32 -right-32 w-96 h-96 bg-gold/15 blur-3xl" />
+        <div className="absolute rounded-full top-20 -left-24 w-72 h-72 bg-mint blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-5 py-14 md:py-20 text-center">
-          {/* <nav aria-label="Breadcrumb" className="text-xs text-primary/50 mb-6">
+        <div className="relative px-5 mx-auto text-center max-w-7xl py-14 md:py-20">
+          {/* <nav aria-label="Breadcrumb" className="mb-6 text-xs text-primary/50">
             <ol className="flex items-center justify-center gap-1.5">
               <li>
-                <Link to="/" className="hover:text-primary transition-colors">
+                <Link to="/" className="transition-colors hover:text-primary">
                   Home
                 </Link>
               </li>
               <li aria-hidden="true" className="text-primary/30">
                 /
               </li>
-              <li className="text-primary font-medium">Contact</li>
+              <li className="font-medium text-primary">Contact</li>
             </ol>
           </nav> */}
 
@@ -120,11 +119,11 @@ export default function Contact() {
             We read every message
           </span>
 
-          <h1 className="font-display text-3xl md:text-5xl text-primary mt-5 tracking-tight">
+          <h1 className="mt-5 text-3xl tracking-tight font-display md:text-5xl text-primary">
             Let's <span className="text-gold">talk.</span>
           </h1>
 
-          <p className="text-primary/60 mt-4 max-w-xl mx-auto text-sm md:text-base">
+          <p className="max-w-xl mx-auto mt-4 text-sm text-primary/60 md:text-base">
             Questions, feedback, feature ideas, or just want to say hi? Drop us
             a line — we usually reply within a day.
           </p>
@@ -132,13 +131,13 @@ export default function Contact() {
       </section>
 
       {/* ================= CONTACT CARDS ================= */}
-      <section className="max-w-7xl mx-auto px-5 -mt-6 md:-mt-8 relative z-10">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section className="relative z-10 px-5 mx-auto -mt-6 max-w-7xl md:-mt-8">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CONTACT_CARDS.map(
             ({ icon: Icon, title, value, hint, tone, accent }) => (
               <div
                 key={title}
-                className="bg-white border border-primary/10 rounded-3xl p-5 hover:shadow-soft transition-shadow flex items-start gap-4"
+                className="flex items-start gap-4 p-5 transition-shadow bg-white border border-primary/10 rounded-3xl hover:shadow-soft"
               >
                 <div
                   className={`w-11 h-11 rounded-2xl ${tone} grid place-items-center shrink-0`}
@@ -149,10 +148,10 @@ export default function Contact() {
                   <p className="text-[10px] uppercase tracking-wider text-primary/40 font-medium">
                     {title}
                   </p>
-                  <p className="font-display text-base text-primary mt-1 truncate">
+                  <p className="mt-1 text-base truncate font-display text-primary">
                     {value}
                   </p>
-                  <p className="text-xs text-primary/50 mt-1">{hint}</p>
+                  <p className="mt-1 text-xs text-primary/50">{hint}</p>
                 </div>
               </div>
             ),
@@ -163,16 +162,16 @@ export default function Contact() {
       {/* ================= FORM + INFO ================= */}
       <section className="max-w-7xl mx-auto px-5 py-12 md:py-16 grid lg:grid-cols-[1fr_400px] gap-8 lg:gap-12">
         {/* Form */}
-        <div className="bg-white border border-primary/10 rounded-3xl p-6 md:p-8">
-          <h2 className="font-display text-2xl text-primary">
+        <div className="p-6 bg-white border border-primary/10 rounded-3xl md:p-8">
+          <h2 className="text-2xl font-display text-primary">
             Send us a message
           </h2>
-          <p className="text-sm text-primary/60 mt-2">
+          <p className="mt-2 text-sm text-primary/60">
             Fill in the form below and we'll get back to you soon.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Your name" required>
                 <User size={15} className="text-primary/40 shrink-0" />
                 <input
@@ -181,7 +180,7 @@ export default function Contact() {
                   value={form.name}
                   onChange={update("name")}
                   placeholder="Aarav Sharma"
-                  className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/40 py-3"
+                  className="w-full py-3 text-sm bg-transparent outline-none text-primary placeholder:text-primary/40"
                 />
               </Field>
 
@@ -193,7 +192,7 @@ export default function Contact() {
                   value={form.email}
                   onChange={update("email")}
                   placeholder="you@example.com"
-                  className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/40 py-3"
+                  className="w-full py-3 text-sm bg-transparent outline-none text-primary placeholder:text-primary/40"
                 />
               </Field>
             </div>
@@ -205,7 +204,7 @@ export default function Contact() {
                 value={form.subject}
                 onChange={update("subject")}
                 placeholder="What is this about?"
-                className="w-full bg-transparent outline-none text-sm text-primary placeholder:text-primary/40 py-3"
+                className="w-full py-3 text-sm bg-transparent outline-none text-primary placeholder:text-primary/40"
               />
             </Field>
 
@@ -219,7 +218,7 @@ export default function Contact() {
                 value={form.message}
                 onChange={update("message")}
                 placeholder="Tell us how we can help…"
-                className="w-full bg-white border border-primary/10 rounded-2xl px-4 py-3 text-sm text-primary placeholder:text-primary/40 outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/40 transition resize-none"
+                className="w-full px-4 py-3 text-sm transition bg-white border outline-none resize-none border-primary/10 rounded-2xl text-primary placeholder:text-primary/40 focus:ring-2 focus:ring-gold/40 focus:border-gold/40"
               />
             </div>
 
@@ -248,7 +247,7 @@ export default function Contact() {
 
             {/* Success state */}
             {sent && (
-              <div className="flex items-center gap-2 bg-mint text-primary text-sm rounded-2xl px-4 py-3 mt-2">
+              <div className="flex items-center gap-2 px-4 py-3 mt-2 text-sm bg-mint text-primary rounded-2xl">
                 <CheckCircle2 size={16} className="text-gold shrink-0" />
                 Message sent! We'll get back to you shortly.
               </div>
@@ -259,46 +258,46 @@ export default function Contact() {
         {/* Sidebar */}
         <aside className="space-y-5">
           {/* Response promise */}
-          <div className="relative overflow-hidden rounded-3xl bg-primary p-6">
-            <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-gold/25 blur-2xl" />
+          <div className="relative p-6 overflow-hidden rounded-3xl bg-primary">
+            <div className="absolute w-40 h-40 rounded-full -top-12 -right-12 bg-gold/25 blur-2xl" />
             <div className="relative">
-              <div className="w-10 h-10 rounded-2xl bg-gold text-primary grid place-items-center">
+              <div className="grid w-10 h-10 rounded-2xl bg-gold text-primary place-items-center">
                 <Headphones size={17} />
               </div>
-              <h3 className="font-display text-lg text-cream mt-4">
+              <h3 className="mt-4 text-lg font-display text-cream">
                 Real humans, quick replies.
               </h3>
-              <p className="text-cream/70 text-sm mt-2 leading-relaxed">
+              <p className="mt-2 text-sm leading-relaxed text-cream/70">
                 No bots, no ticket queues. Our small team reads every message
                 personally and gets back to you within a day.
               </p>
 
-              <div className="mt-5 pt-4 border-t border-cream/10 space-y-2">
+              <div className="pt-4 mt-5 space-y-2 border-t border-cream/10">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-cream/60">Support hours</span>
-                  <span className="text-cream font-medium">
+                  <span className="font-medium text-cream">
                     Mon–Sat, 10am–7pm
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-cream/60">Avg. response</span>
-                  <span className="text-cream font-medium">&lt; 24 hours</span>
+                  <span className="font-medium text-cream">&lt; 24 hours</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Copyright / takedown note */}
-          <div className="bg-white border border-primary/10 rounded-3xl p-5">
+          <div className="p-5 bg-white border border-primary/10 rounded-3xl">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl bg-mint grid place-items-center shrink-0">
+              <div className="grid w-9 h-9 rounded-xl bg-mint place-items-center shrink-0">
                 <AlertCircle size={15} className="text-primary" />
               </div>
               <div>
-                <h3 className="font-display text-sm text-primary">
+                <h3 className="text-sm font-display text-primary">
                   Copyright & takedowns
                 </h3>
-                <p className="text-xs text-primary/60 mt-1 leading-relaxed">
+                <p className="mt-1 text-xs leading-relaxed text-primary/60">
                   If you believe content on VedBook infringes your rights, email
                   us and we'll act within 48 hours.
                 </p>
@@ -310,15 +309,15 @@ export default function Contact() {
 
       {/* ================= FAQ ================= */}
       <section className="bg-white border-t border-primary/10">
-        <div className="max-w-4xl mx-auto px-5 py-16 md:py-20">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-gold font-medium">
+        <div className="max-w-4xl px-5 py-16 mx-auto md:py-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <span className="inline-flex items-center gap-2 text-xs font-medium tracking-wider uppercase text-gold">
               <HelpCircle size={12} /> FAQ
             </span>
-            <h2 className="font-display text-3xl md:text-4xl text-primary mt-3">
+            <h2 className="mt-3 text-3xl font-display md:text-4xl text-primary">
               Answers to common questions.
             </h2>
-            <p className="text-primary/60 mt-3 text-sm md:text-base">
+            <p className="mt-3 text-sm text-primary/60 md:text-base">
               Still can't find what you're looking for? Drop us a message above.
             </p>
           </div>
@@ -329,15 +328,15 @@ export default function Contact() {
               return (
                 <div
                   key={q}
-                  className="bg-cream border border-primary/10 rounded-2xl overflow-hidden transition-shadow hover:shadow-soft"
+                  className="overflow-hidden transition-shadow border bg-cream border-primary/10 rounded-2xl hover:shadow-soft"
                 >
                   <button
                     type="button"
                     onClick={() => setOpenFaq(open ? -1 : i)}
                     aria-expanded={open}
-                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
+                    className="flex items-center justify-between w-full gap-4 px-5 py-4 text-left"
                   >
-                    <span className="font-display text-base text-primary">
+                    <span className="text-base font-display text-primary">
                       {q}
                     </span>
                     <ChevronDown
@@ -355,7 +354,7 @@ export default function Contact() {
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="px-5 pb-4 text-sm text-primary/70 leading-relaxed">
+                      <p className="px-5 pb-4 text-sm leading-relaxed text-primary/70">
                         {a}
                       </p>
                     </div>
@@ -370,9 +369,8 @@ export default function Contact() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Field helper                                                       */
-/* ------------------------------------------------------------------ */
+
 function Field({ label, required, children }) {
   return (
     <div>

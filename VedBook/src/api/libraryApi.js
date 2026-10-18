@@ -2,9 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from './usersApi';
 
-/* ------------------------------------------------------------------ */
-/*  Axios instance                                                    */
-/* ------------------------------------------------------------------ */
+// Axios instance                                                    */
+
 const client = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
@@ -19,9 +18,8 @@ client.interceptors.request.use(async config => {
   return config;
 });
 
-/* ------------------------------------------------------------------ */
-/*  Cover URL normaliser                                              */
-/* ------------------------------------------------------------------ */
+// Cover URL normaliser                                              */
+
 const getCoverImageUrl = cover => {
   if (!cover || typeof cover !== 'string') return null;
   const path = cover.trim();
@@ -33,9 +31,8 @@ const getCoverImageUrl = cover => {
   return `${serverBaseUrl}/${cleanPath}`;
 };
 
-/* ------------------------------------------------------------------ */
-/*  Book shape normaliser                                             */
-/* ------------------------------------------------------------------ */
+// Book shape normaliser                                             */
+
 export function normaliseBook(b) {
   if (!b) return null;
 
@@ -150,9 +147,8 @@ export function normaliseBook(b) {
   };
 }
 
-/* ------------------------------------------------------------------ */
-/*  Universal list parser                                             */
-/* ------------------------------------------------------------------ */
+// Universal list parser                                             */
+
 const parseList = data => {
   const raw =
     data?.data?.books ||
@@ -167,9 +163,9 @@ const parseList = data => {
   return (Array.isArray(raw) ? raw : []).map(normaliseBook).filter(Boolean);
 };
 
-/* ================================================================== */
-/*  LIBRARY API                                                       */
-/* ================================================================== */
+//================================================================== */
+// LIBRARY API                                                       */
+//================================================================== */
 export const libraryAPI = {
   /** Get Library Summary counts */
   getMyLibrarySummary: async () => {

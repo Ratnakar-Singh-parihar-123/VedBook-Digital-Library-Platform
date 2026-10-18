@@ -14,8 +14,8 @@ export function Skeleton({
     tone === "light"
       ? "animate-shimmer-light bg-cream/10"
       : tone === "gold"
-      ? "animate-shimmer-gold bg-gold/10"
-      : "animate-shimmer bg-primary/5";
+        ? "animate-shimmer-gold bg-gold/10"
+        : "animate-shimmer bg-primary/5";
 
   return (
     <div
@@ -74,7 +74,11 @@ SkeletonText.propTypes = {
 /**
  * Circle / Avatar Skeleton
  */
-export function SkeletonCircle({ size = 40, className = "", tone = "default" }) {
+export function SkeletonCircle({
+  size = 40,
+  className = "",
+  tone = "default",
+}) {
   return (
     <Skeleton
       tone={tone}

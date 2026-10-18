@@ -157,10 +157,18 @@ export const deleteUserById = async (id) => {
     await connection.beginTransaction();
 
     await connection.execute(`DELETE FROM bookmarks WHERE user_id = ?`, [id]);
-    await connection.execute(`DELETE FROM reading_progress WHERE user_id = ?`, [id]);
+    await connection.execute(`DELETE FROM reading_progress WHERE user_id = ?`, [
+      id,
+    ]);
     await connection.execute(`DELETE FROM reviews WHERE user_id = ?`, [id]);
-    await connection.execute(`UPDATE book_read_events SET user_id = NULL WHERE user_id = ?`, [id]);
-    const [result] = await connection.execute(`DELETE FROM users WHERE id = ?`, [id]);
+    await connection.execute(
+      `UPDATE book_read_events SET user_id = NULL WHERE user_id = ?`,
+      [id],
+    );
+    const [result] = await connection.execute(
+      `DELETE FROM users WHERE id = ?`,
+      [id],
+    );
 
     await connection.commit();
     return result.affectedRows > 0;

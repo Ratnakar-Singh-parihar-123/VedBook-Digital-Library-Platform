@@ -1,7 +1,3 @@
-/**
- * VedBook — Premium React Native Digital Library Application
- * Android and iOS support with custom StyleSheet styling and local session persistence.
- */
 
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

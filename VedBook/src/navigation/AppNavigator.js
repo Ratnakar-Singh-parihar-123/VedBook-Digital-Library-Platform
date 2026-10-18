@@ -27,12 +27,17 @@ const BrandLoadingScreen = () => (
     <View style={styles.loadingLogoBadge}>
       <Icon name="logo" size={48} color={colors.gold} />
     </View>
-    <ActivityIndicator size="small" color={colors.gold} style={styles.spinner} />
+    <ActivityIndicator
+      size="small"
+      color={colors.gold}
+      style={styles.spinner}
+    />
   </View>
 );
 
 export const AppNavigator = () => {
-  const { isLoadingSession, hasCompletedOnboarding, isAuthenticated } = useAuth();
+  const { isLoadingSession, hasCompletedOnboarding, isAuthenticated } =
+    useAuth();
 
   if (isLoadingSession) {
     return <BrandLoadingScreen />;

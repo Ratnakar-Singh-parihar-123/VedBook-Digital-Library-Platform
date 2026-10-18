@@ -19,9 +19,8 @@ import {
 import { authAPI } from "../../api/adminApi";
 import logo from "../../assets/logo/mainLogo.png";
 
-/* ------------------------------------------------------------------ */
 /*  Feature list (left branding panel)                                 */
-/* ------------------------------------------------------------------ */
+
 const FEATURES = [
   { icon: BookOpen, text: "Full content management" },
   { icon: Users, text: "User & permissions control" },
@@ -357,9 +356,8 @@ export default function AdminRegister() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Field wrapper                                                      */
-/* ------------------------------------------------------------------ */
+
 function Field({ label, icon: Icon, children }) {
   return (
     <div>

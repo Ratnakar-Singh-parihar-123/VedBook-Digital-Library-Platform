@@ -10,9 +10,8 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-/* ------------------------------------------------------------------ */
 /*  Brand logo — same file as Navbar                                   */
-/* ------------------------------------------------------------------ */
+
 const LOGO_SRC = "/mainLogo.png";
 
 /* Social icon map */
@@ -41,9 +40,8 @@ const usefulLinks = [
   { label: "Report Issue", to: "/report" },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Brand — logo + wordmark                                            */
-/* ------------------------------------------------------------------ */
+
 function Brand() {
   return (
     <Link
@@ -51,23 +49,23 @@ function Brand() {
       className="inline-flex items-center gap-3 group"
       aria-label="VedBook — Home"
     >
-      <div className="relative w-11 h-11 rounded-2xl bg-primary grid place-items-center overflow-hidden ring-1 ring-primary/10 shrink-0">
+      <div className="relative grid overflow-hidden w-11 h-11 rounded-2xl bg-primary place-items-center ring-1 ring-primary/10 shrink-0">
         <img
           src={LOGO_SRC}
           alt="VedBook logo"
-          className="w-full h-full object-contain"
+          className="object-contain w-full h-full"
           onError={(e) => {
             e.currentTarget.style.display = "none";
             e.currentTarget.nextSibling.style.display = "grid";
           }}
         />
-        <span className="hidden absolute inset-0 place-items-center font-display text-lg font-bold text-gold">
+        <span className="absolute inset-0 hidden text-lg font-bold place-items-center font-display text-gold">
           V
         </span>
-        <span className="pointer-events-none absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gold/40 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+        <span className="absolute w-6 h-6 transition-opacity rounded-full opacity-0 pointer-events-none -top-2 -right-2 bg-gold/40 blur-md group-hover:opacity-100" />
       </div>
       <div className="leading-none">
-        <p className="font-display text-primary text-lg font-bold">VedBook</p>
+        <p className="text-lg font-bold font-display text-primary">VedBook</p>
         <p className="text-[11px] text-secondary uppercase tracking-[0.2em] mt-1 font-medium">
           Digital Library
         </p>
@@ -76,9 +74,8 @@ function Brand() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Footer                                                             */
-/* ------------------------------------------------------------------ */
+
 export default function Footer({ socials = [] }) {
   const year = new Date().getFullYear();
   const [email, setEmail] = useState("");
@@ -94,27 +91,27 @@ export default function Footer({ socials = [] }) {
   };
 
   return (
-    <footer className="relative mt-16 border-t border-border bg-cream overflow-hidden">
+    <footer className="relative mt-16 overflow-hidden border-t border-border bg-cream">
       {/* Decorative blurs */}
-      <div className="pointer-events-none absolute -top-24 -left-24 w-72 h-72 rounded-full bg-gold/15 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-mint blur-3xl" />
+      <div className="absolute rounded-full pointer-events-none -top-24 -left-24 w-72 h-72 bg-gold/15 blur-3xl" />
+      <div className="absolute rounded-full pointer-events-none -bottom-24 -right-24 w-72 h-72 bg-mint blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-5 py-12 md:py-16 grid gap-10 md:gap-8 md:grid-cols-2 lg:grid-cols-12">
+      <div className="relative grid gap-10 px-5 py-12 mx-auto max-w-7xl md:py-16 md:gap-8 md:grid-cols-2 lg:grid-cols-12">
         {/* ============ Brand + description + socials ============ */}
-        <div className="lg:col-span-5 max-w-md">
+        <div className="max-w-md lg:col-span-5">
           <Brand />
 
-          <p className="text-sm text-secondary mt-5 leading-relaxed font-normal">
+          <p className="mt-5 text-sm font-normal leading-relaxed text-secondary">
             Books, e-books, PDFs, study notes, and courses — all in one
             beautifully simple platform. Read in{" "}
-            <span className="text-primary font-semibold">Hindi</span> or{" "}
-            <span className="text-primary font-semibold">English</span>, anytime,
-            anywhere.
+            <span className="font-semibold text-primary">Hindi</span> or{" "}
+            <span className="font-semibold text-primary">English</span>,
+            anytime, anywhere.
           </p>
 
           {socials.length > 0 && (
             <ul
-              className="mt-6 flex items-center gap-2"
+              className="flex items-center gap-2 mt-6"
               aria-label="Social media"
             >
               {socials.map(({ type, href, label }) => {
@@ -127,7 +124,7 @@ export default function Footer({ socials = [] }) {
                       aria-label={label || type}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-xl bg-white border border-border grid place-items-center text-secondary hover:bg-primary hover:text-gold hover:border-primary transition"
+                      className="grid w-10 h-10 transition bg-white border rounded-xl border-border place-items-center text-secondary hover:bg-primary hover:text-gold hover:border-primary"
                     >
                       <Icon size={15} />
                     </a>
@@ -140,7 +137,10 @@ export default function Footer({ socials = [] }) {
 
         {/* ============ Quick links ============ */}
         <nav aria-labelledby="footer-quick" className="lg:col-span-2">
-          <h2 id="footer-quick" className="font-display text-base text-primary font-bold">
+          <h2
+            id="footer-quick"
+            className="text-base font-bold font-display text-primary"
+          >
             Quick Links
           </h2>
           <ul className="mt-4 space-y-3">
@@ -150,7 +150,7 @@ export default function Footer({ socials = [] }) {
                   to={link.to}
                   className="group inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary transition-colors font-medium"
                 >
-                  <span className="w-0 group-hover:w-2 h-px bg-gold transition-all duration-200" />
+                  <span className="w-0 h-px transition-all duration-200 group-hover:w-2 bg-gold" />
                   {link.label}
                 </Link>
               </li>
@@ -162,7 +162,7 @@ export default function Footer({ socials = [] }) {
         <nav aria-labelledby="footer-useful" className="lg:col-span-2">
           <h2
             id="footer-useful"
-            className="font-display text-base text-primary font-bold"
+            className="text-base font-bold font-display text-primary"
           >
             Useful Links
           </h2>
@@ -173,7 +173,7 @@ export default function Footer({ socials = [] }) {
                   to={link.to}
                   className="group inline-flex items-center gap-1.5 text-sm text-secondary hover:text-primary transition-colors font-medium"
                 >
-                  <span className="w-0 group-hover:w-2 h-px bg-gold transition-all duration-200" />
+                  <span className="w-0 h-px transition-all duration-200 group-hover:w-2 bg-gold" />
                   {link.label}
                 </Link>
               </li>
@@ -183,15 +183,15 @@ export default function Footer({ socials = [] }) {
 
         {/* ============ Newsletter ============ */}
         <div className="lg:col-span-3">
-          <h2 className="font-display text-base text-primary font-bold">
+          <h2 className="text-base font-bold font-display text-primary">
             Stay in the loop
           </h2>
-          <p className="text-sm text-secondary mt-3">
+          <p className="mt-3 text-sm text-secondary">
             New books, notes, and course drops — straight to your inbox.
           </p>
 
           <form onSubmit={handleSubscribe} className="mt-4">
-            <div className="flex items-center gap-2 bg-white border border-border rounded-2xl px-3 focus-within:ring-2 focus-within:ring-gold focus-within:border-gold transition">
+            <div className="flex items-center gap-2 px-3 transition bg-white border border-border rounded-2xl focus-within:ring-2 focus-within:ring-gold focus-within:border-gold">
               <Mail size={16} className="text-muted shrink-0" />
               <input
                 type="email"
@@ -200,7 +200,7 @@ export default function Footer({ socials = [] }) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 aria-label="Email for newsletter"
-                className="w-full bg-transparent outline-none text-sm text-charcoal placeholder:text-muted py-3"
+                className="w-full py-3 text-sm bg-transparent outline-none text-charcoal placeholder:text-muted"
               />
               <button
                 type="submit"
@@ -223,14 +223,14 @@ export default function Footer({ socials = [] }) {
           </form>
 
           {/* Small highlight card */}
-          <div className="mt-5 relative overflow-hidden rounded-2xl bg-primary p-4 border border-primary-light/40 shadow-soft">
-            <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-gold/20 blur-2xl" />
+          <div className="relative p-4 mt-5 overflow-hidden border rounded-2xl bg-primary border-primary-light/40 shadow-soft">
+            <div className="absolute w-20 h-20 rounded-full -top-6 -right-6 bg-gold/20 blur-2xl" />
             <div className="relative flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gold text-white grid place-items-center shrink-0">
+              <div className="grid text-white w-9 h-9 rounded-xl bg-gold place-items-center shrink-0">
                 <Sparkles size={16} />
               </div>
               <div className="min-w-0">
-                <p className="text-white text-xs font-semibold leading-tight">
+                <p className="text-xs font-semibold leading-tight text-white">
                   10,000+ titles
                 </p>
                 <p className="text-white/80 text-[11px] mt-0.5">
@@ -244,19 +244,19 @@ export default function Footer({ socials = [] }) {
 
       {/* ============ Bottom bar ============ */}
       <div className="relative border-t border-border">
-        <div className="max-w-7xl mx-auto px-5 py-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-xs text-secondary">
+        <div className="flex flex-col gap-3 px-5 py-5 mx-auto text-xs max-w-7xl sm:flex-row sm:items-center sm:justify-between text-secondary">
           <p>© {year} VedBook. All rights reserved.</p>
 
           <div className="flex items-center gap-4">
             <Link
               to="/privacy"
-              className="text-secondary hover:text-primary transition-colors font-medium"
+              className="font-medium transition-colors text-secondary hover:text-primary"
             >
               Privacy
             </Link>
             <Link
               to="/terms"
-              className="text-secondary hover:text-primary transition-colors font-medium"
+              className="font-medium transition-colors text-secondary hover:text-primary"
             >
               Terms
             </Link>
@@ -265,7 +265,7 @@ export default function Footer({ socials = [] }) {
             </span>
             <Link
               to="/"
-              className="inline-flex items-center gap-1 text-secondary hover:text-primary transition-colors font-medium"
+              className="inline-flex items-center gap-1 font-medium transition-colors text-secondary hover:text-primary"
               aria-label="Back to top"
             >
               Top <ArrowUpRight size={13} />

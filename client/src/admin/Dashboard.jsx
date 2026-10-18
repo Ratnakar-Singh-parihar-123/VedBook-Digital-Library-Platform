@@ -54,9 +54,7 @@ export default function Dashboard() {
               <Calendar size={12} />
               {formatDate(new Date())}
             </p>
-            {isRefreshing && (
-              <RefreshBanner message="Updating dashboard..." />
-            )}
+            {isRefreshing && <RefreshBanner message="Updating dashboard..." />}
           </div>
         </div>
 
@@ -66,7 +64,10 @@ export default function Dashboard() {
           disabled={loading || isRefreshing}
           className="inline-flex items-center gap-2 bg-cream border border-primary/10 text-primary px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-mint hover:border-primary/20 disabled:opacity-60 disabled:cursor-not-allowed transition shadow-soft"
         >
-          <RefreshCw size={14} className={loading || isRefreshing ? "animate-spin text-gold" : ""} />
+          <RefreshCw
+            size={14}
+            className={loading || isRefreshing ? "animate-spin text-gold" : ""}
+          />
           {isRefreshing ? "Refreshing..." : "Refresh"}
         </button>
       </header>
@@ -120,9 +121,8 @@ export default function Dashboard() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Build stat card list from overview                                */
-/* ------------------------------------------------------------------ */
+
 function buildStats(o = {}) {
   const books = o.books || o.bookStats || {};
   const cats = o.categories || o.categoryStats || {};

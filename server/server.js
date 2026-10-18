@@ -47,8 +47,12 @@ app.use(
       }
 
       // Allow Vercel preview deployments (*.vercel.app)
-      if (/^https:\/\/[\w-]+-ratnakarsinghparihars-projects\.vercel\.app$/.test(origin) ||
-          /^https:\/\/thevedbook.*\.vercel\.app$/.test(origin)) {
+      if (
+        /^https:\/\/[\w-]+-ratnakarsinghparihars-projects\.vercel\.app$/.test(
+          origin,
+        ) ||
+        /^https:\/\/thevedbook.*\.vercel\.app$/.test(origin)
+      ) {
         return callback(null, true);
       }
 

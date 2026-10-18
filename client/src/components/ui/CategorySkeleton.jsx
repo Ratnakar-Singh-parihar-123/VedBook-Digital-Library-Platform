@@ -15,14 +15,14 @@ export function CategoryCardSkeleton({ className = "" }) {
         <Skeleton className="w-12 h-12 shrink-0" rounded="rounded-2xl" />
 
         <div className="flex-1 min-w-0">
-          <Skeleton className="h-5 w-3/4 rounded-md mb-2" />
-          <Skeleton className="h-3 w-4/5 rounded" />
+          <Skeleton className="w-3/4 h-5 mb-2 rounded-md" />
+          <Skeleton className="w-4/5 h-3 rounded" />
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between pt-2">
-        <Skeleton className="h-3 w-16 rounded" />
-        <Skeleton className="h-3 w-12 rounded" tone="gold" />
+      <div className="flex items-center justify-between pt-2 mt-6">
+        <Skeleton className="w-16 h-3 rounded" />
+        <Skeleton className="w-12 h-3 rounded" tone="gold" />
       </div>
     </div>
   );

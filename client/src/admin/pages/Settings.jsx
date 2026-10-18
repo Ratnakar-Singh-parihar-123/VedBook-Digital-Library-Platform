@@ -29,9 +29,8 @@ import {
 
 import useLocalSettings from "../../admin/dashboard/hooks/useLocalSettings";
 
-/* ------------------------------------------------------------------ */
 /*  Tabs                                                               */
-/* ------------------------------------------------------------------ */
+
 const TABS = [
   { key: "general", label: "General", icon: Globe },
   { key: "notifications", label: "Notifications", icon: Bell },
@@ -40,9 +39,8 @@ const TABS = [
   { key: "data", label: "Data", icon: Database },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function Settings() {
   const { settings, update, reset } = useLocalSettings();
 
@@ -171,9 +169,8 @@ export default function Settings() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  General                                                            */
-/* ------------------------------------------------------------------ */
+
 function GeneralSection({ settings, update }) {
   return (
     <Card
@@ -225,9 +222,8 @@ function GeneralSection({ settings, update }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Notifications                                                      */
-/* ------------------------------------------------------------------ */
+
 function NotificationsSection({ settings, update }) {
   const items = [
     {
@@ -278,9 +274,8 @@ function NotificationsSection({ settings, update }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Preferences                                                        */
-/* ------------------------------------------------------------------ */
+
 function PreferencesSection({ settings, update }) {
   return (
     <Card
@@ -349,9 +344,8 @@ function PreferencesSection({ settings, update }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Security                                                           */
-/* ------------------------------------------------------------------ */
+
 function SecuritySection({ settings, update }) {
   return (
     <>
@@ -416,9 +410,8 @@ function SecuritySection({ settings, update }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Data                                                               */
-/* ------------------------------------------------------------------ */
+
 function DataSection({ settings, reset }) {
   const [exported, setExported] = useState(false);
 
@@ -545,9 +538,8 @@ function DataSection({ settings, reset }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Card wrapper                                                       */
-/* ------------------------------------------------------------------ */
+
 function Card({ icon: Icon, title, description, children }) {
   return (
     <section className="p-4 space-y-4 border bg-cream border-primary/10 rounded-3xl shadow-soft sm:p-6">
@@ -567,9 +559,8 @@ function Card({ icon: Icon, title, description, children }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Field                                                              */
-/* ------------------------------------------------------------------ */
+
 function Field({ label, icon: Icon, children }) {
   return (
     <div>
@@ -584,9 +575,8 @@ function Field({ label, icon: Icon, children }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Select field                                                       */
-/* ------------------------------------------------------------------ */
+
 function SelectField({ label, icon: Icon, value, onChange, options }) {
   return (
     <div>
@@ -625,9 +615,8 @@ function SelectField({ label, icon: Icon, value, onChange, options }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Toggle row                                                         */
-/* ------------------------------------------------------------------ */
+
 function ToggleRow({ icon: Icon, label, desc, checked, onChange, disabled }) {
   return (
     <div className="flex items-center justify-between gap-3 sm:gap-4 bg-white/60 border border-primary/10 rounded-2xl px-3.5 sm:px-4 py-3 sm:py-3.5">
@@ -666,9 +655,8 @@ function ToggleRow({ icon: Icon, label, desc, checked, onChange, disabled }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Reset confirmation dialog                                          */
-/* ------------------------------------------------------------------ */
+
 function ResetDialog({ open, onClose, onConfirm }) {
   if (!open) return null;
 

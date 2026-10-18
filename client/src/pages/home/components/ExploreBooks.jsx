@@ -37,9 +37,8 @@ import {
   addRecentlyViewed,
 } from "../../../utils/libraryStorage";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const SORTS = [
   { key: "popular", label: "Most Popular" },
   { key: "rating", label: "Top Rated" },
@@ -48,7 +47,6 @@ const SORTS = [
 ];
 
 const BOOKS_PER_PAGE = 12;
-
 
 function pickCover(b) {
   if (!b) return "";
@@ -68,9 +66,8 @@ function pickCover(b) {
   return resolveCoverUrl(raw);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Auto-cover palettes (theme-based)                                  */
-/* ------------------------------------------------------------------ */
+
 const COVER_PALETTES = [
   {
     from: "#1A4A3E",
@@ -125,9 +122,8 @@ function hashString(str) {
   return Math.abs(h);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Main Component                                                     */
-/* ------------------------------------------------------------------ */
+
 export default function ExploreBooks() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -835,9 +831,8 @@ export default function ExploreBooks() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  FilterSidebar (Desktop)                                            */
-/* ------------------------------------------------------------------ */
+
 function FilterSidebar({
   categories,
   category,
@@ -957,9 +952,8 @@ function FilterSidebar({
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Chip                                                               */
-/* ------------------------------------------------------------------ */
+
 function Chip({ label, onClear }) {
   return (
     <span className="inline-flex items-center gap-1.5 bg-mint text-primary text-xs font-semibold pl-3 pr-1.5 py-1.5 rounded-full border border-primary/10">
@@ -976,9 +970,8 @@ function Chip({ label, onClear }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  BookCover                                                          */
-/* ------------------------------------------------------------------ */
+
 function BookCover({ book, className = "" }) {
   const [errored, setErrored] = useState(false);
   const src = resolveCoverUrl(book.cover);
@@ -1043,9 +1036,8 @@ function BookCover({ book, className = "" }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  BookCard (Grid View)                                               */
-/* ------------------------------------------------------------------ */
+
 function BookCard({ book, onOpen, onDirectRead }) {
   const toast = useToast();
   const [fav, setFav] = useState(() => isFavorite(book.id));
@@ -1144,9 +1136,8 @@ function BookCard({ book, onOpen, onDirectRead }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  BookRow (List View)                                                */
-/* ------------------------------------------------------------------ */
+
 function BookRow({ book, onOpen, onDirectRead }) {
   const toast = useToast();
   const [fav, setFav] = useState(() => isFavorite(book.id));
@@ -1246,9 +1237,8 @@ function BookRow({ book, onOpen, onDirectRead }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  MobileFilterDrawer                                                 */
-/* ------------------------------------------------------------------ */
+
 function MobileFilterDrawer({
   open,
   onClose,

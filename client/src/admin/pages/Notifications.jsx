@@ -41,9 +41,8 @@ import {
   formatNumber,
 } from "../dashboard/utils/format";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const FILTERS = [
   { key: "all", label: "All" },
   { key: "unread", label: "Unread" },
@@ -85,9 +84,8 @@ const CREATE_TYPE_OPTIONS = [
   { value: "custom", label: "Custom", icon: Sparkles },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Detection helpers                                                  */
-/* ------------------------------------------------------------------ */
+
 function isUserNotification(n) {
   if (!n) return false;
   const t = String(n.type || "").toLowerCase();
@@ -147,9 +145,8 @@ function extractUserId(n) {
   return null;
 }
 
-/* ------------------------------------------------------------------ */
 /*  Reusable Modal Shell — smooth + responsive                         */
-/* ------------------------------------------------------------------ */
+
 function ModalShell({ open, onClose, children, ariaLabel, closeDisabled }) {
   useEffect(() => {
     if (!open || closeDisabled) return;
@@ -211,9 +208,8 @@ function ModalShell({ open, onClose, children, ariaLabel, closeDisabled }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function Notifications() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [filter, setFilter] = useState("all");
@@ -572,10 +568,9 @@ export default function Notifications() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Notification Row                                                   */
 /*  Edit/Delete buttons ONLY for admin-created (custom) notifications  */
-/* ------------------------------------------------------------------ */
+
 function NotificationRow({
   notification,
   working,
@@ -704,9 +699,8 @@ function NotificationRow({
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Empty state                                                        */
-/* ------------------------------------------------------------------ */
+
 function EmptyState({ filter, onCreate }) {
   const config = {
     unread: {
@@ -755,9 +749,8 @@ function EmptyState({ filter, onCreate }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Create / Edit Modal                                               */
-/* ------------------------------------------------------------------ */
+
 function NotificationFormModal({ open, editing, onClose, onSuccess }) {
   const isEdit = Boolean(editing);
 
@@ -1091,9 +1084,8 @@ function NotificationFormModal({ open, editing, onClose, onSuccess }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  User Detail Modal                                                 */
-/* ------------------------------------------------------------------ */
+
 function UserDetailModal({ userId, notification, onClose }) {
   const open = Boolean(userId);
   const isRealId =
@@ -1378,9 +1370,8 @@ function DetailRow({ icon: Icon, label, value }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+
 function groupByDate(items) {
   const map = new Map();
   const today = new Date();

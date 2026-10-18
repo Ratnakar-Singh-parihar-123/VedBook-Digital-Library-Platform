@@ -25,9 +25,8 @@ import ErrorState from "../../../components/ui/ErrorState";
 import EmptyState from "../../../components/ui/EmptyState";
 import RefreshBanner from "../../../components/ui/RefreshBanner";
 
-/* ------------------------------------------------------------------ */
 /*  Fallback categories (used until API responds)                     */
-/* ------------------------------------------------------------------ */
+
 const DEFAULT_CATEGORIES = [
   {
     id: "fiction",
@@ -121,9 +120,8 @@ const DEFAULT_CATEGORIES = [
   },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function Categories() {
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [loading, setLoading] = useState(false);

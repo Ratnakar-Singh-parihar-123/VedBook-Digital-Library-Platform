@@ -4,9 +4,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from './usersApi';
 
-/* ================================================================== */
-/* AXIOS CLIENT                                                        */
-/* ================================================================== */
+//AXIOS CLIENT                                                       //
+
 const client = axios.create({
   baseURL: API_BASE_URL,
   timeout: 30000,
@@ -29,9 +28,8 @@ client.interceptors.request.use(
   error => Promise.reject(error),
 );
 
-/* ================================================================== */
-/* SHORT-TERM MEMORY CACHE (defensive anti-loop)                       */
-/* ================================================================== */
+//SHORT-TERM MEMORY CACHE (defensive anti-loop)                      //
+
 const BOOK_CACHE_TTL = 30000; // 30s
 const CONTENT_CACHE_TTL = 60000; // 60s
 
@@ -53,9 +51,8 @@ const writeCache = (map, key, data) => {
   map.set(key, { data, time: Date.now() });
 };
 
-/* ================================================================== */
-/* URL HELPERS                                                         */
-/* ================================================================== */
+//URL HELPERS                                                        //
+
 const getServerBaseUrl = () =>
   String(API_BASE_URL || '').replace(/\/api\/?$/i, '');
 
@@ -141,9 +138,8 @@ const getPdfUrl = rawPath => {
   return resolveServerFileUrl(rawPath);
 };
 
-/* ================================================================== */
-/* RESPONSE HELPERS                                                    */
-/* ================================================================== */
+//RESPONSE HELPERS                                                   //
+
 const getBookObject = response => {
   if (!response) return null;
 
@@ -191,9 +187,8 @@ const getBooksArray = response => {
   return [];
 };
 
-/* ================================================================== */
-/* BOOK NORMALISER                                                     */
-/* ================================================================== */
+//BOOK NORMALISER                                                    //
+
 function normaliseBook(b) {
   if (!b || typeof b !== 'object') return null;
 
@@ -240,9 +235,8 @@ function normaliseBook(b) {
   };
 }
 
-/* ================================================================== */
-/* DETAIL ENRICHER                                                     */
-/* ================================================================== */
+//DETAIL ENRICHER                                                    //
+
 function enrichBookDetails(raw, fullResponse) {
   if (!raw || typeof raw !== 'object') return null;
 
@@ -284,9 +278,8 @@ function enrichBookDetails(raw, fullResponse) {
   };
 }
 
-/* ================================================================== */
-/* TEXT PAGINATION                                                     */
-/* ================================================================== */
+//TEXT PAGINATION                                                    //
+
 const splitTextIntoPages = (text, charsPerPage = 1200) => {
   if (!text || typeof text !== 'string') return [];
 
@@ -326,11 +319,10 @@ const splitTextIntoPages = (text, charsPerPage = 1200) => {
   return pages;
 };
 
-/* ================================================================== */
-/* BOOKS API                                                           */
-/* ================================================================== */
+//BOOKS API                                                          //
+
 export const booksAPI = {
-  /* ---------------- SEARCH ---------------- */
+  //---------------- SEARCH ----------------//
   searchBooks: async ({
     query = '',
     category = 'All',
@@ -386,7 +378,7 @@ export const booksAPI = {
     }
   },
 
-  /* ---------------- CATEGORIES ---------------- */
+  //---------------- CATEGORIES ----------------//
   getCategories: async () => {
     const { data } = await client.get('/categories');
     const raw =
@@ -404,7 +396,7 @@ export const booksAPI = {
       .filter(c => c.name);
   },
 
-  /* ---------------- BOOK DETAILS (CACHED) ---------------- */
+  //---------------- BOOK DETAILS (CACHED) ----------------//
   getBookById: async bookId => {
     if (!bookId) return null;
 
@@ -418,7 +410,7 @@ export const booksAPI = {
     }
 
     const fetchPromise = (async () => {
-      /* Direct detail endpoint */
+      //Direct detail endpoint//
       try {
         const { data } = await client.get(
           `/books/${encodeURIComponent(cacheKey)}`,
@@ -433,7 +425,7 @@ export const booksAPI = {
         if (__DEV__) console.log('Detail endpoint failed:', error?.message);
       }
 
-      /* Fallback: list with ID params */
+      //Fallback: list with ID params//
       try {
         for (const params of [
           { id: cacheKey },
@@ -451,7 +443,7 @@ export const booksAPI = {
         }
       } catch {}
 
-      /* Last resort: larger list */
+      //Last resort: larger list//
       try {
         const { data } = await client.get('/books', { params: { limit: 500 } });
         const found = getBooksArray(data).find(item => {
@@ -475,7 +467,7 @@ export const booksAPI = {
     }
   },
 
-  /* ---------------- RELATED ---------------- */
+  //---------------- RELATED ----------------//
   getRelated: async ({ category, excludeId, limit = 8 } = {}) => {
     if (!category || category === 'General') return [];
 
@@ -491,7 +483,7 @@ export const booksAPI = {
       .slice(0, limit);
   },
 
-  /* ---------------- BOOK CONTENT / PDF (CACHED) ---------------- */
+  //---------------- BOOK CONTENT / PDF (CACHED) ----------------//
   getBookContent: async (bookId, passedBook = null) => {
     if (!bookId) return { type: 'none' };
 
@@ -505,7 +497,7 @@ export const booksAPI = {
     }
 
     const fetchPromise = (async () => {
-      /* Try content endpoint */
+      //Try content endpoint//
       try {
         const { data } = await client.get(
           `/books/${encodeURIComponent(cacheKey)}/content`,
@@ -537,7 +529,7 @@ export const booksAPI = {
           }
         }
 
-        /* Text pages */
+        //Text pages//
         const rawPages =
           payload.pages ||
           payload.chapters ||
@@ -569,7 +561,7 @@ export const booksAPI = {
           if (pages.length > 0) return { type: 'text', pages };
         }
 
-        /* Long text */
+        //Long text//
         const longText =
           (typeof payload.content === 'string' &&
             !looksLikePdfPath(payload.content) &&
@@ -597,7 +589,7 @@ export const booksAPI = {
         }
       }
 
-      /* Fallback: PDF from passed book — no extra network */
+      //Fallback: PDF from passed book — no extra network//
       if (passedBook) {
         const passedPdf = getPdfPathFromObject(passedBook);
         if (passedPdf) {
@@ -606,7 +598,7 @@ export const booksAPI = {
         }
       }
 
-      /* Fallback: fetch details (uses cached getBookById) */
+      //Fallback: fetch details (uses cached getBookById)//
       try {
         const book = await booksAPI.getBookById(bookId);
         const pdfPath = getPdfPathFromObject(book);
@@ -659,9 +651,8 @@ export const booksAPI = {
   },
 };
 
-/* ================================================================== */
-/* CATEGORIES API                                                      */
-/* ================================================================== */
+//CATEGORIES API                                                     //
+
 export const categoriesAPI = {
   getAll: async () => {
     const { data } = await client.get('/categories');

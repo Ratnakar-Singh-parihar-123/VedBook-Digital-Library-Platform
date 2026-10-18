@@ -20,9 +20,8 @@ import {
   Search,
 } from "lucide-react";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const POPULAR_SEARCHES = ["Clean Code", "DSA Notes", "UPSC", "Hindi Novels"];
 
 const FEATURE_CHIPS = [
@@ -38,9 +37,8 @@ const STATS = [
   { icon: Users, value: "25K+", label: "READERS" },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Hero Section                                                       */
-/* ------------------------------------------------------------------ */
+
 export default function HeroSection() {
   const navigate = useNavigate();
 
@@ -172,9 +170,8 @@ export default function HeroSection() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Phone Mockup — realistic titanium device                           */
-/* ------------------------------------------------------------------ */
+
 function PhoneMockup() {
   return (
     <div className="relative w-full max-w-[320px] mx-auto lg:mx-0">
@@ -412,9 +409,8 @@ function PhoneMockup() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Book thumbnail — realistic cover look                              */
-/* ------------------------------------------------------------------ */
+
 function BookThumb({ title, author, rating, gradient, accent }) {
   return (
     <div>

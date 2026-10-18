@@ -1,16 +1,5 @@
 import PropTypes from "prop-types";
 
-/**
- * VedBook Unified Professional Loader
- *
- * Designed to fit the warm cream & forest-green editorial aesthetic.
- *
- * Usage:
- *  - Inline button: <Loader inline size="sm" label="Saving..." />
- *  - Section / Card: <Loader center label="Loading books..." />
- *  - Fullscreen blocking: <Loader fullScreen label="Please wait..." sublabel="Securing session" />
- *  - Direct spinner: <Loader size={24} tone="gold" />
- */
 export default function Loader({
   size = 28,
   tone = "dark",
@@ -33,29 +22,25 @@ export default function Loader({
   const isLight = tone === "light";
   const isGold = tone === "gold";
 
-  const strokeColor = isLight
-    ? "#FAF8F3"
-    : isGold
-    ? "#A8833E"
-    : "#193F34";
+  const strokeColor = isLight ? "#FAF8F3" : isGold ? "#A8833E" : "#193F34";
 
   const trackColor = isLight
     ? "rgba(250, 248, 243, 0.2)"
     : isGold
-    ? "rgba(168, 131, 62, 0.2)"
-    : "rgba(25, 63, 52, 0.15)";
+      ? "rgba(168, 131, 62, 0.2)"
+      : "rgba(25, 63, 52, 0.15)";
 
   const textColor = isLight
     ? "text-cream/90"
     : isGold
-    ? "text-gold"
-    : "text-primary";
+      ? "text-gold"
+      : "text-primary";
 
   const subtextColor = isLight
     ? "text-cream/60"
     : isGold
-    ? "text-gold/70"
-    : "text-primary/60";
+      ? "text-gold/70"
+      : "text-primary/60";
 
   // SVG Spinner Graphic
   const spinnerSvg = (
@@ -114,7 +99,7 @@ export default function Loader({
           isLight ? "bg-primary/80" : "bg-cream/85"
         } ${className}`}
       >
-        <div className="relative flex flex-col items-center gap-3 p-8 bg-white/70 border border-primary/10 rounded-3xl shadow-card backdrop-blur-lg max-w-xs w-full text-center">
+        <div className="relative flex flex-col items-center w-full max-w-xs gap-3 p-8 text-center border bg-white/70 border-primary/10 rounded-3xl shadow-card backdrop-blur-lg">
           <div className="relative">
             {spinnerSvg}
             <div className="absolute inset-0 rounded-full blur-md bg-gold/20 -z-10 animate-pulse" />
@@ -156,7 +141,9 @@ export default function Loader({
         </p>
       )}
       {sublabel && (
-        <p className={`text-[11px] ${subtextColor} max-w-xs text-center mt-0.5`}>
+        <p
+          className={`text-[11px] ${subtextColor} max-w-xs text-center mt-0.5`}
+        >
           {sublabel}
         </p>
       )}

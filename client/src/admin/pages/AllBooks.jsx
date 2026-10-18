@@ -32,9 +32,8 @@ import ErrorState from "../../components/ui/ErrorState";
 import RefreshBanner from "../../components/ui/RefreshBanner";
 import { useToast } from "../../context/ToastContext";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const PAGE_SIZE = 10;
 
 const STATUS_OPTIONS = [
@@ -437,9 +436,8 @@ export default function AllBooks() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  BookRow (desktop)                                                  */
-/* ------------------------------------------------------------------ */
+
 function BookRow({ book, onView, onDelete, onToggleStatus, working }) {
   const id = book.id || book._id;
   const title = book.title || "Untitled";
@@ -536,9 +534,8 @@ function BookRow({ book, onView, onDelete, onToggleStatus, working }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  BookCard (mobile)                                                  */
-/* ------------------------------------------------------------------ */
+
 function BookCard({ book, onView, onDelete, onToggleStatus, working }) {
   const id = book.id || book._id;
   const title = book.title || "Untitled";
@@ -622,9 +619,8 @@ function BookCard({ book, onView, onDelete, onToggleStatus, working }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  BookThumb                                                          */
-/* ------------------------------------------------------------------ */
+
 function BookThumb({ book, className = "" }) {
   const [errored, setErrored] = useState(false);
 
@@ -669,9 +665,8 @@ function BookThumb({ book, className = "" }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  StatusBadge                                                        */
-/* ------------------------------------------------------------------ */
+
 function StatusBadge({ status }) {
   const s = String(status).toLowerCase();
   const config = {
@@ -698,9 +693,8 @@ function StatusBadge({ status }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+
 function Chip({ label, onClear }) {
   return (
     <span className="inline-flex items-center gap-1.5 bg-mint text-primary text-xs font-medium pl-2.5 pr-1.5 py-1 rounded-full">

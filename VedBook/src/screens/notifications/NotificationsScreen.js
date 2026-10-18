@@ -32,7 +32,7 @@ export const NotificationsScreen = ({ navigation }) => {
     notifications: cachedNotifs,
   } = useLibrary();
 
-  /* ---------------- STATE ---------------- */
+  //---------------- STATE ----------------//
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
@@ -43,40 +43,43 @@ export const NotificationsScreen = ({ navigation }) => {
 
   const requestIdRef = useRef(0);
 
-  /* ---------------- FETCH ---------------- */
-  const fetchNotifications = useCallback(async (isRefresh = false) => {
-    if (isRefresh) setRefreshing(true);
-    else setLoading(true);
-    setError('');
+  //---------------- FETCH ----------------//
+  const fetchNotifications = useCallback(
+    async (isRefresh = false) => {
+      if (isRefresh) setRefreshing(true);
+      else setLoading(true);
+      setError('');
 
-    const myReqId = ++requestIdRef.current;
+      const myReqId = ++requestIdRef.current;
 
-    try {
-      const res = await notificationsAPI.getAll({ page: 1, limit: 50 });
+      try {
+        const res = await notificationsAPI.getAll({ page: 1, limit: 50 });
 
-      if (myReqId !== requestIdRef.current) return;
+        if (myReqId !== requestIdRef.current) return;
 
-      setNotifications(res.notifications);
-      setUnreadCount(res.unreadCount);
-    } catch (e) {
-      if (myReqId !== requestIdRef.current) return;
-      if (cachedNotifs && cachedNotifs.length > 0) {
-        setNotifications(cachedNotifs);
-        setUnreadCount(cachedNotifs.filter(n => !n.isRead).length);
-      } else {
-        setError(
-          e?.response?.data?.message ||
-            'Could not load notifications. Please try again.',
-        );
-        setNotifications([]);
-        setUnreadCount(0);
+        setNotifications(res.notifications);
+        setUnreadCount(res.unreadCount);
+      } catch (e) {
+        if (myReqId !== requestIdRef.current) return;
+        if (cachedNotifs && cachedNotifs.length > 0) {
+          setNotifications(cachedNotifs);
+          setUnreadCount(cachedNotifs.filter(n => !n.isRead).length);
+        } else {
+          setError(
+            e?.response?.data?.message ||
+              'Could not load notifications. Please try again.',
+          );
+          setNotifications([]);
+          setUnreadCount(0);
+        }
+      } finally {
+        if (myReqId !== requestIdRef.current) return;
+        if (isRefresh) setRefreshing(false);
+        else setLoading(false);
       }
-    } finally {
-      if (myReqId !== requestIdRef.current) return;
-      if (isRefresh) setRefreshing(false);
-      else setLoading(false);
-    }
-  }, [cachedNotifs]);
+    },
+    [cachedNotifs],
+  );
 
   useEffect(() => {
     fetchNotifications();
@@ -84,31 +87,31 @@ export const NotificationsScreen = ({ navigation }) => {
 
   const onRefresh = () => fetchNotifications(true);
 
-  /* ---------------- HANDLERS ---------------- */
+  //---------------- HANDLERS ----------------//
 
-  /* Tap a notification */
+  //Tap a notification//
   const handleNotificationPress = async notif => {
-    /* Optimistic update */
+    //Optimistic update//
     if (!notif.isRead) {
       setNotifications(prev =>
         prev.map(n => (n.id === notif.id ? { ...n, isRead: true } : n)),
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
 
-      /* Sync with context (bell badge) */
+      //Sync with context (bell badge)//
       try {
         contextMarkRead?.(notif.id);
       } catch {}
 
-      /* Sync with server */
+      //Sync with server//
       try {
         await notificationsAPI.markAsRead(notif.id);
       } catch {
-        /* Silent — optimistic already updated */
+        //Silent — optimistic already updated//
       }
     }
 
-    /* Navigate */
+    //Navigate//
     if (notif.bookId) {
       navigation.navigate('BookDetails', { bookId: notif.bookId });
     } else if (notif.actionUrl) {
@@ -116,11 +119,11 @@ export const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  /* Mark all as read */
+  //Mark all as read//
   const handleMarkAllAsRead = async () => {
     if (markingAll || unreadCount === 0) return;
 
-    /* Optimistic update */
+    //Optimistic update//
     const prevNotifications = notifications;
     const prevUnread = unreadCount;
 
@@ -128,7 +131,7 @@ export const NotificationsScreen = ({ navigation }) => {
     setUnreadCount(0);
     setMarkingAll(true);
 
-    /* Sync with context immediately */
+    //Sync with context immediately//
     try {
       contextMarkAllRead?.();
     } catch {}
@@ -136,7 +139,7 @@ export const NotificationsScreen = ({ navigation }) => {
     try {
       await notificationsAPI.markAllAsRead();
     } catch (e) {
-      /* Rollback on error */
+      //Rollback on error//
       setNotifications(prevNotifications);
       setUnreadCount(prevUnread);
       setError(
@@ -148,7 +151,7 @@ export const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  /* ---------------- ICON ---------------- */
+  //---------------- ICON ----------------//
   const getNotificationIcon = type => {
     switch (type) {
       case 'new_book':
@@ -165,7 +168,7 @@ export const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  /* ---------------- FORMAT DATE ---------------- */
+  //---------------- FORMAT DATE ----------------//
   const formatDate = iso => {
     try {
       const d = new Date(iso);
@@ -191,9 +194,9 @@ export const NotificationsScreen = ({ navigation }) => {
     }
   };
 
-  /* ---------------- RENDER ---------------- */
+  //---------------- RENDER ----------------//
 
-  /* Loading */
+  //Loading//
   if (loading && notifications.length === 0) {
     return (
       <View style={styles.container}>
@@ -212,7 +215,7 @@ export const NotificationsScreen = ({ navigation }) => {
     );
   }
 
-  /* Error */
+  //Error//
   if (error && notifications.length === 0) {
     return (
       <View style={styles.container}>
@@ -240,7 +243,7 @@ export const NotificationsScreen = ({ navigation }) => {
     );
   }
 
-  /* Main */
+  //Main//
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.ivory} />
@@ -358,9 +361,9 @@ export const NotificationsScreen = ({ navigation }) => {
   );
 };
 
-/* ================================================================== */
-/*  STYLES                                                            */
-/* ================================================================== */
+//==================================================================//
+// STYLES                                                         //
+//==================================================================//
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.ivory },
 
@@ -381,7 +384,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
   },
 
-  /* CARD */
+  //CARD//
   notificationCard: {
     flexDirection: 'row',
     backgroundColor: colors.surface,
@@ -465,7 +468,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 
-  /* STATES */
+  //STATES//
   centerBox: {
     flex: 1,
     alignItems: 'center',

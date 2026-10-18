@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing, borderRadius, shadows } from '../theme';
 import { Icon } from '../components/common/Icon';
@@ -57,14 +63,21 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
               key={route.key}
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel || `${label} tab`}
+              accessibilityLabel={
+                options.tabBarAccessibilityLabel || `${label} tab`
+              }
               testID={options.tabBarButtonTestID}
               onPress={onPress}
               onLongPress={onLongPress}
               activeOpacity={0.7}
               style={styles.tabButton}
             >
-              <View style={[styles.iconWrapper, isFocused && styles.iconWrapperActive]}>
+              <View
+                style={[
+                  styles.iconWrapper,
+                  isFocused && styles.iconWrapperActive,
+                ]}
+              >
                 <Icon
                   name={iconName}
                   size={20}

@@ -13,9 +13,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from './AuthContext';
 import { libraryAPI } from '../api/libraryApi';
 
-/* ================================================================== */
-/*  User-scoped Storage Keys                                          */
-/* ================================================================== */
+// User-scoped Storage Keys                                         //
+
 const getStorageKeys = userId => ({
   BOOKMARKS: userId ? `@vedbook_u${userId}_bookmarks` : null,
   PROGRESS: userId ? `@vedbook_u${userId}_reading_progress` : null,
@@ -25,9 +24,8 @@ const getStorageKeys = userId => ({
   BOOK_META: '@vedbook_shared_book_meta_cache',
 });
 
-/* ================================================================== */
-/*  Debounced writer                                                  */
-/* ================================================================== */
+// Debounced writer                                                 //
+
 const debouncedWriter = (saveFn, delay = 400) => {
   let timer = null;
   let pending = null;
@@ -48,9 +46,8 @@ const debouncedWriter = (saveFn, delay = 400) => {
   };
 };
 
-/* ================================================================== */
-/*  Storage helpers                                                   */
-/* ================================================================== */
+// Storage helpers                                                  //
+
 const readJSON = async key => {
   if (!key) return null;
   try {
@@ -68,9 +65,8 @@ const writeJSON = async (key, value) => {
   } catch {}
 };
 
-/* ================================================================== */
-/*  Book metadata normaliser                                          */
-/* ================================================================== */
+// Book metadata normaliser                                         //
+
 const extractMeta = book => {
   if (!book || typeof book !== 'object') return null;
 
@@ -100,14 +96,12 @@ const extractMeta = book => {
   };
 };
 
-/* ================================================================== */
-/*  Context                                                           */
-/* ================================================================== */
+// Context                                                          //
+
 const LibraryContext = createContext(null);
 
-/* ================================================================== */
-/*  Provider                                                          */
-/* ================================================================== */
+// Provider                                                         //
+
 export const LibraryProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const currentUserId = user?.id ? String(user.id) : null;
@@ -125,12 +119,11 @@ export const LibraryProvider = ({ children }) => {
     currentUserIdRef.current = currentUserId;
   }, [currentUserId]);
 
-  /* Debounced persist */
+  //Debounced persist//
   const persistJSON = useRef(debouncedWriter(writeJSON, 400)).current;
 
-  /* ================================================================== */
-  /*  Clear all in-memory library state                                 */
-  /* ================================================================== */
+  // Clear all in-memory library state                                //
+
   const clearLibraryState = useCallback(() => {
     setBookmarks([]);
     setReadingProgress({});
@@ -139,9 +132,8 @@ export const LibraryProvider = ({ children }) => {
     setNotifications([]);
   }, []);
 
-  /* ================================================================== */
-  /*  registerBooks — batch save metadata for array of books            */
-  /* ================================================================== */
+  // registerBooks — batch save metadata for array of books           //
+
   const registerBooks = useCallback(
     booksArray => {
       if (!Array.isArray(booksArray) || booksArray.length === 0) return;
@@ -177,9 +169,8 @@ export const LibraryProvider = ({ children }) => {
     [persistJSON],
   );
 
-  /* ================================================================== */
-  /*  Hydrate Shared Book Metadata on startup                           */
-  /* ================================================================== */
+  // Hydrate Shared Book Metadata on startup                          //
+
   useEffect(() => {
     readJSON('@vedbook_shared_book_meta_cache').then(meta => {
       if (meta && typeof meta === 'object') {
@@ -188,9 +179,8 @@ export const LibraryProvider = ({ children }) => {
     });
   }, []);
 
-  /* ================================================================== */
-  /*  Hydrate & Sync for Active User                                    */
-  /* ================================================================== */
+  // Hydrate & Sync for Active User                                   //
+
   const refreshLibrary = useCallback(async () => {
     const uid = currentUserIdRef.current;
     if (!uid) {
@@ -203,19 +193,24 @@ export const LibraryProvider = ({ children }) => {
 
     try {
       // 1. Fetch server state for this authenticated user
-      const [continueRes, bmRes, compRes, recentRes] = await Promise.allSettled([
-        libraryAPI.getContinueReading(),
-        libraryAPI.getBookmarks(),
-        libraryAPI.getCompleted(),
-        libraryAPI.getRecentlyOpened(),
-      ]);
+      const [continueRes, bmRes, compRes, recentRes] = await Promise.allSettled(
+        [
+          libraryAPI.getContinueReading(),
+          libraryAPI.getBookmarks(),
+          libraryAPI.getCompleted(),
+          libraryAPI.getRecentlyOpened(),
+        ],
+      );
 
       if (currentUserIdRef.current !== uid) return; // User switched during fetch
 
       const booksToRegister = [];
 
       // Process Continue Reading
-      if (continueRes.status === 'fulfilled' && Array.isArray(continueRes.value)) {
+      if (
+        continueRes.status === 'fulfilled' &&
+        Array.isArray(continueRes.value)
+      ) {
         const progMap = {};
         continueRes.value.forEach(book => {
           if (book?.id) {
@@ -268,7 +263,8 @@ export const LibraryProvider = ({ children }) => {
         registerBooks(booksToRegister);
       }
     } catch (e) {
-      if (__DEV__) console.warn('refreshLibrary network sync error:', e?.message);
+      if (__DEV__)
+        console.warn('refreshLibrary network sync error:', e?.message);
     } finally {
       if (currentUserIdRef.current === uid) {
         setIsLoadingLibrary(false);
@@ -276,7 +272,7 @@ export const LibraryProvider = ({ children }) => {
     }
   }, [clearLibraryState, registerBooks]);
 
-  /* Re-hydrate on user login/logout */
+  //Re-hydrate on user login/logout//
   useEffect(() => {
     let cancelled = false;
 
@@ -318,9 +314,8 @@ export const LibraryProvider = ({ children }) => {
     };
   }, [currentUserId, isAuthenticated, clearLibraryState, refreshLibrary]);
 
-  /* ================================================================== */
-  /*  recordBookOpened                                                  */
-  /* ================================================================== */
+  // recordBookOpened                                                 //
+
   const recordBookOpened = useCallback(
     bookOrId => {
       if (!bookOrId) return;
@@ -351,9 +346,8 @@ export const LibraryProvider = ({ children }) => {
     [registerBooks, persistJSON],
   );
 
-  /* ================================================================== */
-  /*  updateReadingProgress                                             */
-  /* ================================================================== */
+  // updateReadingProgress                                            //
+
   const updateReadingProgress = useCallback(
     (bookId, currentPage, totalPages) => {
       if (!bookId) return;
@@ -361,8 +355,14 @@ export const LibraryProvider = ({ children }) => {
       const uid = currentUserIdRef.current;
 
       const safeTotal = Math.max(1, Number(totalPages) || 1);
-      const safePage = Math.min(Math.max(1, Number(currentPage) || 1), safeTotal);
-      const percentage = Math.min(100, Math.round((safePage / safeTotal) * 100));
+      const safePage = Math.min(
+        Math.max(1, Number(currentPage) || 1),
+        safeTotal,
+      );
+      const percentage = Math.min(
+        100,
+        Math.round((safePage / safeTotal) * 100),
+      );
       const now = new Date().toISOString();
 
       if (uid) {
@@ -399,9 +399,8 @@ export const LibraryProvider = ({ children }) => {
     [persistJSON],
   );
 
-  /* ================================================================== */
-  /*  toggleBookmark                                                    */
-  /* ================================================================== */
+  // toggleBookmark                                                   //
+
   const toggleBookmark = useCallback(
     bookId => {
       if (!bookId) return;
@@ -414,7 +413,9 @@ export const LibraryProvider = ({ children }) => {
       let willBeBookmarked = false;
       setBookmarks(prev => {
         willBeBookmarked = !prev.includes(id);
-        const next = willBeBookmarked ? [id, ...prev] : prev.filter(x => x !== id);
+        const next = willBeBookmarked
+          ? [id, ...prev]
+          : prev.filter(x => x !== id);
         persistJSON(keys.BOOKMARKS, next);
         return next;
       });
@@ -437,9 +438,8 @@ export const LibraryProvider = ({ children }) => {
     [bookmarks],
   );
 
-  /* ================================================================== */
-  /*  Notifications                                                     */
-  /* ================================================================== */
+  // Notifications                                                    //
+
   const markNotificationAsRead = useCallback(
     notifId => {
       if (!notifId) return;
@@ -468,9 +468,8 @@ export const LibraryProvider = ({ children }) => {
     });
   }, [persistJSON]);
 
-  /* ================================================================== */
-  /*  buildBook — assemble full book from meta + progress               */
-  /* ================================================================== */
+  // buildBook — assemble full book from meta + progress              //
+
   const buildBook = useCallback(
     (id, progress = null) => {
       const key = String(id);
@@ -491,9 +490,8 @@ export const LibraryProvider = ({ children }) => {
     [bookMetaCache],
   );
 
-  /* ================================================================== */
-  /*  Getters                                                           */
-  /* ================================================================== */
+  // Getters                                                          //
+
   const getContinueReadingBooks = useCallback(() => {
     if (!currentUserIdRef.current) return [];
 
@@ -539,9 +537,8 @@ export const LibraryProvider = ({ children }) => {
     [notifications],
   );
 
-  /* ================================================================== */
-  /*  Context Value                                                     */
-  /* ================================================================== */
+  // Context Value                                                    //
+
   const value = useMemo(
     () => ({
       bookmarks,
@@ -553,7 +550,7 @@ export const LibraryProvider = ({ children }) => {
       isLoadingLibrary,
       unreadNotificationsCount,
 
-      /* Actions */
+      //Actions//
       toggleBookmark,
       isBookmarked,
       updateReadingProgress,
@@ -564,7 +561,7 @@ export const LibraryProvider = ({ children }) => {
       markNotificationAsRead,
       markAllNotificationsAsRead,
 
-      /* Getters */
+      //Getters//
       getContinueReadingBooks,
       getBookmarkedBooks,
       getCompletedBooksList,

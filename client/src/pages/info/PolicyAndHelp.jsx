@@ -29,21 +29,21 @@ export default function PolicyAndHelp({ section = "privacy" }) {
   };
 
   return (
-    <div className="min-h-screen bg-cream py-12 md:py-16">
-      <div className="max-w-5xl mx-auto px-5">
+    <div className="min-h-screen py-12 bg-cream md:py-16">
+      <div className="max-w-5xl px-5 mx-auto">
         {/* Breadcrumb Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-2 text-xs text-primary/50 mb-3">
-            <Link to="/" className="hover:text-primary transition">
+          <div className="flex items-center gap-2 mb-3 text-xs text-primary/50">
+            <Link to="/" className="transition hover:text-primary">
               Home
             </Link>
             <ChevronRight size={12} />
-            <span className="text-primary font-medium capitalize">
+            <span className="font-medium capitalize text-primary">
               {activeTab}
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-display text-primary font-bold">
+          <h1 className="text-3xl font-bold sm:text-4xl font-display text-primary">
             {activeTab === "privacy" && "Privacy Policy"}
             {activeTab === "terms" && "Terms and Conditions"}
             {activeTab === "help" && "Help & Support Center"}
@@ -55,7 +55,7 @@ export default function PolicyAndHelp({ section = "privacy" }) {
         </div>
 
         {/* Tab Selector */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-primary/10 pb-4 mb-8">
+        <div className="flex flex-wrap items-center gap-2 pb-4 mb-8 border-b border-primary/10">
           {[
             { id: "privacy", label: "Privacy Policy", icon: Shield },
             { id: "terms", label: "Terms of Service", icon: FileText },
@@ -79,34 +79,45 @@ export default function PolicyAndHelp({ section = "privacy" }) {
         </div>
 
         {/* Content Box */}
-        <div className="bg-white/70 border border-primary/10 rounded-3xl p-6 sm:p-10 shadow-soft backdrop-blur-sm">
+        <div className="p-6 border bg-white/70 border-primary/10 rounded-3xl sm:p-10 shadow-soft backdrop-blur-sm">
           {/* ================= PRIVACY POLICY ================= */}
           {activeTab === "privacy" && (
-            <div className="space-y-6 text-sm text-primary/80 leading-relaxed">
+            <div className="space-y-6 text-sm leading-relaxed text-primary/80">
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   1. Information We Collect
                 </h2>
                 <p>
-                  VedBook is committed to protecting your personal privacy. We do not require account registration to read our publicly available classical texts and documents. When you browse the website, we collect minimal technical telemetry (such as browser type and anonymized reading events) exclusively to improve reading performance and maintain platform stability.
+                  VedBook is committed to protecting your personal privacy. We
+                  do not require account registration to read our publicly
+                  available classical texts and documents. When you browse the
+                  website, we collect minimal technical telemetry (such as
+                  browser type and anonymized reading events) exclusively to
+                  improve reading performance and maintain platform stability.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   2. Cookies and Local Storage
                 </h2>
                 <p>
-                  We use browser local storage solely to remember your reading preferences (e.g. current page numbers, theme settings, and reader zoom level). We do not store third-party advertising cookies or cross-site tracking beacons.
+                  We use browser local storage solely to remember your reading
+                  preferences (e.g. current page numbers, theme settings, and
+                  reader zoom level). We do not store third-party advertising
+                  cookies or cross-site tracking beacons.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   3. Contact & Support Communications
                 </h2>
                 <p>
-                  When you submit messages via our contact form or feedback system, your name and email address are used strictly to reply to your inquiry. We never sell, rent, or distribute your email address to external entities.
+                  When you submit messages via our contact form or feedback
+                  system, your name and email address are used strictly to reply
+                  to your inquiry. We never sell, rent, or distribute your email
+                  address to external entities.
                 </p>
               </section>
             </div>
@@ -114,31 +125,41 @@ export default function PolicyAndHelp({ section = "privacy" }) {
 
           {/* ================= TERMS OF SERVICE ================= */}
           {activeTab === "terms" && (
-            <div className="space-y-6 text-sm text-primary/80 leading-relaxed">
+            <div className="space-y-6 text-sm leading-relaxed text-primary/80">
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   1. Acceptance of Terms
                 </h2>
                 <p>
-                  By accessing or utilizing the VedBook Digital Library web and mobile applications, you agree to abide by these terms of use. The platform is dedicated to educational, cultural, and spiritual research purposes.
+                  By accessing or utilizing the VedBook Digital Library web and
+                  mobile applications, you agree to abide by these terms of use.
+                  The platform is dedicated to educational, cultural, and
+                  spiritual research purposes.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   2. Intellectual Property & Fair Use
                 </h2>
                 <p>
-                  The ancient and classical texts hosted in our archive are believed to reside in the public domain or are distributed under educational open-access licenses. If you believe any material infringes upon valid copyright, please use our Report tab to submit a notice with relevant ownership documentation.
+                  The ancient and classical texts hosted in our archive are
+                  believed to reside in the public domain or are distributed
+                  under educational open-access licenses. If you believe any
+                  material infringes upon valid copyright, please use our Report
+                  tab to submit a notice with relevant ownership documentation.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   3. Prohibited Conduct
                 </h2>
                 <p>
-                  Users may not attempt automated denial-of-service attacks, scrape the platform aggressively without authorization, or inject malicious scripts into review or contact submission endpoints.
+                  Users may not attempt automated denial-of-service attacks,
+                  scrape the platform aggressively without authorization, or
+                  inject malicious scripts into review or contact submission
+                  endpoints.
                 </p>
               </section>
             </div>
@@ -146,32 +167,46 @@ export default function PolicyAndHelp({ section = "privacy" }) {
 
           {/* ================= HELP CENTER ================= */}
           {activeTab === "help" && (
-            <div className="space-y-6 text-sm text-primary/80 leading-relaxed">
+            <div className="space-y-6 text-sm leading-relaxed text-primary/80">
               <section>
-                <h2 className="text-lg font-display text-primary font-bold mb-2">
+                <h2 className="mb-2 text-lg font-bold font-display text-primary">
                   Frequently Asked Questions
                 </h2>
 
-                <div className="space-y-4 mt-4">
-                  <div className="p-4 rounded-2xl bg-cream/70 border border-primary/5">
-                    <h3 className="font-semibold text-primary">How do I read a book in the browser?</h3>
+                <div className="mt-4 space-y-4">
+                  <div className="p-4 border rounded-2xl bg-cream/70 border-primary/5">
+                    <h3 className="font-semibold text-primary">
+                      How do I read a book in the browser?
+                    </h3>
                     <p className="mt-1 text-xs text-primary/70">
-                      Navigate to the Explore Books or Categories page, click on any book card, and click the "Read Book" or reader button. You can navigate pages using your arrow keys or the on-screen toolbar.
+                      Navigate to the Explore Books or Categories page, click on
+                      any book card, and click the "Read Book" or reader button.
+                      You can navigate pages using your arrow keys or the
+                      on-screen toolbar.
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-cream/70 border border-primary/5">
-                    <h3 className="font-semibold text-primary">Can I download books for offline study?</h3>
+                  <div className="p-4 border rounded-2xl bg-cream/70 border-primary/5">
+                    <h3 className="font-semibold text-primary">
+                      Can I download books for offline study?
+                    </h3>
                     <p className="mt-1 text-xs text-primary/70">
-                      Yes! You can download books using our official mobile application, or click the download option on supported titles in the web reader.
+                      Yes! You can download books using our official mobile
+                      application, or click the download option on supported
+                      titles in the web reader.
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-cream/70 border border-primary/5">
-                    <h3 className="font-semibold text-primary">Where can I suggest a new manuscript or title?</h3>
+                  <div className="p-4 border rounded-2xl bg-cream/70 border-primary/5">
+                    <h3 className="font-semibold text-primary">
+                      Where can I suggest a new manuscript or title?
+                    </h3>
                     <p className="mt-1 text-xs text-primary/70">
                       Please send your suggestions directly to us through our{" "}
-                      <Link to="/contact" className="text-gold font-semibold hover:underline">
+                      <Link
+                        to="/contact"
+                        className="font-semibold text-gold hover:underline"
+                      >
                         Contact Page
                       </Link>
                       . We review all literature contributions regularly.
@@ -185,24 +220,33 @@ export default function PolicyAndHelp({ section = "privacy" }) {
           {/* ================= REPORT ISSUE ================= */}
           {activeTab === "report" && (
             <div>
-              <p className="text-sm text-primary/70 mb-6">
-                Encountered a broken PDF, inaccurate book metadata, or a technical glitch? Let our curation team know and we will resolve it promptly.
+              <p className="mb-6 text-sm text-primary/70">
+                Encountered a broken PDF, inaccurate book metadata, or a
+                technical glitch? Let our curation team know and we will resolve
+                it promptly.
               </p>
 
               {reportSubmitted ? (
-                <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center gap-3">
-                  <CheckCircle2 size={20} className="text-emerald-600 shrink-0" />
+                <div className="flex items-center gap-3 p-5 border rounded-2xl bg-emerald-50 border-emerald-200 text-emerald-800">
+                  <CheckCircle2
+                    size={20}
+                    className="text-emerald-600 shrink-0"
+                  />
                   <div>
-                    <h4 className="font-semibold text-sm">Report received</h4>
+                    <h4 className="text-sm font-semibold">Report received</h4>
                     <p className="text-xs text-emerald-700 mt-0.5">
-                      Thank you for helping keep the library clean and accurate. Our admins have logged this issue.
+                      Thank you for helping keep the library clean and accurate.
+                      Our admins have logged this issue.
                     </p>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleReportSubmit} className="space-y-4 max-w-lg">
+                <form
+                  onSubmit={handleReportSubmit}
+                  className="max-w-lg space-y-4"
+                >
                   <div>
-                    <label className="block text-xs font-semibold text-primary/80 mb-1">
+                    <label className="block mb-1 text-xs font-semibold text-primary/80">
                       Your Name
                     </label>
                     <input
@@ -210,7 +254,10 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                       required
                       value={reportData.name}
                       onChange={(e) =>
-                        setReportData((prev) => ({ ...prev, name: e.target.value }))
+                        setReportData((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
                       }
                       className="w-full px-3.5 py-2.5 rounded-xl border border-primary/15 bg-cream/50 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                       placeholder="e.g. Rahul Sharma"
@@ -218,7 +265,7 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-primary/80 mb-1">
+                    <label className="block mb-1 text-xs font-semibold text-primary/80">
                       Email Address
                     </label>
                     <input
@@ -226,7 +273,10 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                       required
                       value={reportData.email}
                       onChange={(e) =>
-                        setReportData((prev) => ({ ...prev, email: e.target.value }))
+                        setReportData((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
                       }
                       className="w-full px-3.5 py-2.5 rounded-xl border border-primary/15 bg-cream/50 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                       placeholder="you@example.com"
@@ -234,7 +284,7 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-primary/80 mb-1">
+                    <label className="block mb-1 text-xs font-semibold text-primary/80">
                       Issue Subject / Book Title
                     </label>
                     <input
@@ -242,7 +292,10 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                       required
                       value={reportData.subject}
                       onChange={(e) =>
-                        setReportData((prev) => ({ ...prev, subject: e.target.value }))
+                        setReportData((prev) => ({
+                          ...prev,
+                          subject: e.target.value,
+                        }))
                       }
                       className="w-full px-3.5 py-2.5 rounded-xl border border-primary/15 bg-cream/50 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                       placeholder="e.g. Page 14 is corrupted in Rigveda Vol 1"
@@ -250,7 +303,7 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-primary/80 mb-1">
+                    <label className="block mb-1 text-xs font-semibold text-primary/80">
                       Detailed Description
                     </label>
                     <textarea
@@ -258,7 +311,10 @@ export default function PolicyAndHelp({ section = "privacy" }) {
                       required
                       value={reportData.details}
                       onChange={(e) =>
-                        setReportData((prev) => ({ ...prev, details: e.target.value }))
+                        setReportData((prev) => ({
+                          ...prev,
+                          details: e.target.value,
+                        }))
                       }
                       className="w-full px-3.5 py-2.5 rounded-xl border border-primary/15 bg-cream/50 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                       placeholder="Describe what happened or what needs correction..."
@@ -267,7 +323,7 @@ export default function PolicyAndHelp({ section = "privacy" }) {
 
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 bg-primary text-cream px-6 py-3 rounded-2xl text-sm font-semibold hover:bg-primary/90 transition shadow-soft"
+                    className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold transition bg-primary text-cream rounded-2xl hover:bg-primary/90 shadow-soft"
                   >
                     Submit Report
                   </button>

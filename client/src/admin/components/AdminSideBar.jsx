@@ -22,9 +22,8 @@ import {
 } from "lucide-react";
 import logo from "../../assets/logo/mainLogo.png";
 
-/* ------------------------------------------------------------------ */
 /*  Nav groups                                                         */
-/* ------------------------------------------------------------------ */
+
 const NAV_GROUPS = [
   {
     label: "Overview",
@@ -77,7 +76,6 @@ const NAV_GROUPS = [
 
 import { resolveAvatarUrl } from "../../utils/urlUtils";
 
-
 function getAvatarFromAdmin(admin) {
   if (!admin) return "";
   const raw =
@@ -91,9 +89,8 @@ function getAvatarFromAdmin(admin) {
   return resolveAvatarUrl(raw);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Sidebar                                                            */
-/* ------------------------------------------------------------------ */
+
 export default function AdminSideBar({ open, onClose }) {
   const navigate = useNavigate();
   const panelRef = useRef(null);

@@ -44,7 +44,7 @@ describe('mockAuthService', () => {
     expect(session.email).toBe(newEmail);
     expect(profile.fullName).toBe('Gargi Vachaknavi');
 
-    // Should be able to log in with new user credentials
+   */ Should be able to log in with new user credentials
     const loginRes = await mockAuthService.login(newEmail, 'SecurePassword123!');
     expect(loginRes.profile.fullName).toBe('Gargi Vachaknavi');
   });

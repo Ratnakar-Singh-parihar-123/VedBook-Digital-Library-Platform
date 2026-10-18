@@ -30,9 +30,8 @@ import { notificationsAPI } from "../../api/adminApi";
 import useFetch from "../dashboard/hooks/useFetch";
 import { formatDateTime, formatNumber } from "../dashboard/utils/format";
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function SentNotifications() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [search, setSearch] = useState("");
@@ -300,9 +299,8 @@ export default function SentNotifications() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Sent Card — with edit/delete on hover                              */
-/* ------------------------------------------------------------------ */
+
 function SentCard({ notification, onClick, onEdit, onDelete }) {
   const isBroadcast = notification.recipientType === "all";
   const readPct =
@@ -436,9 +434,8 @@ function SentCard({ notification, onClick, onEdit, onDelete }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Empty state                                                        */
-/* ------------------------------------------------------------------ */
+
 function EmptyState({ hasSearch }) {
   return (
     <div className="px-6 py-16 text-center border bg-cream border-primary/10 rounded-2xl">
@@ -465,9 +462,8 @@ function EmptyState({ hasSearch }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Detail Modal                                                       */
-/* ------------------------------------------------------------------ */
+
 function SentDetailModal({ notificationId, onClose, onEdit, onDelete }) {
   const open = Boolean(notificationId);
 
@@ -757,9 +753,8 @@ function SentDetailModal({ notificationId, onClose, onEdit, onDelete }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Edit Modal                                                         */
-/* ------------------------------------------------------------------ */
+
 function EditSentModal({ open, notification, onClose, onSuccess }) {
   const [form, setForm] = useState({ title: "", message: "", link: "" });
   const [saving, setSaving] = useState(false);
@@ -991,9 +986,8 @@ function EditSentModal({ open, notification, onClose, onSuccess }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Delete Confirmation Dialog                                         */
-/* ------------------------------------------------------------------ */
+
 function DeleteDialog({ open, notification, working, onClose, onConfirm }) {
   useEffect(() => {
     if (!open || working) return;
@@ -1099,9 +1093,8 @@ function DeleteDialog({ open, notification, working, onClose, onConfirm }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Sub-components                                                     */
-/* ------------------------------------------------------------------ */
+
 function StatBox({ icon: Icon, label, value, tone }) {
   const toneCls =
     {
@@ -1176,9 +1169,8 @@ function RecipientRow({ recipient }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+
 function relativeTime(dateStr) {
   if (!dateStr) return "—";
   const dt = new Date(dateStr);

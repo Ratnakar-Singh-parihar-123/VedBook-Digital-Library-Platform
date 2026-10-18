@@ -25,9 +25,8 @@ import {
   addRecentlyViewed,
 } from "../../utils/libraryStorage";
 
-/* ------------------------------------------------------------------ */
 /*  Cover Palettes & URL Resolver                                      */
-/* ------------------------------------------------------------------ */
+
 const COVER_PALETTES = [
   {
     from: "#1A4A3E",
@@ -74,7 +73,6 @@ function hashString(str) {
   }
   return Math.abs(h);
 }
-
 
 const FEATURED_FALLBACKS = [
   {
@@ -477,9 +475,8 @@ export default function HomeScreen() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Editorial Card Component                                          */
-/* ------------------------------------------------------------------ */
+
 function EditorialCard({ book, onOpen, onDirectRead }) {
   const [imgError, setImgError] = useState(false);
   const seed = hashString(`${book.title}-${book.id}`);

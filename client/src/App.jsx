@@ -28,9 +28,8 @@ import PopularThisWeek from "./admin/pages/PopularThisWeek.jsx";
 import ReviewManagement from "./admin/pages/ReviewManagement.jsx";
 // import Reviews from "./admin/pages/Reviews.jsx";
 
-/* ------------------------------------------------------------------ */
 /*  Lazy-loaded pages — chunked for fast initial paint                */
-/* ------------------------------------------------------------------ */
+
 /* Public */
 const HomeIcon = lazy(() => import("./pages/home/index.jsx"));
 const About = lazy(() => import("./pages/home/components/About.jsx"));
@@ -57,9 +56,8 @@ const EditBook = lazy(() => import("./admin/components/EditBook.jsx"));
 const Profile = lazy(() => import("./admin/pages/Profile.jsx"));
 // import { from } from "../node_modules/@types/stylis/index.d";
 
-/* ------------------------------------------------------------------ */
 /*  Page-level loader (light tone for dark reader, dark for light)   */
-/* ------------------------------------------------------------------ */
+
 function PageLoader({ tone = "dark" }) {
   return (
     <div
@@ -72,9 +70,8 @@ function PageLoader({ tone = "dark" }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Public layout — Navbar + Footer                                    */
-/* ------------------------------------------------------------------ */
+
 function PublicLayout() {
   return (
     <>
@@ -89,9 +86,8 @@ function PublicLayout() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Admin layout wrapper with its own Suspense                         */
-/* ------------------------------------------------------------------ */
+
 function AdminAppShell() {
   return (
     <AdminLayout>
@@ -102,9 +98,8 @@ function AdminAppShell() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  App                                                                */
-/* ------------------------------------------------------------------ */
+
 export default function App() {
   return (
     <ToastProvider>
@@ -130,10 +125,16 @@ export default function App() {
             <Route path="/categories" element={<Categories />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/download" element={<DownloadApp />} />
-            <Route path="/privacy" element={<PolicyAndHelp section="privacy" />} />
+            <Route
+              path="/privacy"
+              element={<PolicyAndHelp section="privacy" />}
+            />
             <Route path="/terms" element={<PolicyAndHelp section="terms" />} />
             <Route path="/help" element={<PolicyAndHelp section="help" />} />
-            <Route path="/report" element={<PolicyAndHelp section="report" />} />
+            <Route
+              path="/report"
+              element={<PolicyAndHelp section="report" />}
+            />
           </Route>
 
           {/* ================= ADMIN AUTH (full-screen) ================= */}
@@ -169,7 +170,10 @@ export default function App() {
             <Route path="/admin/books/edit/:id" element={<EditBook />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/analytics" element={<Analytics />} />
-            <Route path="/admin/reading-activity" element={<ReadingActivity />} />
+            <Route
+              path="/admin/reading-activity"
+              element={<ReadingActivity />}
+            />
             <Route path="/admin/activity-log" element={<ActivityLog />} />
             <Route path="/admin/profile" element={<Profile />} />
             <Route path="/admin/settings" element={<Setting />} />

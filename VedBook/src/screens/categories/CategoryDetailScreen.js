@@ -13,12 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import {
-  colors,
-  spacing,
-  borderRadius,
-  typography,
-} from '../../theme';
+import { colors, spacing, borderRadius, typography } from '../../theme';
 import { Header } from '../../components/common/Header';
 import { BookCard } from '../../components/common/BookCard';
 import { EmptyState } from '../../components/common/EmptyState';
@@ -48,9 +43,8 @@ export const CategoryDetailScreen = ({ route, navigation }) => {
 
   const requestIdRef = useRef(0);
 
-  /* ------------------------------------------------------------------ */
-  /*  Fetch a page of books                                             */
-  /* ------------------------------------------------------------------ */
+  // Fetch a page of books                                            //
+
   const fetchPage = useCallback(
     async (targetPage, mode = 'initial') => {
       const myReqId = ++requestIdRef.current;
@@ -109,14 +103,14 @@ export const CategoryDetailScreen = ({ route, navigation }) => {
     navigation.navigate('BookDetails', { bookId: book.id, book });
   };
 
-  /* ---------------- HEADER SUBTITLE ---------------- */
+  //---------------- HEADER SUBTITLE ----------------//
   const headerSubtitle = loading
     ? 'Loading volumes...'
     : `${total || books.length} ${
         (total || books.length) === 1 ? 'volume' : 'volumes'
       } available`;
 
-  /* ---------------- BODY ---------------- */
+  //---------------- BODY ----------------//
   const renderBody = () => {
     if (loading) {
       return (
@@ -244,9 +238,9 @@ export const CategoryDetailScreen = ({ route, navigation }) => {
   );
 };
 
-/* ================================================================== */
-/*  STYLES                                                            */
-/* ================================================================== */
+//==================================================================//
+// STYLES                                                           //
+//==================================================================//
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.ivory },
 
@@ -261,7 +255,7 @@ const styles = StyleSheet.create({
   gridCard: { width: GRID_ITEM_WIDTH },
   gridBookCard: { width: '100%', marginRight: 0 },
 
-  /* HERO */
+  //HERO//
   categoryHeroBox: {
     backgroundColor: colors.sage,
     padding: spacing.md + 2,
@@ -298,7 +292,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontSerif,
   },
 
-  /* LOADERS / STATES */
+  //LOADERS / STATES//
   centerBox: {
     flex: 1,
     alignItems: 'center',

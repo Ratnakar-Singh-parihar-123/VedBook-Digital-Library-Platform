@@ -47,9 +47,8 @@ import { useLibrary } from '../../context/LibraryContext';
 import { homeAPI } from '../../api/homeApi';
 import { booksAPI } from '../../api/booksApi';
 
-/* ------------------------------------------------------------------ */
 /*  Constants                                                         */
-/* ------------------------------------------------------------------ */
+
 const FALLBACK_COVER =
   'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&auto=format&fit=crop';
 
@@ -136,8 +135,7 @@ export const HomeScreen = ({ navigation }) => {
         featuredRes?.status === 'fulfilled' ? featuredRes.value || [] : [];
       const popularList =
         popularRes?.status === 'fulfilled' ? popularRes.value || [] : [];
-      const recList =
-        recRes?.status === 'fulfilled' ? recRes.value || [] : [];
+      const recList = recRes?.status === 'fulfilled' ? recRes.value || [] : [];
       const recentList =
         recentRes?.status === 'fulfilled' ? recentRes.value || [] : [];
       const continueList =
@@ -362,7 +360,6 @@ export const HomeScreen = ({ navigation }) => {
       icon: category.icon,
     });
   };
-
 
   /* ================================================================== */
   /*  HOME CONTENT                                                      */

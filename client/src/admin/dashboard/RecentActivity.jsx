@@ -92,30 +92,30 @@ export default function RecentActivity({ refreshKey = 0, limit = 10 }) {
       {items.length > 0 && (
         <div className={isRefreshing ? "opacity-75 transition-opacity" : ""}>
           <ul className="divide-y divide-primary/5">
-          {items.map((a) => (
-            <li key={a.id} className="flex items-start gap-3 py-3">
-              <span className="w-8 h-8 rounded-lg bg-mint grid place-items-center text-primary shrink-0 mt-0.5">
-                <Activity size={13} />
-              </span>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-primary">
-                  <span className="font-medium">{humanise(a.action)}</span>
-                  <span className="text-primary/30 mx-1.5">·</span>
-                  <span className="text-primary/60">{a.entityType}</span>
-                </p>
-                <p className="text-xs text-primary/40 mt-0.5 truncate">
-                  ID: {String(a.entityId)}
-                </p>
-              </div>
-              <span className="text-xs text-primary/40 whitespace-nowrap shrink-0">
-                {formatDateTime(a.createdAt)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-  </section>
+            {items.map((a) => (
+              <li key={a.id} className="flex items-start gap-3 py-3">
+                <span className="w-8 h-8 rounded-lg bg-mint grid place-items-center text-primary shrink-0 mt-0.5">
+                  <Activity size={13} />
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-primary">
+                    <span className="font-medium">{humanise(a.action)}</span>
+                    <span className="text-primary/30 mx-1.5">·</span>
+                    <span className="text-primary/60">{a.entityType}</span>
+                  </p>
+                  <p className="text-xs text-primary/40 mt-0.5 truncate">
+                    ID: {String(a.entityId)}
+                  </p>
+                </div>
+                <span className="text-xs text-primary/40 whitespace-nowrap shrink-0">
+                  {formatDateTime(a.createdAt)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
   );
 }
 

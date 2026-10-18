@@ -310,17 +310,14 @@ export const getSentNotificationDetails = async (notificationId, adminId) => {
   };
 };
 
-/* ------------------------------------------------------------------ */
-/*  USER-FACING NOTIFICATIONS                                         */
-/* ------------------------------------------------------------------ */
+// USER-FACING NOTIFICATIONS                                      //
 
-/* Fetch all notifications for a user */
-/* ------------------------------------------------------------------ */
-/*  USER-FACING NOTIFICATIONS                                         */
-/*  Table: notifications (recipient_type='user', recipient_id=userId) */
-/* ------------------------------------------------------------------ */
+//Fetch all notifications for a user//
 
-/* Fetch all notifications for a user */
+// USER-FACING NOTIFICATIONS                                      //
+// Table: notifications (recipient_type='user', recipient_id=userId)//
+
+//Fetch all notifications for a user//
 export const getUserNotifications = async (userId, limit, offset) => {
   const [rows] = await db.query(
     `SELECT
@@ -343,7 +340,7 @@ export const getUserNotifications = async (userId, limit, offset) => {
   return rows;
 };
 
-/* Unread count for bell badge */
+//Unread count for bell badge//
 export const getUserUnreadCount = async (userId) => {
   const [rows] = await db.query(
     `SELECT COUNT(*) AS count
@@ -356,7 +353,7 @@ export const getUserUnreadCount = async (userId) => {
   return Number(rows[0]?.count) || 0;
 };
 
-/* Mark one as read */
+//Mark one as read//
 export const markUserNotificationRead = async (userId, notificationId) => {
   const [result] = await db.query(
     `UPDATE notifications
@@ -369,7 +366,7 @@ export const markUserNotificationRead = async (userId, notificationId) => {
   return result.affectedRows > 0;
 };
 
-/* Mark all as read */
+//Mark all as read//
 export const markAllUserNotificationsRead = async (userId) => {
   const [result] = await db.query(
     `UPDATE notifications

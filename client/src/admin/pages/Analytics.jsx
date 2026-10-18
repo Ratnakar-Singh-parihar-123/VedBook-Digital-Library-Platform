@@ -24,18 +24,16 @@ import UserGrowthChart from "../dashboard/UserGrowthChart";
 import TrendingBooks from "../dashboard/TrendingBooks";
 import RecentActivity from "../dashboard/RecentActivity";
 
-/* ------------------------------------------------------------------ */
 /*  Period config                                                      */
-/* ------------------------------------------------------------------ */
+
 const PERIODS = [
   { key: 7, label: "7 days" },
   { key: 30, label: "30 days" },
   { key: 90, label: "90 days" },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function Analytics() {
   const [period, setPeriod] = useState(30);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -167,9 +165,8 @@ export default function Analytics() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  KPI Card                                                           */
-/* ------------------------------------------------------------------ */
+
 function KpiCard({
   label,
   value,
@@ -227,9 +224,8 @@ function KpiCard({
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Insight Banner — auto-generated tips from data                    */
-/* ------------------------------------------------------------------ */
+
 function InsightBanner({ overview }) {
   const insights = useMemo(() => {
     const list = [];
@@ -336,9 +332,8 @@ function InsightBanner({ overview }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Build KPIs from overview                                           */
-/* ------------------------------------------------------------------ */
+
 function buildKpis(o = {}) {
   const books = o.books || {};
   const users = o.users || {};

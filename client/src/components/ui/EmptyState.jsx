@@ -30,19 +30,19 @@ export default function EmptyState({
         <div className="grid w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-mint text-primary place-items-center shadow-soft ring-1 ring-primary/10">
           <Icon size={26} className="text-primary/70" />
         </div>
-        <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center">
+        <span className="absolute flex items-center justify-center w-5 h-5 rounded-full -bottom-1 -right-1 bg-gold/20">
           <Sparkles size={11} className="text-gold" />
         </span>
       </div>
 
       {/* Heading */}
-      <h3 className="font-display text-lg sm:text-xl text-primary leading-tight">
+      <h3 className="text-lg leading-tight font-display sm:text-xl text-primary">
         {title}
       </h3>
 
       {/* Description */}
       {description && (
-        <p className="mt-2 text-sm text-primary/60 max-w-sm sm:max-w-md leading-relaxed">
+        <p className="max-w-sm mt-2 text-sm leading-relaxed text-primary/60 sm:max-w-md">
           {description}
         </p>
       )}

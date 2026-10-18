@@ -29,7 +29,7 @@ const DEFAULTS = {
 export default function useLocalSettings() {
   const [settings, setSettings] = useState(DEFAULTS);
 
-  /* Load */
+  //Load//
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -38,42 +38,42 @@ export default function useLocalSettings() {
         setSettings({ ...DEFAULTS, ...parsed });
       }
     } catch {
-      /* ignore */
+      //ignore//
     }
   }, []);
 
-  /* Update one key */
+  //Update one key//
   const update = useCallback((key, value) => {
     setSettings((prev) => {
       const next = { ...prev, [key]: value };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       } catch {
-        /* ignore */
+        //ignore//
       }
       return next;
     });
   }, []);
 
-  /* Update multiple keys */
+  //Update multiple keys//
   const updateMany = useCallback((patch) => {
     setSettings((prev) => {
       const next = { ...prev, ...patch };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       } catch {
-        /* ignore */
+        //ignore//
       }
       return next;
     });
   }, []);
 
-  /* Reset all */
+  //Reset all//
   const reset = useCallback(() => {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
-      /* ignore */
+      //ignore//
     }
     setSettings(DEFAULTS);
   }, []);

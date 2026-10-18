@@ -33,9 +33,8 @@ import { analyticsAPI } from "../../api/analyticsApi";
 import useFetch from "../dashboard/hooks/useFetch";
 import { formatDateTime } from "../dashboard/utils/format";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const PAGE_SIZE = 12;
 
 const ACTION_META = {
@@ -107,9 +106,8 @@ const FILTER_TABS = [
   { key: "user", label: "Users", icon: Users },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function ActivityLog() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [search, setSearch] = useState("");
@@ -417,9 +415,8 @@ export default function ActivityLog() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Activity Row                                                       */
-/* ------------------------------------------------------------------ */
+
 function ActivityRow({ activity }) {
   const actionMeta = ACTION_META[String(activity.action).toLowerCase()] || {
     label: humanise(activity.action),
@@ -534,9 +531,8 @@ function ActivityRow({ activity }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+
 function humanise(str) {
   if (!str) return "—";
   return String(str)
@@ -589,9 +585,8 @@ function groupByDate(items) {
   return Array.from(map.values());
 }
 
-/* ------------------------------------------------------------------ */
 /*  Chip                                                               */
-/* ------------------------------------------------------------------ */
+
 function Chip({ label, onClear }) {
   return (
     <span className="inline-flex items-center gap-1.5 bg-mint text-primary text-xs font-medium pl-2.5 pr-1.5 py-1 rounded-full">
@@ -608,9 +603,8 @@ function Chip({ label, onClear }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Empty state                                                        */
-/* ------------------------------------------------------------------ */
+
 function EmptyState({ hasFilters, onClear }) {
   return (
     <div className="px-6 py-16 text-center border bg-cream border-primary/10 rounded-2xl">
@@ -638,9 +632,8 @@ function EmptyState({ hasFilters, onClear }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Pagination                                                         */
-/* ------------------------------------------------------------------ */
+
 function Pagination({ page, totalPages, onChange }) {
   const pages = [];
   const maxVisible = 5;

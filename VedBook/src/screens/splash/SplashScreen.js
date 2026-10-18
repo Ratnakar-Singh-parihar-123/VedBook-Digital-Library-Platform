@@ -49,7 +49,10 @@ export const SplashScreen = ({ navigation, onFinish }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.primaryDark} />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={colors.primaryDark}
+      />
 
       {/* Decorative Gold Radiance Rings */}
       <View style={styles.radianceCircleLarge} />
@@ -76,7 +79,9 @@ export const SplashScreen = ({ navigation, onFinish }) => {
           <Text style={styles.taglineOrnament}>✦</Text>
           <View style={styles.dividerLine} />
         </View>
-        <Text style={styles.tagline}>The Sovereign Digital Sanctuary for Timeless Minds</Text>
+        <Text style={styles.tagline}>
+          The Sovereign Digital Sanctuary for Timeless Minds
+        </Text>
 
         <View style={styles.buttonWrapper}>
           <Button
@@ -92,7 +97,9 @@ export const SplashScreen = ({ navigation, onFinish }) => {
       </Animated.View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Crafted with Ancient Wisdom & Modern Grace</Text>
+        <Text style={styles.footerText}>
+          Crafted with Ancient Wisdom & Modern Grace
+        </Text>
       </View>
     </View>
   );

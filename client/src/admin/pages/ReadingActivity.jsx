@@ -18,18 +18,16 @@ import { formatNumber } from "../dashboard/utils/format";
 import ReadingTrendChart from "../dashboard/ReadingTrendChart";
 import TrendingBooks from "../dashboard/TrendingBooks";
 
-/* ------------------------------------------------------------------ */
 /*  Period config                                                      */
-/* ------------------------------------------------------------------ */
+
 const PERIODS = [
   { key: 7, label: "7 days" },
   { key: 30, label: "30 days" },
   { key: 90, label: "90 days" },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function ReadingActivity() {
   const [period, setPeriod] = useState(30);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -155,9 +153,8 @@ export default function ReadingActivity() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  KPI Card                                                           */
-/* ------------------------------------------------------------------ */
+
 function KpiCard({ label, value, icon: Icon, tone = "primary", sub, loading }) {
   const toneStyles = {
     primary: "bg-mint text-primary",
@@ -195,9 +192,8 @@ function KpiCard({ label, value, icon: Icon, tone = "primary", sub, loading }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Engagement banner — highlights reading behavior                   */
-/* ------------------------------------------------------------------ */
+
 function EngagementBanner({ overview, period }) {
   const stats = useMemo(() => {
     const reading = overview.reading || {};
@@ -313,9 +309,8 @@ function EngagementBanner({ overview, period }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Build reading-specific KPIs                                        */
-/* ------------------------------------------------------------------ */
+
 function buildReadingKpis(o = {}) {
   const reading = o.reading || {};
   const users = o.users || {};

@@ -83,7 +83,12 @@ export const OnboardingScreen = ({ navigation }) => {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        { paddingTop: insets.top, paddingBottom: insets.bottom },
+      ]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor={colors.ivory} />
 
       {/* Top Header with Brand & Skip */}
@@ -110,7 +115,7 @@ export const OnboardingScreen = ({ navigation }) => {
       <FlatList
         ref={flatListRef}
         data={SLIDES}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}

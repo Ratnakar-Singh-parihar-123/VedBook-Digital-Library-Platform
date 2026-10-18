@@ -525,9 +525,8 @@ export default function EditBook() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Field wrapper                                                      */
-/* ------------------------------------------------------------------ */
+
 function Field({ label, required, children }) {
   return (
     <div>
@@ -541,9 +540,8 @@ function Field({ label, required, children }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Page skeleton                                                      */
-/* ------------------------------------------------------------------ */
+
 function PageSkeleton() {
   return (
     <div className="max-w-4xl px-4 py-6 mx-auto space-y-6 sm:px-6 lg:px-8 sm:py-8">

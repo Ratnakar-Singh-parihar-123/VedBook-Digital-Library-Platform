@@ -15,9 +15,8 @@ import {
 import Loader from "../../components/ui/Loader";
 import { reviewsAPI } from "../../api/reviewsApi";
 
-/* ================================================================== */
 /*  Page                                                              */
-/* ================================================================== */
+
 export default function PopularThisWeek() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [books, setBooks] = useState([]);
@@ -209,9 +208,8 @@ export default function PopularThisWeek() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Hero stat                                                          */
-/* ------------------------------------------------------------------ */
+
 function HeroStat({ label, value, icon: Icon }) {
   return (
     <div className="sm:text-right">
@@ -226,9 +224,8 @@ function HeroStat({ label, value, icon: Icon }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Popular row                                                        */
-/* ------------------------------------------------------------------ */
+
 function PopularRow({ book }) {
   const isTop3 = book.rank <= 3;
   const medals = ["🥇", "🥈", "🥉"];
@@ -332,9 +329,8 @@ function PopularRow({ book }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Empty                                                              */
-/* ------------------------------------------------------------------ */
+
 function EmptyRanking() {
   return (
     <div className="text-center py-14">

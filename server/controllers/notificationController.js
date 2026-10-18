@@ -414,11 +414,9 @@ export const getSentNotification = async (req, res) => {
   }
 };
 
-/* ------------------------------------------------------------------ */
-/*  USER-FACING CONTROLLERS                                           */
-/* ------------------------------------------------------------------ */
+// USER-FACING CONTROLLERS                                        //
 
-/* GET /api/notifications */
+//GET /api/notifications//
 // export const listUserNotifications = async (req, res) => {
 //   try {
 //     const userId = req.user.id;
@@ -448,7 +446,7 @@ export const getSentNotification = async (req, res) => {
 //     });
 //   }
 // };
-/* GET /api/notifications */
+//GET /api/notifications//
 export const listUserNotifications = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -464,7 +462,7 @@ export const listUserNotifications = async (req, res) => {
       getUserUnreadCount(userId),
     ]);
 
-    /* Normalize response for frontend */
+    //Normalize response for frontend//
     const normalized = notifications.map((n) => ({
       id: String(n.id),
       title: n.title,
@@ -473,7 +471,7 @@ export const listUserNotifications = async (req, res) => {
       link: n.link || null,
       isRead: Boolean(n.is_read),
       createdAt: n.created_at,
-      /* Book navigation */
+      //Book navigation//
       entityType: n.entity_type || null,
       entityId: n.entity_id || null,
       bookId:
@@ -494,7 +492,7 @@ export const listUserNotifications = async (req, res) => {
     });
   }
 };
-/* GET /api/notifications/unread-count */
+//GET /api/notifications/unread-count//
 export const getUnreadCount = async (req, res) => {
   try {
     const count = await getUserUnreadCount(req.user.id);
@@ -508,7 +506,7 @@ export const getUnreadCount = async (req, res) => {
   }
 };
 
-/* PATCH /api/notifications/:id/read */
+//PATCH /api/notifications/:id/read//
 export const readUserNotification = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -543,7 +541,7 @@ export const readUserNotification = async (req, res) => {
   }
 };
 
-/* PATCH /api/notifications/read-all */
+//PATCH /api/notifications/read-all//
 export const readAllUserNotifications = async (req, res) => {
   try {
     const updatedCount = await markAllUserNotificationsRead(req.user.id);

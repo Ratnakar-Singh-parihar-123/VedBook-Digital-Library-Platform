@@ -20,9 +20,8 @@ import useFetch from "../dashboard/hooks/useFetch";
 import { profileAPI } from "../../api/adminApi";
 import { resolveAvatarUrl } from "../../utils/urlUtils";
 
-/* ------------------------------------------------------------------ */
 /*  Avatar URL resolver — handles relative paths & filename-only      */
-/* ------------------------------------------------------------------ */
+
 function resolveAvatar(admin) {
   if (!admin) return "";
   const raw =
@@ -36,9 +35,8 @@ function resolveAvatar(admin) {
   return resolveAvatarUrl(raw);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Page                                                               */
-/* ------------------------------------------------------------------ */
+
 export default function Profile() {
   const fileRef = useRef(null);
 
@@ -498,9 +496,8 @@ export default function Profile() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Field wrappers                                                     */
-/* ------------------------------------------------------------------ */
+
 function Field({ label, icon: Icon, children }) {
   return (
     <div>

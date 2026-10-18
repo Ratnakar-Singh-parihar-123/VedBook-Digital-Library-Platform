@@ -1,12 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-/**
- * Enhanced data-fetching hook for VedBook
- * - Distinguishes between initial loading and background refreshing
- * - Keeps existing data during reload so UI doesn't blink or unmount
- * - Exposes { data, loading, isRefreshing, refreshing, error, reload, setData }
- * - Supports cancellation via AbortController
- */
 export default function useFetch(fetcher, deps = [], options = {}) {
   const { initialData = null, keepPreviousData = true } = options;
   const [data, setData] = useState(initialData);
@@ -59,7 +52,7 @@ export default function useFetch(fetcher, deps = [], options = {}) {
         }
       }
     },
-    [keepPreviousData]
+    [keepPreviousData],
   );
 
   useEffect(() => {

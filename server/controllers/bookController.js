@@ -58,11 +58,14 @@ const safeLogAdminActivity = async (activity) => {
 
 // Cleanup uploaded files on error
 const cleanupUploadedFiles = async (req) => {
-  const pdfFile = req.files?.pdf?.[0] || (req.file?.fieldname === "pdf" ? req.file : null);
+  const pdfFile =
+    req.files?.pdf?.[0] || (req.file?.fieldname === "pdf" ? req.file : null);
   const coverFile =
     req.files?.cover?.[0] ||
     req.files?.coverImage?.[0] ||
-    (req.file && ["cover", "coverImage"].includes(req.file.fieldname) ? req.file : null);
+    (req.file && ["cover", "coverImage"].includes(req.file.fieldname)
+      ? req.file
+      : null);
 
   if (pdfFile) {
     await safeDeleteStoredFile(`uploads/books/${pdfFile.filename}`);
@@ -113,7 +116,8 @@ export const listAdminBooks = async (req, res) => {
 // Admin: Add a new book as draft
 export const addBook = async (req, res) => {
   const pdfFile =
-    req.files?.pdf?.[0] || (req.file?.fieldname === "pdf" ? req.file : req.file);
+    req.files?.pdf?.[0] ||
+    (req.file?.fieldname === "pdf" ? req.file : req.file);
   const coverFile =
     req.files?.cover?.[0] ||
     req.files?.coverImage?.[0] ||

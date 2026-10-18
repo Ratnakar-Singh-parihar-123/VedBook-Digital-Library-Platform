@@ -39,7 +39,9 @@ export default function UserGrowthChart({ refreshKey = 0, defaultDays = 30 }) {
       />
 
       {loading && points.length === 0 && <ChartSkeleton />}
-      {!loading && error && points.length === 0 && <ChartError message={error} />}
+      {!loading && error && points.length === 0 && (
+        <ChartError message={error} />
+      )}
       {!loading && !error && points.length === 0 && (
         <ChartEmpty label="No user registrations in this period." />
       )}

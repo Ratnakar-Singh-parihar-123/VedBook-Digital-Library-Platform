@@ -24,14 +24,12 @@ import {
 import { booksAPI } from "../../api/adminApi";
 import { resolveCoverUrl, resolveAvatarUrl } from "../../utils/urlUtils";
 
-/* ------------------------------------------------------------------ */
 /*  Brand logo                                                         */
-/* ------------------------------------------------------------------ */
+
 const LOGO_SRC = "/mainLogo.png";
 
-/* ------------------------------------------------------------------ */
 /*  Shared config                                                      */
-/* ------------------------------------------------------------------ */
+
 const navLinks = [
   { label: "Home", to: "/", end: true, icon: Home },
   { label: "About", to: "/about", icon: Info },
@@ -40,9 +38,8 @@ const navLinks = [
   { label: "Contact", to: "/contact", icon: Mail },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Cover palettes — same as Explore page                              */
-/* ------------------------------------------------------------------ */
+
 const COVER_PALETTES = [
   { from: "#1A4A3E", to: "#0B241C", text: "#FAF7F0", accent: "#D6B56D" },
   { from: "#B08F4A", to: "#6E5A2A", text: "#FAF7F0", accent: "#FAF7F0" },
@@ -60,7 +57,6 @@ function hashString(str) {
   }
   return Math.abs(h);
 }
-
 
 function pickCover(b) {
   if (!b) return "";
@@ -82,10 +78,9 @@ function pickCover(b) {
   return resolveCoverUrl(raw);
 }
 
-/* ------------------------------------------------------------------ */
 /*  MiniCover — used in search results                                 */
 /*  Real image if available, otherwise premium auto-generated cover    */
-/* ------------------------------------------------------------------ */
+
 function MiniCover({ book, className = "" }) {
   const [errored, setErrored] = useState(false);
   const src = pickCover(book);
@@ -161,7 +156,6 @@ function MiniCover({ book, className = "" }) {
   );
 }
 
-
 function getAvatarFromAdmin(admin) {
   if (!admin) return "";
   const raw =
@@ -175,9 +169,8 @@ function getAvatarFromAdmin(admin) {
   return resolveAvatarUrl(raw);
 }
 
-/* ------------------------------------------------------------------ */
 /*  Auth hook                                                          */
-/* ------------------------------------------------------------------ */
+
 function useAdminAuth() {
   const [admin, setAdmin] = useState(null);
 
@@ -210,9 +203,8 @@ function useAdminAuth() {
   return { admin, isAuthed: Boolean(admin) };
 }
 
-/* ------------------------------------------------------------------ */
 /*  Search hook — debounced API call                                   */
-/* ------------------------------------------------------------------ */
+
 function useBookSearch(query, { enabled = true } = {}) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -263,9 +255,8 @@ function useBookSearch(query, { enabled = true } = {}) {
   return { results, loading, error };
 }
 
-/* ------------------------------------------------------------------ */
 /*  Brand                                                              */
-/* ------------------------------------------------------------------ */
+
 function Brand({ size = "md", onClick }) {
   const isSm = size === "sm";
   return (
@@ -313,9 +304,8 @@ function Brand({ size = "md", onClick }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Admin dropdown                                                     */
-/* ------------------------------------------------------------------ */
+
 function AdminMenu({ admin }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -470,9 +460,8 @@ function MenuItem({ to, icon: Icon, label, onClick }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Search results dropdown — with auto-cover                          */
-/* ------------------------------------------------------------------ */
+
 function SearchResults({ query, results, loading, error, onSelect }) {
   const showPanel =
     query.trim().length >= 2 && (loading || results.length > 0 || error);
@@ -563,9 +552,8 @@ function SearchResults({ query, results, loading, error, onSelect }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Navbar                                                             */
-/* ------------------------------------------------------------------ */
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -878,9 +866,8 @@ export default function Navbar() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  MobileSidebar                                                      */
-/* ------------------------------------------------------------------ */
+
 function MobileSidebar({ open, onClose, admin, isAuthed }) {
   const navigate = useNavigate();
   const panelRef = useRef(null);

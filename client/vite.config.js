@@ -13,11 +13,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/uploads": {
-        target: "http://localhost:8000", // 👈 apna backend port yahan daalo
+        target: "https://vedbook-digital-library-platform.onrender.com", // 👈 apna backend port yahan daalo
         changeOrigin: true,
       },
       "/api": {
-        target: "http://localhost:8000", // 👈 same backend port
+        target: "https://vedbook-digital-library-platform.onrender.com", // 👈 same backend port
         changeOrigin: true,
       },
     },

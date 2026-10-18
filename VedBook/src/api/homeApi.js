@@ -2,9 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from './usersApi';
 
-/* ------------------------------------------------------------------ */
-/* Axios instance for public + user home endpoints                    */
-/* ------------------------------------------------------------------ */
+//Axios instance for public + user home endpoints                    */
 
 const client = axios.create({
   baseURL: API_BASE_URL,
@@ -12,9 +10,7 @@ const client = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-/* ------------------------------------------------------------------ */
-/* Auto-attach JWT if present                                          */
-/* ------------------------------------------------------------------ */
+//Auto-attach JWT if present                                          */
 
 client.interceptors.request.use(async config => {
   try {
@@ -30,9 +26,7 @@ client.interceptors.request.use(async config => {
   return config;
 });
 
-/* ------------------------------------------------------------------ */
-/* Convert relative image paths to complete URLs                      */
-/* ------------------------------------------------------------------ */
+//Convert relative image paths to complete URLs                      */
 
 const getCoverImageUrl = cover => {
   if (!cover || typeof cover !== 'string') {
@@ -60,9 +54,7 @@ const getCoverImageUrl = cover => {
   return `${serverBaseUrl}/${cleanPath}`;
 };
 
-/* ------------------------------------------------------------------ */
-/* Normalise book shape                                                */
-/* ------------------------------------------------------------------ */
+//Normalise book shape                                                */
 
 function normaliseBook(b) {
   if (!b) {
@@ -162,19 +154,14 @@ function normaliseBook(b) {
     // Continue-reading extras
     progress: progressData,
     lastReadAt:
-      b.lastReadAt ||
-      b.last_read_at ||
-      progressData?.lastReadAt ||
-      null,
+      b.lastReadAt || b.last_read_at || progressData?.lastReadAt || null,
   };
 }
 
-/* ------------------------------------------------------------------ */
-/* API Methods                                                         */
-/* ------------------------------------------------------------------ */
+//API Methods                                                         */
 
 export const homeAPI = {
-  /* Featured masterpieces — public */
+  //Featured masterpieces — public */
   getFeatured: async () => {
     const { data } = await client.get('/discovery/featured');
 
@@ -183,7 +170,7 @@ export const homeAPI = {
     return (Array.isArray(raw) ? raw : []).map(normaliseBook).filter(Boolean);
   },
 
-  /* Recently catalogued — public */
+  //Recently catalogued — public */
   getRecentlyCatalogued: async (limit = 8) => {
     const { data } = await client.get('/discovery/recently-catalogued', {
       params: { limit },
@@ -208,7 +195,7 @@ export const homeAPI = {
     return books;
   },
 
-  /* Popular this week — public */
+  //Popular this week — public */
   getPopularThisWeek: async () => {
     const { data } = await client.get('/reviews/popular-this-week');
 
@@ -217,7 +204,7 @@ export const homeAPI = {
     return (Array.isArray(raw) ? raw : []).map(normaliseBook).filter(Boolean);
   },
 
-  /* Recommended for logged-in user — auth */
+  //Recommended for logged-in user — auth */
   getRecommended: async () => {
     const { data } = await client.get('/discovery/recommended');
 
@@ -226,7 +213,7 @@ export const homeAPI = {
     return (Array.isArray(raw) ? raw : []).map(normaliseBook).filter(Boolean);
   },
 
-  /* Continue reading — auth */
+  //Continue reading — auth */
   getContinueReading: async () => {
     const { data } = await client.get('/my-library/continue-reading');
 

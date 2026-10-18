@@ -26,18 +26,16 @@ import EmptyState from "../../components/ui/EmptyState";
 import ErrorState from "../../components/ui/ErrorState";
 import RefreshBanner from "../../components/ui/RefreshBanner";
 
-/* ------------------------------------------------------------------ */
 /*  Config                                                             */
-/* ------------------------------------------------------------------ */
+
 const FILTER_OPTIONS = [
   { value: "all", label: "All categories" },
   { value: "active", label: "Active" },
   { value: "inactive", label: "Inactive" },
 ];
 
-/* ------------------------------------------------------------------ */
 /*  Robust isActive — handles boolean | 1/0 | "1"/"0" | "true"/"false"  */
-/* ------------------------------------------------------------------ */
+
 function isActive(category) {
   if (!category) return true;
   const v =
@@ -501,9 +499,8 @@ export default function Categories() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Summary card                                                       */
-/* ------------------------------------------------------------------ */
+
 function SummaryCard({ icon: Icon, label, value, tone }) {
   const toneMap = {
     primary: { bg: "bg-mint text-primary", ring: "ring-primary/10" },
@@ -535,9 +532,8 @@ function SummaryCard({ icon: Icon, label, value, tone }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Category row (desktop)                                             */
-/* ------------------------------------------------------------------ */
+
 function CategoryRow({ category, working, onEdit, onDelete, onToggleStatus }) {
   const name = category.name || "Untitled";
   const description = category.description || "";
@@ -626,9 +622,8 @@ function CategoryRow({ category, working, onEdit, onDelete, onToggleStatus }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Category card (mobile)                                             */
-/* ------------------------------------------------------------------ */
+
 function CategoryCard({ category, working, onEdit, onDelete, onToggleStatus }) {
   const name = category.name || "Untitled";
   const description = category.description || "";
@@ -701,9 +696,8 @@ function CategoryCard({ category, working, onEdit, onDelete, onToggleStatus }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Status toggle (inline switch)                                      */
-/* ------------------------------------------------------------------ */
+
 function StatusToggle({ active, working, onToggle, compact = false }) {
   return (
     <button
@@ -756,9 +750,8 @@ function StatusToggle({ active, working, onToggle, compact = false }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Chip                                                               */
-/* ------------------------------------------------------------------ */
+
 function Chip({ label, onClear }) {
   return (
     <span className="inline-flex items-center gap-1.5 bg-mint text-primary text-xs font-medium pl-2.5 pr-1.5 py-1 rounded-full">

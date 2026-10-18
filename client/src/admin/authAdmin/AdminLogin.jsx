@@ -18,9 +18,7 @@ import {
 import { authAPI } from "../../api/adminApi";
 import logo from "../../assets/logo/mainLogo.png";
 
-/* ------------------------------------------------------------------ */
 /*  Feature list (left branding panel)                                 */
-/* ------------------------------------------------------------------ */
 const FEATURES = [
   { icon: BookOpen, text: "Content & metadata manager" },
   { icon: Users, text: "User & permissions control" },
@@ -323,9 +321,7 @@ export default function AdminLogin() {
   );
 }
 
-/* ------------------------------------------------------------------ */
 /*  Field wrapper                                                      */
-/* ------------------------------------------------------------------ */
 function Field({ label, icon: Icon, children }) {
   return (
     <div>

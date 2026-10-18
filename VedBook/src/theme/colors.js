@@ -50,14 +50,22 @@ export const typography = {
     default: 'sans-serif',
   }),
   h1: {
-    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
+    fontFamily: Platform.select({
+      ios: 'Georgia',
+      android: 'serif',
+      default: 'serif',
+    }),
     fontSize: 28,
     fontWeight: '700',
     lineHeight: 34,
     color: colors.primary,
   },
   h2: {
-    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
+    fontFamily: Platform.select({
+      ios: 'Georgia',
+      android: 'serif',
+      default: 'serif',
+    }),
     fontSize: 22,
     fontWeight: '700',
     lineHeight: 28,
@@ -127,7 +135,7 @@ export const shadows = {
   medium: {
     shadowColor: '#173F35',
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.1,
     shadowRadius: 18,
     elevation: 6,
   },
