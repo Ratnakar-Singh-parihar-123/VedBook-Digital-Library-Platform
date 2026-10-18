@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { QRCodeSVG } from "qrcode.react";
 import {
   Download,
   QrCode,
@@ -11,12 +12,44 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
+const APK_PATH = "/apk/VedBook-release.apk";
+const APK_VERSION = "v1.0.4";
+const PROD_ORIGIN = "https://thevedbook.vercel.app";
+
+/* Dev / local / LAN pe detect karke QR ke liye PROD_ORIGIN use karta hai.
+   Production pe automatic window.location.origin use hota hai. */
+function getApkFullUrl() {
+  if (typeof window === "undefined") return `${PROD_ORIGIN}${APK_PATH}`;
+
+  const host = window.location.hostname;
+  const isDevLike =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host.startsWith("192.168.") ||
+    host.startsWith("10.") ||
+    host.startsWith("172.") ||
+    host.endsWith(".local");
+
+  const origin = isDevLike ? PROD_ORIGIN : window.location.origin;
+  return `${origin}${APK_PATH}`;
+}
+
 export default function DownloadApp() {
   const [downloadStarted, setDownloadStarted] = useState(false);
 
+  const APK_FULL_URL = getApkFullUrl();
+
   const handleDownload = () => {
     setDownloadStarted(true);
-    setTimeout(() => setDownloadStarted(false), 4000);
+
+    const link = document.createElement("a");
+    link.href = APK_PATH;
+    link.download = `VedBook-${APK_VERSION}.apk`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(() => setDownloadStarted(false), 5000);
   };
 
   return (
@@ -52,7 +85,7 @@ export default function DownloadApp() {
                   className="inline-flex items-center gap-2.5 bg-primary text-cream px-6 py-3.5 rounded-2xl text-sm font-semibold hover:bg-primary/90 transition shadow-soft hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Download size={16} />
-                  Download APK (v1.0.4)
+                  Download APK ({APK_VERSION})
                 </button>
 
                 <a
@@ -105,7 +138,7 @@ export default function DownloadApp() {
               </div>
             </div>
 
-            {/* Mockup Preview Card */}
+            {/* Mockup Preview Card with REAL QR */}
             <div id="qr-code" className="flex justify-center">
               <div className="relative w-full max-w-sm p-6 border rounded-3xl bg-white/70 border-primary/10 sm:p-8 shadow-soft backdrop-blur-sm">
                 <div className="absolute px-3 py-1 text-xs font-bold tracking-wider uppercase rounded-full shadow-sm -top-3 -right-3 bg-gold text-primary">
@@ -127,14 +160,21 @@ export default function DownloadApp() {
                 </div>
 
                 <div className="flex flex-col items-center p-6 mt-6 text-center border rounded-2xl bg-cream border-primary/10">
-                  <div className="grid p-2 bg-white border shadow-inner w-36 h-36 rounded-xl border-primary/10 place-items-center">
-                    <QrCode size={120} className="text-primary" />
+                  <div className="grid p-3 bg-white border shadow-inner rounded-xl border-primary/10 place-items-center">
+                    <QRCodeSVG
+                      value={APK_FULL_URL}
+                      size={140}
+                      level="H"
+                      bgColor="#ffffff"
+                      fgColor="#1f3a2e"
+                      marginSize={0}
+                    />
                   </div>
                   <p className="mt-3 text-xs font-medium text-primary">
                     Scan with phone camera
                   </p>
                   <p className="text-[11px] text-primary/50 mt-0.5">
-                    Instant direct installation link
+                    Instant direct APK download link
                   </p>
                 </div>
 

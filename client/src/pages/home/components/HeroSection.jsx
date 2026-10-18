@@ -135,7 +135,8 @@ export default function HeroSection() {
               <ArrowRight size={16} />
             </Link>
             <a
-              href="#download"
+              href="/apk/VedBook-release.apk"
+              download="VedBook-v1.0.4.apk"
               className="inline-flex items-center gap-2 bg-white border border-primary/15 text-primary font-semibold px-6 py-3.5 rounded-xl text-sm hover:bg-mint transition"
             >
               <Download size={16} className="text-gold" />

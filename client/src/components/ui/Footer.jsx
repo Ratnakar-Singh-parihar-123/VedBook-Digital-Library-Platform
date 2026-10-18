@@ -261,7 +261,7 @@ export default function Footer({ socials = [] }) {
               Terms
             </Link>
             <span className="inline-flex items-center gap-1 text-muted">
-              Made with <span className="text-gold">❤</span> for readers
+              Made with <span className="text-gold">❤</span> for ratnakar
             </span>
             <Link
               to="/"

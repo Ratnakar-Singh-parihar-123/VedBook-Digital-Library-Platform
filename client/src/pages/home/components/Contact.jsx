@@ -179,7 +179,7 @@ export default function Contact() {
                   required
                   value={form.name}
                   onChange={update("name")}
-                  placeholder="Aarav Sharma"
+                  placeholder="Enter your name..."
                   className="w-full py-3 text-sm bg-transparent outline-none text-primary placeholder:text-primary/40"
                 />
               </Field>
